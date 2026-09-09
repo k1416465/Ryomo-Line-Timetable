@@ -1,3 +1,1059 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>両毛線{{ station_name }}時刻表</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+<div class="board">
+
+<!-- ==================================================
+     駅名
+     ================================================== -->
+
+<div class="station-header">
+
+    <h1>
+        両毛線{{ station_name }}時刻表
+    </h1>
+
+    <div class="station-en">
+        Ryomo Line {{ station_english }} Timetable
+    </div>
+
+</div>
+
+
+<!-- ==================================================
+     1番線
+     ================================================== -->
+
+<div class="platform">
+
+    <div class="platform-header">
+
+        <div class="platform-number">
+            1
+        </div>
+
+        <div class="yellow-bar"></div>
+
+        <div class="direction">
+
+            <div class="direction-jp">
+
+                <div class="line-name">
+                    両毛線
+                </div>
+
+                <div id="platform1-direction">
+                    読み込み中
+                </div>
+
+            </div>
+
+            <div class="direction-en">
+
+                <div>
+                    Ryomo Line
+                </div>
+
+                <div id="platform1-direction-en">
+                    Loading...
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="train-table">
+
+        <div
+            class="table-head"
+            id="platform1-header"
+        >
+
+            <div>種別</div>
+            <div>発車時刻</div>
+            <div>行先</div>
+            <div>両数</div>
+            <div>発車まで</div>
+
+        </div>
+
+        <div id="platform1-trains"></div>
+
+    </div>
+
+</div>
+
+
+<!-- ==================================================
+     2番線
+     ================================================== -->
+
+<div class="platform">
+
+    <div class="platform-header">
+
+        <div class="platform-number">
+            2
+        </div>
+
+        <div class="yellow-bar"></div>
+
+        <div class="direction">
+
+            <div class="direction-jp">
+
+                <div class="line-name">
+                    両毛線
+                </div>
+
+                <div id="platform2-direction">
+                    読み込み中
+                </div>
+
+            </div>
+
+            <div class="direction-en">
+
+                <div>
+                    Ryomo Line
+                </div>
+
+                <div id="platform2-direction-en">
+                    Loading...
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="train-table">
+
+        <div
+            class="table-head"
+            id="platform2-header"
+        >
+
+            <div>種別</div>
+            <div>発車時刻</div>
+            <div>行先</div>
+            <div>両数</div>
+            <div>発車まで</div>
+
+        </div>
+
+        <div id="platform2-trains"></div>
+
+    </div>
+
+</div>
+
+
+<!-- ==================================================
+     日付・時刻・更新
+     ================================================== -->
+
+<div class="footer">
+
+    <div id="current-date">
+        ----年--月--日
+    </div>
+
+    <div id="current-time">
+        --:--:--
+    </div>
+
+    <button onclick="loadTimetable()">
+
+        <span class="refresh-icon">
+            ↻
+        </span>
+
+        更新
+
+    </button>
+
+</div>
+
+
+<!-- ==================================================
+     ホームへ戻る
+     ================================================== -->
+
+<div class="back-home-area">
+
+    <a
+        href="/"
+        class="back-home-button"
+    >
+
+        <span class="back-home-arrow">
+            ←
+        </span>
+
+        <span class="back-home-text">
+
+            <span class="back-home-jp">
+                ホームへ戻る
+            </span>
+
+            <span class="back-home-en">
+                Back to Home
+            </span>
+
+        </span>
+
+    </a>
+
+</div>
+
+
+</div>
+
+
+<script>
+
+/* ==================================================
+   現在表示している駅
+   ================================================== */
+
+const stationName =
+    "{{ station_name }}";
+
+
+/* ==================================================
+   駅ごとの番線・方面設定
+   ================================================== */
+
+const stationConfig = {
+
+    "栃木駅": {
+
+        platform1: {
+            direction: "下り",
+            name: "小山方面",
+            english: "For Oyama"
+        },
+
+        platform2: {
+            direction: "上り",
+            name: "佐野・足利・高崎方面",
+            english: "For Sano, Ashikaga & Takasaki"
+        }
+
+    },
+
+
+    "佐野駅": {
+
+        platform1: {
+            direction: "上り",
+            name: "足利・桐生・高崎方面",
+            english: "For Ashikaga, Kiryu & Takasaki"
+        },
+
+        platform2: {
+            direction: "下り",
+            name: "栃木・小山方面",
+            english: "For Tochigi & Oyama"
+        }
+
+    },
+
+
+    "足利駅": {
+
+        platform1: {
+            direction: "下り",
+            name: "佐野・栃木・小山方面",
+            english: "For Sano, Tochigi & Oyama"
+        },
+
+        platform2: {
+            direction: "上り",
+            name: "桐生・前橋・高崎方面",
+            english: "For Kiryu, Maebashi & Takasaki"
+        }
+
+    }
+
+};
+
+
+/* ==================================================
+   現在駅の設定を取得
+   ================================================== */
+
+const currentStationConfig =
+    stationConfig[stationName];
+
+
+/* ==================================================
+   方面表示
+   ================================================== */
+
+function setPlatformInfo() {
+
+    if (!currentStationConfig) {
+        return;
+    }
+
+    document.getElementById(
+        "platform1-direction"
+    ).textContent =
+        currentStationConfig.platform1.name;
+
+    document.getElementById(
+        "platform1-direction-en"
+    ).textContent =
+        currentStationConfig.platform1.english;
+
+    document.getElementById(
+        "platform2-direction"
+    ).textContent =
+        currentStationConfig.platform2.name;
+
+    document.getElementById(
+        "platform2-direction-en"
+    ).textContent =
+        currentStationConfig.platform2.english;
+
+}
+
+
+/* ==================================================
+   列車データ
+   ================================================== */
+
+let allTrains = [];
+
+
+/* ==================================================
+   下りデータの補正
+   ================================================== */
+
+const downCars = {
+
+    "421M": 6,
+    "423M": 4,
+    "425M": 6,
+    "427M": 4,
+    "429M": 4,
+    "431M": 4,
+    "433M": 6,
+    "437M": 4,
+    "439M": 4,
+    "441M": 6,
+    "443M": 4,
+    "445M": 4,
+    "447M": 4,
+    "449M": 4,
+    "451M": 4,
+    "453M": 4,
+    "455M": 6,
+    "459M": 6,
+    "461M": 4,
+    "463M": 6,
+    "465M": 6,
+    "467M": 4,
+    "469M": 4,
+    "471M": 6,
+    "475M": 4,
+    "479M": 6
+
+};
+
+
+/* ==================================================
+   列車データを正常化
+   ================================================== */
+
+function normalizeTrain(train) {
+
+    const result = {
+        ...train
+    };
+
+    if (
+        result.direction === "下り" &&
+        result.train_number === "普通" &&
+        typeof result.cars === "string" &&
+        result.cars.endsWith("M")
+    ) {
+
+        const correctTrainNumber =
+            result.cars;
+
+        result.train_number =
+            correctTrainNumber;
+
+        result.type =
+            "普通";
+
+        result.cars =
+            downCars[correctTrainNumber] || null;
+
+    }
+
+    if (!result.type) {
+
+        result.type =
+            "普通";
+
+    }
+
+    return result;
+
+}
+
+
+/* ==================================================
+   英語：種別
+   ================================================== */
+
+function getTypeEnglish(type) {
+
+    switch (type) {
+
+        case "普通":
+            return "Local";
+
+        case "快速":
+            return "Rapid";
+
+        case "特急":
+            return "Limited Express";
+
+        default:
+            return type || "Local";
+
+    }
+
+}
+
+
+/* ==================================================
+   英語：行先
+   ================================================== */
+
+function getDestinationEnglish(destination) {
+
+    const map = {
+
+        "高崎": "Takasaki",
+        "小山": "Oyama",
+        "前橋": "Maebashi",
+        "桐生": "Kiryu",
+        "伊勢崎": "Isesaki",
+        "足利": "Ashikaga",
+        "栃木": "Tochigi",
+        "佐野": "Sano"
+
+    };
+
+    return map[destination] ||
+           destination ||
+           "";
+
+}
+
+
+/* ==================================================
+   時刻を秒に変換
+   ================================================== */
+
+function timeToSeconds(time) {
+
+    if (!time) {
+        return null;
+    }
+
+    const parts =
+        time.split(":");
+
+    if (parts.length !== 2) {
+        return null;
+    }
+
+    const hour =
+        Number(parts[0]);
+
+    const minute =
+        Number(parts[1]);
+
+    if (
+        !Number.isFinite(hour) ||
+        !Number.isFinite(minute)
+    ) {
+        return null;
+    }
+
+    return (
+        hour * 60 * 60 +
+        minute * 60
+    );
+
+}
+
+
+/* ==================================================
+   現在駅の発車時刻
+   ================================================== */
+
+function getStationDeparture(train) {
+
+    const stops =
+        train.stops || {};
+
+    const station =
+        stops[stationName];
+
+    if (!station) {
+        return null;
+    }
+
+    return (
+        station.departure ||
+        station.arrival ||
+        null
+    );
+
+}
+
+
+/* ==================================================
+   両数
+   ================================================== */
+
+function getCars(train) {
+
+    const cars =
+        Number(train.cars);
+
+    if (
+        Number.isFinite(cars) &&
+        cars > 0
+    ) {
+
+        return cars;
+
+    }
+
+    return null;
+
+}
+
+
+/* ==================================================
+   発車まで
+   ================================================== */
+
+function getRemaining(departure) {
+
+    if (!departure) {
+
+        return {
+            number: "--",
+            label: "",
+            finished: false
+        };
+
+    }
+
+    const departureSeconds =
+        timeToSeconds(departure);
+
+    if (departureSeconds === null) {
+
+        return {
+            number: "--",
+            label: "",
+            finished: false
+        };
+
+    }
+
+    const now =
+        new Date();
+
+    const currentSeconds =
+        now.getHours() * 60 * 60 +
+        now.getMinutes() * 60 +
+        now.getSeconds();
+
+    const diffSeconds =
+        departureSeconds -
+        currentSeconds;
+
+    if (diffSeconds < 0) {
+
+        return {
+            number: null,
+            label: null,
+            finished: true
+        };
+
+    }
+
+    if (diffSeconds === 0) {
+
+        return {
+            number: "0",
+            label: "分後",
+            finished: false
+        };
+
+    }
+
+    const remainingMinutes =
+        Math.floor(
+            diffSeconds / 60
+        );
+
+    return {
+
+        number: remainingMinutes,
+
+        label: "分後",
+
+        finished: false
+
+    };
+
+}
+
+
+/* ==================================================
+   列車1本をHTML化
+   ================================================== */
+
+function createTrainHTML(train) {
+
+    const type =
+        train.type || "普通";
+
+    const typeEnglish =
+        getTypeEnglish(type);
+
+    const destination =
+        train.destination || "";
+
+    const destinationEnglish =
+        getDestinationEnglish(
+            destination
+        );
+
+    const departure =
+        getStationDeparture(train);
+
+    const cars =
+        getCars(train);
+
+    const remaining =
+        getRemaining(departure);
+
+    if (remaining.finished) {
+        return "";
+    }
+
+    let carsClass =
+        "cars-orange";
+
+    if (
+        cars !== null &&
+        cars >= 6
+    ) {
+
+        carsClass =
+            "cars-green";
+
+    }
+
+    let carsHTML =
+        "";
+
+    if (cars !== null) {
+
+        carsHTML = `
+
+            <div class="car-badge ${carsClass}">
+
+                <strong>
+                    ${cars}
+                </strong>
+
+                <span>
+                    両
+                </span>
+
+            </div>
+
+        `;
+
+    }
+
+    let remainingHTML = `
+
+        <div class="remaining">
+
+            <strong>
+                ${remaining.number}
+            </strong>
+
+            <span>
+                ${remaining.label}
+            </span>
+
+        </div>
+
+    `;
+
+    const note =
+        train.note || "";
+
+    let noteHTML;
+
+    if (note) {
+
+        noteHTML = `
+
+            <div class="note">
+                ${note}
+            </div>
+
+        `;
+
+    } else {
+
+        noteHTML = `
+
+            <div class="empty-note"></div>
+
+        `;
+
+    }
+
+    return `
+
+        <div class="train-row">
+
+            <div>
+
+                <div class="local-box">
+
+                    <strong>
+                        ${type}
+                    </strong>
+
+                    <span>
+                        ${typeEnglish}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div>
+
+                <div class="departure-time">
+                    ${departure || "--:--"}
+                </div>
+
+            </div>
+
+
+            <div>
+
+                <div class="destination">
+
+                    <strong>
+                        ${destination}
+                    </strong>
+
+                    <span>
+                        ${destinationEnglish}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="cars">
+
+                ${carsHTML}
+
+            </div>
+
+
+            <div>
+
+                ${remainingHTML}
+
+            </div>
+
+        </div>
+
+
+        ${noteHTML}
+
+    `;
+
+}
+
+
+/* ==================================================
+   現在時刻以降の列車だけ取得
+   ================================================== */
+
+function getTodayUpcomingTrains(direction) {
+
+    const now =
+        new Date();
+
+    if (
+        now.getHours() < 4
+    ) {
+
+        return [];
+
+    }
+
+    const currentSeconds =
+        now.getHours() * 60 * 60 +
+        now.getMinutes() * 60 +
+        now.getSeconds();
+
+    let trains =
+        allTrains
+
+            .filter(
+                train =>
+                    train.direction === direction
+            )
+
+            .filter(train => {
+
+                const departure =
+                    getStationDeparture(train);
+
+                const seconds =
+                    timeToSeconds(
+                        departure
+                    );
+
+                if (seconds === null) {
+                    return false;
+                }
+
+                return seconds >= currentSeconds;
+
+            });
+
+    trains.sort((a, b) => {
+
+        const aTime =
+            timeToSeconds(
+                getStationDeparture(a)
+            );
+
+        const bTime =
+            timeToSeconds(
+                getStationDeparture(b)
+            );
+
+        return aTime - bTime;
+
+    });
+
+    return trains.slice(0, 2);
+
+}
+
+
+/* ==================================================
+   列車終了表示
+   ================================================== */
+
+function showServiceFinished(container) {
+
+    container.innerHTML = `
+
+        <div class="service-finished">
+            本日の列車は終了しました。
+        </div>
+
+    `;
+
+}
+
+
+/* ==================================================
+   番線に列車を表示
+   ================================================== */
+
+function renderPlatform(
+    containerId,
+    headerId,
+    direction
+) {
+
+    const container =
+        document.getElementById(
+            containerId
+        );
+
+    const header =
+        document.getElementById(
+            headerId
+        );
+
+    const trains =
+        getTodayUpcomingTrains(
+            direction
+        );
+
+    if (trains.length === 0) {
+
+        header.style.display = "none";
+
+        showServiceFinished(
+            container
+        );
+
+    } else {
+
+        header.style.display = "grid";
+
+        container.innerHTML =
+            trains
+                .map(createTrainHTML)
+                .join("");
+
+    }
+
+}
+
+
+/* ==================================================
+   上り・下り表示
+   ================================================== */
+
+function renderTrains() {
+
+    if (!currentStationConfig) {
+        return;
+    }
+
+    renderPlatform(
+        "platform1-trains",
+        "platform1-header",
+        currentStationConfig.platform1.direction
+    );
+
+    renderPlatform(
+        "platform2-trains",
+        "platform2-header",
+        currentStationConfig.platform2.direction
+    );
+
+}
+
+
+/* ==================================================
+   JSON読み込み
+   ================================================== */
+
+async function loadTimetable() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/timetable?" +
+                Date.now()
+            );
+
+        if (!response.ok) {
+
+            throw new Error(
+                "データ取得に失敗しました"
+            );
+
+        }
+
+        const data =
+            await response.json();
+
+        allTrains =
+            (data.trains || [])
+                .map(normalizeTrain);
+
+        renderTrains();
+
+    } catch (error) {
+
+        console.error(error);
+
+        document.getElementById(
+            "platform1-header"
+        ).style.display = "none";
+
+        document.getElementById(
+            "platform2-header"
+        ).style.display = "none";
+
+        document.getElementById(
+            "platform1-trains"
+        ).innerHTML = `
+
+            <div class="service-finished">
+                データを取得できません
+            </div>
+
+        `;
+
+        document.getElementById(
+            "platform2-trains"
+        ).innerHTML = `
+
+            <div class="service-finished">
+                データを取得できません
+            </div>
+
+        `;
+
+    }
+
+}
+
+
 /* ==================================================
    時計
    ================================================== */
@@ -48,12 +1104,10 @@ function updateClock() {
             now.getSeconds()
         ).padStart(2, "0");
 
-
     document.getElementById(
         "current-date"
     ).textContent =
         `${year}/${month}/${day}(${weekday})`;
-
 
     document.getElementById(
         "current-time"
@@ -61,3 +1115,49 @@ function updateClock() {
         `${hours}:${minutes}:${seconds}`;
 
 }
+
+
+/* ==================================================
+   初回実行
+   ================================================== */
+
+setPlatformInfo();
+
+loadTimetable();
+
+updateClock();
+
+
+/* ==================================================
+   時計更新
+   ================================================== */
+
+setInterval(
+    updateClock,
+    1000
+);
+
+
+/* ==================================================
+   発車まで更新
+   ================================================== */
+
+setInterval(
+    renderTrains,
+    10000
+);
+
+
+/* ==================================================
+   JSON再取得
+   ================================================== */
+
+setInterval(
+    loadTimetable,
+    60000
+);
+
+</script>
+
+</body>
+</html>
