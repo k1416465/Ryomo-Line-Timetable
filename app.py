@@ -11,7 +11,7 @@ JSON_FILE = Path(__file__).with_name("timetable.json")
 
 
 # ==================================================
-# 時刻表JSON
+# 時刻表JSON読み込み
 # ==================================================
 
 def load_timetable():
@@ -75,14 +75,11 @@ def station(station):
 
     }
 
-
     if station not in station_map:
 
         return "駅が見つかりません", 404
 
-
     station_info = station_map[station]
-
 
     return render_template(
 
@@ -110,17 +107,27 @@ def api_operation():
         "?gid=1&lineid=ryomoline"
     )
 
-
     headers = {
 
-        "User-Agent":
+        "User-Agent": (
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-            "AppleWebKit/537.36 "
-            "(KHTML, like Gecko) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
             "Chrome/140.0 Safari/537.36"
+        ),
+
+        "Accept": (
+            "text/html,application/xhtml+xml,"
+            "application/xml;q=0.9,image/avif,image/webp,"
+            "*/*;q=0.8"
+        ),
+
+        "Accept-Language":
+            "ja-JP,ja;q=0.9,en-US;q=0.8,en;q=0.7",
+
+        "Referer":
+            "https://traininfo.jreast.co.jp/"
 
     }
-
 
     try:
 
@@ -134,8 +141,18 @@ def api_operation():
 
             headers=headers,
 
-            timeout=10
+            timeout=20
 
+        )
+
+        print(
+            "JR東日本 HTTP status:",
+            response.status_code
+        )
+
+        print(
+            "JR東日本 response length:",
+            len(response.text)
         )
 
         response.raise_for_status()
@@ -155,21 +172,21 @@ def api_operation():
 
 
         # ==========================================
-        # ページ内の文字を取得
+        # ページ全体の文字を取得
         # ==========================================
 
-        lines = []
+        text = soup.get_text(
 
-        for line in soup.get_text(
-            "\n",
+            " ",
+
             strip=True
-        ).splitlines():
 
-            line = line.strip()
+        )
 
-            if line:
 
-                lines.append(line)
+        print(
+            "JR東日本ページ取得成功"
+        )
 
 
         # ==========================================
@@ -178,149 +195,29 @@ def api_operation():
 
         updated = ""
 
-
         update_pattern = re.compile(
 
             r"\d{4}年\d{1,2}月\d{1,2}日"
-            r"\s+\d{1,2}時\d{2}分"
-            r"\s+現在"
+            r"\s*\d{1,2}時\d{2}分"
+            r"\s*現在"
 
         )
 
+        match = update_pattern.search(text)
 
-        for line in lines:
+        if match:
 
-            match = update_pattern.search(line)
-
-            if match:
-
-                updated = match.group(0)
-
-                break
+            updated = match.group(0)
 
 
         # ==========================================
-        # 「運行情報・運休情報」をすべて探す
+        # 初期状態
         # ==========================================
 
-        operation_indexes = []
+        status = "情報取得中"
 
-        for i, line in enumerate(lines):
-
-            if "運行情報・運休情報" in line:
-
-                operation_indexes.append(i)
-
-
-        # ==========================================
-        # 見つからない場合
-        # ==========================================
-
-        if not operation_indexes:
-
-            return jsonify({
-
-                "line": "両毛線",
-
-                "status": "情報取得中",
-
-                "message":
-                    "現在、両毛線の運行情報を確認しています。",
-
-                "updated": updated,
-
-                "source": "JR東日本"
-
-            })
-
-
-        # ==========================================
-        # 重要
-        #
-        # 最後に出てくる
-        # 「運行情報・運休情報」を使用する
-        #
-        # 現在のJR東日本ページでは
-        #
-        # 運行情報・運休情報
-        # ↓
-        # 平常運転
-        # ↓
-        # 振替輸送情報
-        #
-        # という構造になっている
-        # ==========================================
-
-        operation_index = operation_indexes[-1]
-
-
-        # ==========================================
-        # 実際の運行情報だけ取得
-        # ==========================================
-
-        operation_lines = []
-
-
-        for line in lines[operation_index + 1:]:
-
-            # 次のセクション
-            if "振替輸送情報" in line:
-
-                break
-
-            if "遅延証明書" in line:
-
-                break
-
-            operation_lines.append(line)
-
-
-        # ==========================================
-        # 不要な文字を除去
-        # ==========================================
-
-        clean_lines = []
-
-
-        for line in operation_lines:
-
-            line = line.strip()
-
-
-            if not line:
-
-                continue
-
-
-            if line == "更新":
-
-                continue
-
-
-            clean_lines.append(line)
-
-
-        # ==========================================
-        # 運行情報を文章にする
-        # ==========================================
-
-        operation_text = " ".join(
-            clean_lines
-        )
-
-
-        # デバッグ用
-        print(
-            "=========================================="
-        )
-
-        print(
-            "JR東日本 運行情報:",
-            operation_text
-        )
-
-        print(
-            "=========================================="
+        message = (
+            "現在、両毛線の運行情報を確認しています。"
         )
 
 
@@ -328,7 +225,7 @@ def api_operation():
         # 平常運転
         # ==========================================
 
-        if "平常運転" in operation_text:
+        if "平常運転" in text:
 
             status = "平常運転"
 
@@ -341,26 +238,66 @@ def api_operation():
         # 運転見合わせ
         # ==========================================
 
-        elif (
-            "運転見合わせ" in operation_text
-            or
-            "運転を見合わせ" in operation_text
+        if (
+
+            "両毛線" in text
+
+            and
+
+            (
+                "運転見合わせ" in text
+                or
+                "運転を見合わせ" in text
+            )
+
         ):
 
             status = "運転見合わせ"
 
-            message = operation_text
+            index = text.find("両毛線")
+
+            if index >= 0:
+
+                message = text[
+                    index:index + 300
+                ]
+
+            else:
+
+                message = (
+                    "両毛線は運転を見合わせています。"
+                )
 
 
         # ==========================================
         # 運休
         # ==========================================
 
-        elif "運休" in operation_text:
+        elif (
+
+            "両毛線" in text
+
+            and
+
+            "運休" in text
+
+        ):
 
             status = "運休"
 
-            message = operation_text
+            index = text.find("両毛線")
+
+            if index >= 0:
+
+                message = text[
+                    index:index + 300
+                ]
+
+            else:
+
+                message = (
+                    "両毛線で運休が発生しています。"
+                )
 
 
         # ==========================================
@@ -368,31 +305,61 @@ def api_operation():
         # ==========================================
 
         elif (
-            "遅延" in operation_text
-            or
-            "遅れ" in operation_text
+
+            "両毛線" in text
+
+            and
+
+            (
+                "遅延" in text
+                or
+                "遅れ" in text
+            )
+
         ):
 
             status = "遅延"
 
-            message = operation_text
+            index = text.find("両毛線")
+
+            if index >= 0:
+
+                message = text[
+                    index:index + 300
+                ]
+
+            else:
+
+                message = (
+                    "両毛線の一部列車に遅れが出ています。"
+                )
 
 
         # ==========================================
-        # その他
+        # デバッグログ
         # ==========================================
 
-        else:
+        print(
+            "=========================================="
+        )
 
-            status = "情報取得中"
+        print(
+            "両毛線 運行情報:",
+            status
+        )
 
-            message = (
-                "現在、両毛線の運行情報を確認しています。"
-            )
+        print(
+            "更新時刻:",
+            updated
+        )
+
+        print(
+            "=========================================="
+        )
 
 
         # ==========================================
-        # JSON
+        # JSONを返す
         # ==========================================
 
         return jsonify({
@@ -411,16 +378,15 @@ def api_operation():
 
 
     # ==========================================
-    # 通信エラー
+    # JR東日本への接続エラー
     # ==========================================
 
     except requests.exceptions.RequestException as e:
 
         print(
             "JR東日本への接続エラー:",
-            e
+            repr(e)
         )
-
 
         return jsonify({
 
@@ -433,7 +399,9 @@ def api_operation():
 
             "updated": "",
 
-            "source": "JR東日本"
+            "source": "JR東日本",
+
+            "error": str(e)
 
         })
 
@@ -446,9 +414,8 @@ def api_operation():
 
         print(
             "運行情報取得エラー:",
-            e
+            repr(e)
         )
-
 
         return jsonify({
 
@@ -461,7 +428,9 @@ def api_operation():
 
             "updated": "",
 
-            "source": "JR東日本"
+            "source": "JR東日本",
+
+            "error": str(e)
 
         })
 
