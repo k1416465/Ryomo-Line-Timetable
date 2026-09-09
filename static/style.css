@@ -1545,6 +1545,25 @@ body {
 
 }
 
+/* 運行情報をリンクにしても見た目を変えない */
+.operation-info,
+.operation-info:link,
+.operation-info:visited,
+.operation-info:hover,
+.operation-info:active {
+    color: inherit;
+    text-decoration: none;
+}
+
+.operation-info .operation-title,
+.operation-info .operation-status,
+.operation-info .operation-text,
+.operation-info .operation-updated {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* 日付と曜日を1行にする */
 #current-date {
-white-space: nowrap;
+    white-space: nowrap;
 }
