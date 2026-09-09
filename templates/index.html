@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>両毛線 時刻表</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+<div class="home">
+
+<!-- ==================================
+     ヘッダー
+================================== -->
+
+<header class="home-header">
+
+    <h1>両毛線 時刻表</h1>
+
+    <div class="english-title">
+        Ryomo Line Timetable
+    </div>
+
+    <button
+        class="settings-button"
+        onclick="openSettings()"
+        aria-label="設定"
+    >
+        <img
+            src="{{ url_for('static', filename='icons/settings.png') }}"
+            alt="設定"
+        >
+    </button>
+
+</header>
+
+
+<!-- ==================================
+     現在日時
+================================== -->
+
+<div class="current-info">
+
+    <span id="current-date">
+        2026/09/09(水)
+    </span>
+
+    <div class="date-divider"></div>
+
+    <span id="current-time">
+        23:00:00
+    </span>
+
+</div>
+
+
+<!-- ==================================
+     駅選択タイトル
+================================== -->
+
+<div class="select-title">
+    表示する駅を選択してください
+</div>
+
+
+<!-- ==================================
+     駅一覧
+================================== -->
+
+<main class="station-grid">
+
+
+    <!-- 栃木駅 -->
+
+    <a
+        href="/station/tochigi"
+        class="station-card tochigi"
+    >
+
+        <div class="station-icon">
+
+            <img
+                src="{{ url_for('static', filename='icons/tochigi.png') }}"
+                alt="栃木駅"
+            >
+
+        </div>
+
+        <div class="station-name">
+            栃木駅
+        </div>
+
+        <div class="station-en">
+            Tochigi Station
+        </div>
+
+        <div class="arrow">
+            ▶
+        </div>
+
+    </a>
+
+
+    <!-- 佐野駅 -->
+
+    <a
+        href="/station/sano"
+        class="station-card sano"
+    >
+
+        <div class="station-icon">
+
+            <img
+                src="{{ url_for('static', filename='icons/sano.png') }}"
+                alt="佐野駅"
+            >
+
+        </div>
+
+        <div class="station-name">
+            佐野駅
+        </div>
+
+        <div class="station-en">
+            Sano Station
+        </div>
+
+        <div class="arrow">
+            ▶
+        </div>
+
+    </a>
+
+
+    <!-- 足利駅 -->
+
+    <a
+        href="/station/ashikaga"
+        class="station-card ashikaga"
+    >
+
+        <div class="station-icon">
+
+            <img
+                src="{{ url_for('static', filename='icons/ashikaga.png') }}"
+                alt="足利駅"
+            >
+
+        </div>
+
+        <div class="station-name">
+            足利駅
+        </div>
+
+        <div class="station-en">
+            Ashikaga Station
+        </div>
+
+        <div class="arrow">
+            ▶
+        </div>
+
+    </a>
+
+
+    <!-- 現在地 -->
+
+    <button
+        class="station-card current-location"
+        onclick="findNearestStation()"
+    >
+
+        <div class="station-icon">
+
+            <img
+                src="{{ url_for('static', filename='icons/location.png') }}"
+                alt="現在地"
+            >
+
+        </div>
+
+        <div class="station-name">
+            現在地
+        </div>
+
+        <div class="station-en">
+            Current Location
+        </div>
+
+        <div class="arrow">
+            ▶
+        </div>
+
+    </button>
+
+</main>
+
+
+<!-- ==================================
+     運行情報
+================================== -->
+
+<section
+    class="operation-info normal"
+    id="operation-info"
+>
+
+    <div
+        class="operation-icon"
+        id="operation-icon"
+    >
+        ○
+    </div>
+
+    <div class="operation-content">
+
+        <div class="operation-title">
+            運行情報
+        </div>
+
+        <div
+            class="operation-status"
+            id="operation-status"
+        >
+            平常運転
+        </div>
+
+        <div
+            class="operation-text"
+            id="operation-text"
+        >
+            両毛線は平常通り運転しています。
+        </div>
+
+        <div
+            class="operation-updated"
+            id="operation-updated"
+        >
+            情報取得中
+        </div>
+
+    </div>
+
+    <div class="operation-arrow">
+        ▶
+    </div>
+
+</section>
+
+</div>
+
+
+<script>
+
+/* ==================================
+   駅情報
+================================== */
+
+const stations = [
+
+    {
+        id: "tochigi",
+        name: "栃木駅",
+        lat: 36.371797,
+        lon: 139.731088
+    },
+
+    {
+        id: "sano",
+        name: "佐野駅",
+        lat: 36.316633,
+        lon: 139.578992
+    },
+
+    {
+        id: "ashikaga",
+        name: "足利駅",
+        lat: 36.332053,
+        lon: 139.456047
+    }
+
+];
+
+
+/* ==================================
+   時計
+================================== */
+
+function updateClock() {
+
+    const now = new Date();
+
+    const year =
+        now.getFullYear();
+
+    const month =
+        String(now.getMonth() + 1)
+        .padStart(2, "0");
+
+    const day =
+        String(now.getDate())
+        .padStart(2, "0");
+
+    const hours =
+        String(now.getHours())
+        .padStart(2, "0");
+
+    const minutes =
+        String(now.getMinutes())
+        .padStart(2, "0");
+
+    const seconds =
+        String(now.getSeconds())
+        .padStart(2, "0");
+
+
+    const weekdays = [
+        "日",
+        "月",
+        "火",
+        "水",
+        "木",
+        "金",
+        "土"
+    ];
+
+
+    const weekday =
+        weekdays[now.getDay()];
+
+
+    document.getElementById(
+        "current-date"
+    ).textContent =
+        `${year}/${month}/${day}(${weekday})`;
+
+
+    document.getElementById(
+        "current-time"
+    ).textContent =
+        `${hours}:${minutes}:${seconds}`;
+
+}
+
+
+updateClock();
+
+setInterval(
+    updateClock,
+    1000
+);
+
+
+/* ==================================
+   運行情報
+================================== */
+
+async function loadOperationInfo() {
+
+    const operationBox =
+        document.getElementById("operation-info");
+
+    const operationIcon =
+        document.getElementById("operation-icon");
+
+    const operationStatus =
+        document.getElementById("operation-status");
+
+    const operationText =
+        document.getElementById("operation-text");
+
+    const operationUpdated =
+        document.getElementById("operation-updated");
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/operation",
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+        if (!response.ok) {
+            throw new Error(
+                "運行情報の取得に失敗しました"
+            );
+        }
+
+
+        const data =
+            await response.json();
+
+
+        /*
+         * まず表示をリセット
+         */
+
+        operationBox.className =
+            "operation-info";
+
+
+        /*
+         * 平常運転
+         */
+
+        if (
+            data.status === "平常運転"
+        ) {
+
+            operationBox.classList.add(
+                "normal"
+            );
+
+            operationIcon.textContent =
+                "○";
+
+            operationStatus.textContent =
+                "平常運転";
+
+            operationText.textContent =
+                data.message ||
+                "両毛線は平常通り運転しています。";
+
+        }
+
+
+        /*
+         * 遅延
+         */
+
+        else if (
+            data.status === "遅延"
+        ) {
+
+            operationBox.classList.add(
+                "delay"
+            );
+
+            operationIcon.textContent =
+                "△";
+
+            operationStatus.textContent =
+                "遅延";
+
+            operationText.textContent =
+                data.message ||
+                "両毛線は、一部列車に遅れが出ています。";
+
+        }
+
+
+        /*
+         * 運転見合わせ
+         */
+
+        else if (
+            data.status === "運転見合わせ"
+            ||
+            data.status === "運休"
+        ) {
+
+            operationBox.classList.add(
+                "suspended"
+            );
+
+            operationIcon.textContent =
+                "×";
+
+            operationStatus.textContent =
+                data.status;
+
+            operationText.textContent =
+                data.message ||
+                "両毛線は、運転を見合わせています。";
+
+        }
+
+
+        /*
+         * その他・情報取得できない場合
+         */
+
+        else {
+
+            operationBox.classList.add(
+                "unknown"
+            );
+
+            operationIcon.textContent =
+                "－";
+
+            operationStatus.textContent =
+                data.status ||
+                "情報取得中";
+
+            operationText.textContent =
+                data.message ||
+                "現在、運行情報を取得しています。";
+
+        }
+
+
+        /*
+         * 更新時刻
+         */
+
+        if (data.updated) {
+
+            operationUpdated.textContent =
+                "更新：" + data.updated;
+
+        } else {
+
+            operationUpdated.textContent =
+                "";
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "運行情報取得エラー:",
+            error
+        );
+
+
+        operationBox.className =
+            "operation-info unknown";
+
+
+        operationIcon.textContent =
+            "－";
+
+        operationStatus.textContent =
+            "情報取得中";
+
+        operationText.textContent =
+            "現在、運行情報を取得できません。";
+
+        operationUpdated.textContent =
+            "";
+
+    }
+
+}
+
+
+/*
+ * 最初に取得
+ */
+
+loadOperationInfo();
+
+
+/*
+ * 60秒ごとに更新
+ */
+
+setInterval(
+    loadOperationInfo,
+    60000
+);
+
+
+/* ==================================
+   設定
+================================== */
+
+function openSettings() {
+
+    alert(
+        "設定画面はこれから作成します。"
+    );
+
+}
+
+
+/* ==================================
+   現在地
+================================== */
+
+function findNearestStation() {
+
+    if (!navigator.geolocation) {
+
+        alert(
+            "このブラウザでは現在地を取得できません。"
+        );
+
+        return;
+    }
+
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(position) {
+
+            const userLat =
+                position.coords.latitude;
+
+            const userLon =
+                position.coords.longitude;
+
+
+            let nearestStation = null;
+
+            let nearestDistance =
+                Infinity;
+
+
+            stations.forEach(
+                function(station) {
+
+                    const distance =
+                        calculateDistance(
+                            userLat,
+                            userLon,
+                            station.lat,
+                            station.lon
+                        );
+
+
+                    if (
+                        distance <
+                        nearestDistance
+                    ) {
+
+                        nearestDistance =
+                            distance;
+
+                        nearestStation =
+                            station;
+
+                    }
+
+                }
+            );
+
+
+            if (nearestStation) {
+
+                window.location.href =
+                    "/station/" +
+                    nearestStation.id;
+
+            }
+
+        },
+
+
+        function(error) {
+
+            if (error.code === 1) {
+
+                alert(
+                    "現在地の取得が許可されていません。"
+                );
+
+            } else {
+
+                alert(
+                    "現在地を取得できませんでした。"
+                );
+
+            }
+
+        },
+
+
+        {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 60000
+        }
+
+    );
+
+}
+
+
+/* ==================================
+   距離計算
+================================== */
+
+function calculateDistance(
+    lat1,
+    lon1,
+    lat2,
+    lon2
+) {
+
+    const R = 6371;
+
+    const dLat =
+        (lat2 - lat1)
+        * Math.PI / 180;
+
+    const dLon =
+        (lon2 - lon1)
+        * Math.PI / 180;
+
+
+    const a =
+
+        Math.sin(dLat / 2) *
+        Math.sin(dLat / 2)
+
+        +
+
+        Math.cos(
+            lat1 * Math.PI / 180
+        )
+
+        *
+
+        Math.cos(
+            lat2 * Math.PI / 180
+        )
+
+        *
+
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+
+
+    const c =
+        2 *
+        Math.atan2(
+            Math.sqrt(a),
+            Math.sqrt(1 - a)
+        );
+
+
+    return R * c;
+
+}
+
+</script>
+
+</body>
+</html>
