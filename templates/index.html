@@ -99,9 +99,7 @@
 <main class="station-grid">
 
 
-    <!-- ==================================
-         栃木駅
-    ================================== -->
+    <!-- 栃木駅 -->
 
     <a
         href="/station/tochigi"
@@ -127,18 +125,11 @@
             Tochigi Station
         </div>
 
-
-        <div class="arrow">
-            ▶
-        </div>
-
     </a>
 
 
 
-    <!-- ==================================
-         佐野駅
-    ================================== -->
+    <!-- 佐野駅 -->
 
     <a
         href="/station/sano"
@@ -164,18 +155,11 @@
             Sano Station
         </div>
 
-
-        <div class="arrow">
-            ▶
-        </div>
-
     </a>
 
 
 
-    <!-- ==================================
-         足利駅
-    ================================== -->
+    <!-- 足利駅 -->
 
     <a
         href="/station/ashikaga"
@@ -201,18 +185,11 @@
             Ashikaga Station
         </div>
 
-
-        <div class="arrow">
-            ▶
-        </div>
-
     </a>
 
 
 
-    <!-- ==================================
-         現在地
-    ================================== -->
+    <!-- 現在地 -->
 
     <button
         class="station-card current-location"
@@ -239,11 +216,6 @@
             Current Location
         </div>
 
-
-        <div class="arrow">
-            ▶
-        </div>
-
     </button>
 
 
@@ -253,7 +225,6 @@
 
 <!-- ==================================
      運行情報
-     クリックするとJR東日本公式ページ
 ================================== -->
 
 <section
@@ -308,11 +279,6 @@
     </div>
 
 
-    <div class="operation-arrow">
-        ▶
-    </div>
-
-
 </section>
 
 
@@ -362,30 +328,24 @@ function updateClock() {
 
     const now = new Date();
 
-
     const year =
         now.getFullYear();
-
 
     const month =
         String(now.getMonth() + 1)
         .padStart(2, "0");
 
-
     const day =
         String(now.getDate())
         .padStart(2, "0");
-
 
     const hours =
         String(now.getHours())
         .padStart(2, "0");
 
-
     const minutes =
         String(now.getMinutes())
         .padStart(2, "0");
-
 
     const seconds =
         String(now.getSeconds())
@@ -393,7 +353,6 @@ function updateClock() {
 
 
     const weekdays = [
-
         "日",
         "月",
         "火",
@@ -401,7 +360,6 @@ function updateClock() {
         "木",
         "金",
         "土"
-
     ];
 
 
@@ -409,21 +367,11 @@ function updateClock() {
         weekdays[now.getDay()];
 
 
-    /* ==================================
-       日付
-       例：2026/09/10(木)
-    ================================== */
-
     document.getElementById(
         "current-date"
     ).textContent =
         `${year}/${month}/${day}(${weekday})`;
 
-
-    /* ==================================
-       時刻
-       例：23:16:42
-    ================================== */
 
     document.getElementById(
         "current-time"
@@ -433,12 +381,8 @@ function updateClock() {
 }
 
 
-/* 最初に時計を表示 */
-
 updateClock();
 
-
-/* 1秒ごとに更新 */
 
 setInterval(
     updateClock,
@@ -452,7 +396,6 @@ setInterval(
 ================================== */
 
 async function loadOperationInfo() {
-
 
     const operationBox =
         document.getElementById(
@@ -486,7 +429,6 @@ async function loadOperationInfo() {
 
     try {
 
-
         const response =
             await fetch(
                 "/api/operation",
@@ -509,37 +451,27 @@ async function loadOperationInfo() {
             await response.json();
 
 
-
-        /* ==================================
-           表示をリセット
-        ================================== */
+        /* 表示をリセット */
 
         operationBox.className =
             "operation-info";
 
 
-
-        /* ==================================
-           平常運転
-        ================================== */
+        /* 平常運転 */
 
         if (
             data.status === "平常運転"
         ) {
 
-
             operationBox.classList.add(
                 "normal"
             );
 
-
             operationIcon.textContent =
                 "○";
 
-
             operationStatus.textContent =
                 "平常運転";
-
 
             operationText.textContent =
                 data.message ||
@@ -548,28 +480,21 @@ async function loadOperationInfo() {
         }
 
 
-
-        /* ==================================
-           遅延
-        ================================== */
+        /* 遅延 */
 
         else if (
             data.status === "遅延"
         ) {
 
-
             operationBox.classList.add(
                 "delay"
             );
 
-
             operationIcon.textContent =
                 "△";
 
-
             operationStatus.textContent =
                 "遅延";
-
 
             operationText.textContent =
                 data.message ||
@@ -578,10 +503,7 @@ async function loadOperationInfo() {
         }
 
 
-
-        /* ==================================
-           運転見合わせ・運休
-        ================================== */
+        /* 運転見合わせ・運休 */
 
         else if (
 
@@ -593,19 +515,15 @@ async function loadOperationInfo() {
 
         ) {
 
-
             operationBox.classList.add(
                 "suspended"
             );
 
-
             operationIcon.textContent =
                 "×";
 
-
             operationStatus.textContent =
                 data.status;
-
 
             operationText.textContent =
                 data.message ||
@@ -614,27 +532,20 @@ async function loadOperationInfo() {
         }
 
 
-
-        /* ==================================
-           その他
-        ================================== */
+        /* その他 */
 
         else {
-
 
             operationBox.classList.add(
                 "unknown"
             );
 
-
             operationIcon.textContent =
                 "－";
-
 
             operationStatus.textContent =
                 data.status ||
                 "情報取得中";
-
 
             operationText.textContent =
                 data.message ||
@@ -643,31 +554,24 @@ async function loadOperationInfo() {
         }
 
 
-
-        /* ==================================
-           更新時刻
-        ================================== */
+        /* 更新時刻 */
 
         if (data.updated) {
 
             operationUpdated.textContent =
                 "更新：" + data.updated;
 
-        }
-
-        else {
+        } else {
 
             operationUpdated.textContent =
                 "";
 
         }
 
-
     }
 
 
     catch (error) {
-
 
         console.error(
             "運行情報取得エラー:",
@@ -701,12 +605,10 @@ async function loadOperationInfo() {
 
 
 /* ==================================
-   運行情報を開く
-   JR東日本公式ページ
+   運行情報クリック
 ================================== */
 
 function openOperationInfo() {
-
 
     window.open(
 
@@ -720,11 +622,6 @@ function openOperationInfo() {
 
 }
 
-
-
-/* ==================================
-   運行情報クリック
-================================== */
 
 const operationInfo =
     document.getElementById(
@@ -741,27 +638,19 @@ operationInfo.addEventListener(
 
 /* ==================================
    キーボード操作
-   Enter / Space
 ================================== */
 
 operationInfo.addEventListener(
     "keydown",
     function(event) {
 
-
         if (
-
             event.key === "Enter"
-
             ||
-
             event.key === " "
-
         ) {
 
-
             event.preventDefault();
-
 
             openOperationInfo();
 
@@ -773,7 +662,7 @@ operationInfo.addEventListener(
 
 
 /* ==================================
-   最初に運行情報を取得
+   最初に取得
 ================================== */
 
 loadOperationInfo();
@@ -811,60 +700,44 @@ function openSettings() {
 
 function findNearestStation() {
 
-
     if (!navigator.geolocation) {
-
 
         alert(
             "このブラウザでは現在地を取得できません。"
         );
 
-
         return;
-
     }
-
 
 
     navigator.geolocation.getCurrentPosition(
 
-
         function(position) {
-
 
             const userLat =
                 position.coords.latitude;
-
 
             const userLon =
                 position.coords.longitude;
 
 
-
             let nearestStation =
                 null;
-
 
             let nearestDistance =
                 Infinity;
 
 
-
             stations.forEach(
                 function(station) {
 
-
                     const distance =
                         calculateDistance(
-
                             userLat,
                             userLon,
-
                             station.lat,
                             station.lon
-
                         );
-
 
 
                     if (
@@ -872,10 +745,8 @@ function findNearestStation() {
                         nearestDistance
                     ) {
 
-
                         nearestDistance =
                             distance;
-
 
                         nearestStation =
                             station;
@@ -886,9 +757,7 @@ function findNearestStation() {
             );
 
 
-
             if (nearestStation) {
-
 
                 window.location.href =
                     "/station/" +
@@ -901,19 +770,13 @@ function findNearestStation() {
 
         function(error) {
 
-
             if (error.code === 1) {
-
 
                 alert(
                     "現在地の取得が許可されていません。"
                 );
 
-            }
-
-
-            else {
-
+            } else {
 
                 alert(
                     "現在地を取得できませんでした。"
@@ -925,13 +788,9 @@ function findNearestStation() {
 
 
         {
-
             enableHighAccuracy: true,
-
             timeout: 10000,
-
             maximumAge: 60000
-
         }
 
     );
@@ -945,14 +804,11 @@ function findNearestStation() {
 ================================== */
 
 function calculateDistance(
-
     lat1,
     lon1,
     lat2,
     lon2
-
 ) {
-
 
     const R =
         6371;
@@ -966,7 +822,6 @@ function calculateDistance(
     const dLon =
         (lon2 - lon1)
         * Math.PI / 180;
-
 
 
     const a =
@@ -992,21 +847,12 @@ function calculateDistance(
         Math.sin(dLon / 2);
 
 
-
     const c =
-
         2 *
-
         Math.atan2(
-
             Math.sqrt(a),
-
-            Math.sqrt(
-                1 - a
-            )
-
+            Math.sqrt(1 - a)
         );
-
 
 
     return R * c;
