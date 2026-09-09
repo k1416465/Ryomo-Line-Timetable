@@ -95,44 +95,46 @@ def station(station):
 
 
 # ==================================================
-# JR東日本 両毛線 運行情報
+# 両毛線 運行情報
+#
+# JR東日本はRenderから403になるため、
+# Yahoo!路線情報を使用
 # ==================================================
 
 @app.route("/api/operation")
 def api_operation():
 
     url = (
-        "https://traininfo.jreast.co.jp/"
-        "train_info/line.aspx"
-        "?gid=1&lineid=ryomoline"
+        "https://transit.yahoo.co.jp/"
+        "diainfo/168/0"
     )
 
     headers = {
 
         "User-Agent": (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Mozilla/5.0 "
+            "(Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 "
+            "(KHTML, like Gecko) "
             "Chrome/140.0 Safari/537.36"
         ),
 
         "Accept": (
             "text/html,application/xhtml+xml,"
-            "application/xml;q=0.9,image/avif,image/webp,"
+            "application/xml;q=0.9,"
+            "image/avif,image/webp,"
             "*/*;q=0.8"
         ),
 
         "Accept-Language":
-            "ja-JP,ja;q=0.9,en-US;q=0.8,en;q=0.7",
-
-        "Referer":
-            "https://traininfo.jreast.co.jp/"
+            "ja-JP,ja;q=0.9,en-US;q=0.8,en;q=0.7"
 
     }
 
     try:
 
         # ==========================================
-        # JR東日本ページ取得
+        # Yahoo!路線情報を取得
         # ==========================================
 
         response = requests.get(
@@ -146,12 +148,12 @@ def api_operation():
         )
 
         print(
-            "JR東日本 HTTP status:",
+            "Yahoo!路線情報 HTTP status:",
             response.status_code
         )
 
         print(
-            "JR東日本 response length:",
+            "Yahoo! response length:",
             len(response.text)
         )
 
@@ -172,7 +174,7 @@ def api_operation():
 
 
         # ==========================================
-        # ページ全体の文字を取得
+        # ページの文字列
         # ==========================================
 
         text = soup.get_text(
@@ -185,7 +187,7 @@ def api_operation():
 
 
         print(
-            "JR東日本ページ取得成功"
+            "Yahoo!路線情報ページ取得成功"
         )
 
 
@@ -195,23 +197,81 @@ def api_operation():
 
         updated = ""
 
-        update_pattern = re.compile(
+        update_patterns = [
 
-            r"\d{4}年\d{1,2}月\d{1,2}日"
-            r"\s*\d{1,2}時\d{2}分"
-            r"\s*現在"
+            re.compile(
+                r"\d{1,2}月\d{1,2}日"
+                r"\s*\d{1,2}時\d{2}分"
+                r"\s*更新"
+            ),
 
-        )
+            re.compile(
+                r"\d{1,2}月\d{1,2}日"
+                r"\s*\d{1,2}時\d{2}分"
+                r"\s*現在"
+            )
 
-        match = update_pattern.search(text)
+        ]
 
-        if match:
+        for pattern in update_patterns:
 
-            updated = match.group(0)
+            match = pattern.search(text)
+
+            if match:
+
+                updated = match.group(0)
+
+                break
 
 
         # ==========================================
-        # 初期状態
+        # 両毛線部分を探す
+        # ==========================================
+
+        ryomo_index = text.find("両毛線")
+
+
+        if ryomo_index == -1:
+
+            print(
+                "Yahoo!ページ内に両毛線が見つかりません"
+            )
+
+            return jsonify({
+
+                "line": "両毛線",
+
+                "status": "情報取得中",
+
+                "message":
+                    "両毛線の運行情報を確認しています。",
+
+                "updated": updated,
+
+                "source":
+                    "Yahoo!路線情報"
+
+            })
+
+
+        # ==========================================
+        # 両毛線周辺の文章
+        # ==========================================
+
+        ryomo_text = text[
+            ryomo_index:
+            ryomo_index + 500
+        ]
+
+
+        print(
+            "両毛線周辺情報:",
+            ryomo_text
+        )
+
+
+        # ==========================================
+        # 初期値
         # ==========================================
 
         status = "情報取得中"
@@ -225,7 +285,16 @@ def api_operation():
         # 平常運転
         # ==========================================
 
-        if "平常運転" in text:
+        if (
+
+            "平常運転" in ryomo_text
+
+            or
+
+            "事故・遅延に関する情報はありません"
+            in ryomo_text
+
+        ):
 
             status = "平常運転"
 
@@ -238,66 +307,34 @@ def api_operation():
         # 運転見合わせ
         # ==========================================
 
-        if (
+        elif (
 
-            "両毛線" in text
+            "運転見合わせ" in ryomo_text
 
-            and
+            or
 
-            (
-                "運転見合わせ" in text
-                or
-                "運転を見合わせ" in text
-            )
+            "運転を見合わせ" in ryomo_text
 
         ):
 
             status = "運転見合わせ"
 
-            index = text.find("両毛線")
-
-            if index >= 0:
-
-                message = text[
-                    index:index + 300
-                ]
-
-            else:
-
-                message = (
-                    "両毛線は運転を見合わせています。"
-                )
+            message = (
+                ryomo_text[:300]
+            )
 
 
         # ==========================================
         # 運休
         # ==========================================
 
-        elif (
-
-            "両毛線" in text
-
-            and
-
-            "運休" in text
-
-        ):
+        elif "運休" in ryomo_text:
 
             status = "運休"
 
-            index = text.find("両毛線")
-
-            if index >= 0:
-
-                message = text[
-                    index:index + 300
-                ]
-
-            else:
-
-                message = (
-                    "両毛線で運休が発生しています。"
-                )
+            message = (
+                ryomo_text[:300]
+            )
 
 
         # ==========================================
@@ -306,37 +343,27 @@ def api_operation():
 
         elif (
 
-            "両毛線" in text
+            "遅延" in ryomo_text
 
-            and
+            or
 
-            (
-                "遅延" in text
-                or
-                "遅れ" in text
-            )
+            "遅れ" in ryomo_text
+
+            or
+
+            "運転状況" in ryomo_text
 
         ):
 
             status = "遅延"
 
-            index = text.find("両毛線")
-
-            if index >= 0:
-
-                message = text[
-                    index:index + 300
-                ]
-
-            else:
-
-                message = (
-                    "両毛線の一部列車に遅れが出ています。"
-                )
+            message = (
+                ryomo_text[:300]
+            )
 
 
         # ==========================================
-        # デバッグログ
+        # デバッグ
         # ==========================================
 
         print(
@@ -359,7 +386,7 @@ def api_operation():
 
 
         # ==========================================
-        # JSONを返す
+        # JSON
         # ==========================================
 
         return jsonify({
@@ -372,19 +399,20 @@ def api_operation():
 
             "updated": updated,
 
-            "source": "JR東日本"
+            "source":
+                "Yahoo!路線情報"
 
         })
 
 
     # ==========================================
-    # JR東日本への接続エラー
+    # 通信エラー
     # ==========================================
 
     except requests.exceptions.RequestException as e:
 
         print(
-            "JR東日本への接続エラー:",
+            "Yahoo!路線情報への接続エラー:",
             repr(e)
         )
 
@@ -395,13 +423,15 @@ def api_operation():
             "status": "情報取得中",
 
             "message":
-                "JR東日本の運行情報を取得できません。",
+                "運行情報を取得できません。",
 
             "updated": "",
 
-            "source": "JR東日本",
+            "source":
+                "Yahoo!路線情報",
 
-            "error": str(e)
+            "error":
+                str(e)
 
         })
 
@@ -428,9 +458,11 @@ def api_operation():
 
             "updated": "",
 
-            "source": "JR東日本",
+            "source":
+                "Yahoo!路線情報",
 
-            "error": str(e)
+            "error":
+                str(e)
 
         })
 
