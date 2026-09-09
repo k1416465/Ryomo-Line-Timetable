@@ -67,7 +67,7 @@
 <div class="current-info">
 
     <span id="current-date">
-        2026/09/09(水)
+        2026/09/10(木)
     </span>
 
     <div class="date-divider"></div>
@@ -253,7 +253,7 @@
 
 <!-- ==================================
      運行情報
-     ボックス全体をクリック可能
+     クリックするとJR東日本公式ページ
 ================================== -->
 
 <section
@@ -393,6 +393,7 @@ function updateClock() {
 
 
     const weekdays = [
+
         "日",
         "月",
         "火",
@@ -400,6 +401,7 @@ function updateClock() {
         "木",
         "金",
         "土"
+
     ];
 
 
@@ -407,11 +409,21 @@ function updateClock() {
         weekdays[now.getDay()];
 
 
+    /* ==================================
+       日付
+       例：2026/09/10(木)
+    ================================== */
+
     document.getElementById(
         "current-date"
     ).textContent =
         `${year}/${month}/${day}(${weekday})`;
 
+
+    /* ==================================
+       時刻
+       例：23:16:42
+    ================================== */
 
     document.getElementById(
         "current-time"
@@ -421,8 +433,12 @@ function updateClock() {
 }
 
 
+/* 最初に時計を表示 */
+
 updateClock();
 
+
+/* 1秒ごとに更新 */
 
 setInterval(
     updateClock,
@@ -685,11 +701,12 @@ async function loadOperationInfo() {
 
 
 /* ==================================
-   運行情報をクリック
-   JR東日本公式ページを開く
+   運行情報を開く
+   JR東日本公式ページ
 ================================== */
 
 function openOperationInfo() {
+
 
     window.open(
 
@@ -706,7 +723,7 @@ function openOperationInfo() {
 
 
 /* ==================================
-   運行情報クリックイベント
+   運行情報クリック
 ================================== */
 
 const operationInfo =
@@ -724,6 +741,7 @@ operationInfo.addEventListener(
 
 /* ==================================
    キーボード操作
+   Enter / Space
 ================================== */
 
 operationInfo.addEventListener(
