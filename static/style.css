@@ -999,6 +999,7 @@ body {
 .train-table {
     width: 100%;
     overflow: hidden;
+    background: #080909;
 }
 
 
@@ -1245,6 +1246,8 @@ body {
     overflow: hidden;
 
     text-overflow: ellipsis;
+
+    background: #080909;
 }
 
 .empty-note {
@@ -1255,6 +1258,8 @@ body {
     padding: 1px 6px 1px;
 
     border-bottom: 1px solid #888;
+
+    background: #080909;
 }
 
 
@@ -1421,6 +1426,8 @@ body {
     font-size: 18px;
 
     font-weight: 700;
+
+    background: #080909;
 }
 
 
@@ -1620,6 +1627,8 @@ body {
         overflow: hidden;
 
         text-overflow: ellipsis;
+
+        background: #080909;
     }
 
     .footer {
@@ -2432,39 +2441,73 @@ body.light-mode .line-name {
     color: #111111;
 }
 
-/* 電光掲示板部分は黒 */
+
+/* ==================================================
+    電光掲示板
+    ライトモードでもここは黒
+================================================== */
+
 body.light-mode .train-table {
-    background: #080909;
+    background: #080909 !important;
     color: #ffffff;
 }
 
-/* 「種別・発車時刻・行先・両数・発車まで」は白 */
+
+/* ===== 見出し部分は白 ===== */
+
 body.light-mode .table-head {
-    background: #ffffff;
-    color: #111111;
-    border-color: #999999;
+    background: #ffffff !important;
+    color: #111111 !important;
 }
 
-/* 列車部分は黒 */
+
+/* ===== 列車部分は黒 ===== */
+
 body.light-mode .train-row {
-    background: #080909;
-    color: #ffffff;
+    background: #080909 !important;
+    color: #ffffff !important;
 }
 
-/* 2個目の列車の下の部分も黒 */
-body.light-mode .note,
-body.light-mode .empty-note,
-body.light-mode .service-finished {
-    background: #080909;
-    color: #ffffff;
-}
+
+/* ===== 備考欄 ===== */
 
 body.light-mode .note,
 body.light-mode .empty-note {
+    background: #080909 !important;
+    color: #ffffff !important;
+
     border-bottom-color: #888888;
 }
 
-/* フッター */
+
+/* ===== 列車終了表示 ===== */
+
+body.light-mode .service-finished {
+    background: #080909 !important;
+    color: #ffffff !important;
+}
+
+
+/* ===== 電光掲示板内部の空白も黒 ===== */
+
+body.light-mode .train-table * {
+    background-color: transparent;
+}
+
+body.light-mode .train-table .table-head {
+    background-color: #ffffff !important;
+}
+
+body.light-mode .train-table .train-row,
+body.light-mode .train-table .note,
+body.light-mode .train-table .empty-note,
+body.light-mode .train-table .service-finished {
+    background-color: #080909 !important;
+}
+
+
+/* ===== フッター ===== */
+
 body.light-mode .footer > div,
 body.light-mode .footer button {
     background: #ffffff;
@@ -2476,7 +2519,9 @@ body.light-mode .refresh-icon {
     color: #111111;
 }
 
-/* ホームへ戻るボタン */
+
+/* ===== ホームへ戻る ===== */
+
 body.light-mode .back-home-button {
     background: #ffffff;
     color: #111111;
@@ -2490,6 +2535,7 @@ body.light-mode .back-home-button:hover {
 body.light-mode .back-home-en {
     color: #666666;
 }
+
 
 /* ===== 黄色の縦線はそのまま ===== */
 
@@ -2513,19 +2559,61 @@ body.light-mode .yellow-bar {
         background: #ffffff;
     }
 
-    /*
-     * 電光掲示板はスマホでも黒のまま
-     */
 
-    body.light-mode .train-table,
-    body.light-mode .table-head,
-    body.light-mode .train-row,
-    body.light-mode .note,
-    body.light-mode .empty-note,
-    body.light-mode .service-finished {
-        background: #080909;
+    /* ===== 電光掲示板はスマホでも黒 ===== */
 
+    body.light-mode .train-table {
+        background: #080909 !important;
         color: #ffffff;
     }
 
+    body.light-mode .train-table .table-head {
+        background: #ffffff !important;
+        color: #111111 !important;
+    }
+
+    body.light-mode .train-table .train-row,
+    body.light-mode .train-table .note,
+    body.light-mode .train-table .empty-note,
+    body.light-mode .train-table .service-finished {
+        background: #080909 !important;
+        color: #ffffff !important;
+    }
+
+}
+
+
+/* ==================================================
+    最終的な電光掲示板下部の黒背景
+================================================== */
+
+/*
+ * 2列車目の備考欄より下に白い隙間が
+ * 発生した場合でも、train-table全体を黒で埋める
+ */
+
+body.light-mode .train-table {
+    background-color: #080909 !important;
+}
+
+
+/* train-table内の空白部分 */
+body.light-mode .train-table::before,
+body.light-mode .train-table::after {
+    background-color: #080909;
+}
+
+
+/* ただし見出しだけ白 */
+body.light-mode .train-table .table-head {
+    background-color: #ffffff !important;
+}
+
+
+/* 列車・備考・終了表示は黒 */
+body.light-mode .train-table .train-row,
+body.light-mode .train-table .note,
+body.light-mode .train-table .empty-note,
+body.light-mode .train-table .service-finished {
+    background-color: #080909 !important;
 }
