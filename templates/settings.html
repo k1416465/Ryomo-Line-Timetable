@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="ja">
 
 <head>
@@ -66,6 +67,34 @@
         <div class="settings-options">
 
 
+            <!-- 選択しない -->
+
+            <label class="settings-option">
+
+                <input
+                    type="radio"
+                    name="defaultStation"
+                    value="none"
+                >
+
+                <span class="settings-option-text">
+
+                    <strong>
+                        選択しない
+                    </strong>
+
+                    <small>
+                        Open Home Screen
+                    </small>
+
+                </span>
+
+            </label>
+
+
+
+            <!-- 栃木駅 -->
+
             <label class="settings-option">
 
                 <input
@@ -90,6 +119,8 @@
 
 
 
+            <!-- 佐野駅 -->
+
             <label class="settings-option">
 
                 <input
@@ -113,6 +144,8 @@
             </label>
 
 
+
+            <!-- 足利駅 -->
 
             <label class="settings-option">
 
@@ -161,6 +194,8 @@
         <div class="settings-options">
 
 
+            <!-- ダーク -->
+
             <label class="settings-option">
 
                 <input
@@ -184,6 +219,8 @@
             </label>
 
 
+
+            <!-- ライト -->
 
             <label class="settings-option">
 
@@ -215,7 +252,7 @@
 
 
     <!-- ==================================
-         保存ボタン
+         保存
     ================================== -->
 
     <button
@@ -262,22 +299,40 @@
 
 
 /* ==================================
-   初期設定を読み込む
+   設定読み込み
 ================================== */
 
 function loadSettings() {
 
+
+    /*
+     * デフォルト駅
+     *
+     * 初期状態は「選択しない」
+     */
+
     const defaultStation =
         localStorage.getItem(
             "defaultStation"
-        ) || "sano";
+        ) || "none";
 
+
+    /*
+     * 表示モード
+     *
+     * 初期状態はダーク
+     */
 
     const displayMode =
         localStorage.getItem(
             "displayMode"
         ) || "dark";
 
+
+
+    /* ==================================
+       デフォルト駅を選択
+    ================================== */
 
     const stationRadio =
         document.querySelector(
@@ -291,6 +346,11 @@ function loadSettings() {
 
     }
 
+
+
+    /* ==================================
+       表示モードを選択
+    ================================== */
 
     const modeRadio =
         document.querySelector(
@@ -309,10 +369,15 @@ function loadSettings() {
 
 
 /* ==================================
-   設定を保存
+   設定保存
 ================================== */
 
 function saveSettings() {
+
+
+    /* ==================================
+       デフォルト駅
+    ================================== */
 
     const station =
         document.querySelector(
@@ -320,11 +385,20 @@ function saveSettings() {
         );
 
 
+    /* ==================================
+       表示モード
+    ================================== */
+
     const mode =
         document.querySelector(
             'input[name="displayMode"]:checked'
         );
 
+
+
+    /* ==================================
+       デフォルト駅チェック
+    ================================== */
 
     if (!station) {
 
@@ -337,6 +411,11 @@ function saveSettings() {
     }
 
 
+
+    /* ==================================
+       表示モードチェック
+    ================================== */
+
     if (!mode) {
 
         alert(
@@ -347,6 +426,11 @@ function saveSettings() {
 
     }
 
+
+
+    /* ==================================
+       保存
+    ================================== */
 
     localStorage.setItem(
         "defaultStation",
@@ -360,9 +444,15 @@ function saveSettings() {
     );
 
 
+
+    /* ==================================
+       表示モードを反映
+    ================================== */
+
     applyDisplayMode(
         mode.value
     );
+
 
 
     alert(
@@ -379,7 +469,10 @@ function saveSettings() {
 
 function applyDisplayMode(mode) {
 
-    if (mode === "light") {
+
+    if (
+        mode === "light"
+    ) {
 
         document.body.classList.add(
             "light-mode"
@@ -396,6 +489,11 @@ function applyDisplayMode(mode) {
 }
 
 
+
+/* ==================================
+   初期表示
+================================== */
+
 const savedMode =
     localStorage.getItem(
         "displayMode"
@@ -407,9 +505,8 @@ applyDisplayMode(
 );
 
 
-/* 初期設定 */
-
 loadSettings();
+
 
 </script>
 
