@@ -1788,3 +1788,485 @@ body {
 .operation-status {
     display: none;
 }
+
+/* ==================================================
+   設定画面
+================================================== */
+
+.settings-page {
+    min-height: 100vh;
+    background: #080909;
+    color: #ffffff;
+}
+
+
+.settings-container {
+    width: min(600px, 100%);
+    margin: 0 auto;
+    padding: 20px 0 40px;
+}
+
+
+/* ===== ヘッダー ===== */
+
+.settings-header {
+    text-align: center;
+
+    padding: 35px 10px 30px;
+
+    border-bottom: 1px solid #555555;
+
+    margin-bottom: 25px;
+}
+
+
+.settings-header-icon {
+    font-size: 42px;
+
+    line-height: 1;
+
+    margin-bottom: 12px;
+}
+
+
+.settings-header h1 {
+    margin: 0;
+
+    font-size: 38px;
+
+    font-weight: 900;
+
+    line-height: 1;
+}
+
+
+.settings-header-en {
+    margin-top: 8px;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    letter-spacing: 2px;
+
+    color: #aaaaaa;
+}
+
+
+/* ===== 設定項目 ===== */
+
+.settings-section {
+    margin-bottom: 25px;
+
+    padding: 22px;
+
+    border: 1px solid #555555;
+
+    border-radius: 12px;
+
+    background: #101010;
+}
+
+
+.settings-section-title {
+    font-size: 22px;
+
+    font-weight: 900;
+}
+
+
+.settings-section-en {
+    margin-top: 4px;
+
+    font-size: 12px;
+
+    color: #999999;
+
+    letter-spacing: 1px;
+}
+
+
+/* ===== 選択肢 ===== */
+
+.settings-options {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    margin-top: 18px;
+}
+
+
+.settings-option {
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    min-height: 65px;
+
+    padding: 12px 15px;
+
+    border: 1px solid #444444;
+
+    border-radius: 9px;
+
+    background: #080909;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease;
+}
+
+
+.settings-option:hover {
+    background: #181818;
+
+    border-color: #888888;
+}
+
+
+.settings-option input {
+    width: 20px;
+
+    height: 20px;
+
+    margin: 0;
+
+    flex-shrink: 0;
+
+    accent-color: #ffffff;
+
+    cursor: pointer;
+}
+
+
+.settings-option:has(input:checked) {
+    border-color: #ffffff;
+
+    background: #1c1c1c;
+}
+
+
+.settings-option-text {
+    display: flex;
+
+    flex-direction: column;
+
+    line-height: 1.2;
+}
+
+
+.settings-option-text strong {
+    font-size: 18px;
+
+    font-weight: 800;
+}
+
+
+.settings-option-text small {
+    margin-top: 5px;
+
+    font-size: 11px;
+
+    color: #999999;
+}
+
+
+/* ===== 保存ボタン ===== */
+
+.settings-save-button {
+    display: block;
+
+    width: 100%;
+
+    min-height: 58px;
+
+    padding: 10px 20px;
+
+    border: 1px solid #ffffff;
+
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    color: #000000;
+
+    font-size: 18px;
+
+    font-weight: 900;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        transform 0.15s ease;
+}
+
+
+.settings-save-button:hover {
+    background: #dddddd;
+
+    transform: translateY(-2px);
+}
+
+
+.settings-save-button:active {
+    transform: scale(0.98);
+}
+
+
+/* ===== ホームへ戻る ===== */
+
+.settings-back-area {
+    margin-top: 15px;
+}
+
+
+.settings-back-button {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 100%;
+
+    min-height: 58px;
+
+    padding: 9px 20px;
+
+    border: 1px solid #555555;
+
+    border-radius: 9px;
+
+    background: #101010;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    transition:
+        background 0.15s ease,
+        transform 0.15s ease;
+}
+
+
+.settings-back-button:hover {
+    background: #202020;
+
+    transform: translateY(-2px);
+}
+
+
+.settings-back-button span {
+    font-size: 17px;
+
+    font-weight: 900;
+}
+
+
+.settings-back-button small {
+    margin-top: 4px;
+
+    font-size: 9px;
+
+    color: #999999;
+
+    letter-spacing: 1px;
+}
+
+
+/* ==================================================
+   設定画面 スマホ
+================================================== */
+
+@media (max-width: 600px) {
+
+    .settings-container {
+        padding: 8px 0 25px;
+    }
+
+
+    .settings-header {
+        padding: 25px 5px 22px;
+
+        margin-bottom: 18px;
+    }
+
+
+    .settings-header-icon {
+        font-size: 35px;
+
+        margin-bottom: 10px;
+    }
+
+
+    .settings-header h1 {
+        font-size: 30px;
+    }
+
+
+    .settings-header-en {
+        font-size: 12px;
+
+        margin-top: 6px;
+    }
+
+
+    .settings-section {
+        margin-bottom: 15px;
+
+        padding: 17px;
+
+        border-radius: 10px;
+    }
+
+
+    .settings-section-title {
+        font-size: 19px;
+    }
+
+
+    .settings-section-en {
+        font-size: 10px;
+    }
+
+
+    .settings-options {
+        margin-top: 14px;
+
+        gap: 8px;
+    }
+
+
+    .settings-option {
+        min-height: 58px;
+
+        padding: 10px 12px;
+
+        gap: 12px;
+    }
+
+
+    .settings-option input {
+        width: 18px;
+
+        height: 18px;
+    }
+
+
+    .settings-option-text strong {
+        font-size: 16px;
+    }
+
+
+    .settings-option-text small {
+        font-size: 9px;
+
+        margin-top: 4px;
+    }
+
+
+    .settings-save-button {
+        min-height: 52px;
+
+        font-size: 16px;
+    }
+
+
+    .settings-back-button {
+        min-height: 52px;
+    }
+
+
+    .settings-back-button span {
+        font-size: 15px;
+    }
+
+
+    .settings-back-button small {
+        font-size: 8px;
+    }
+
+}
+
+
+/* ==================================================
+   ライトモード
+================================================== */
+
+.settings-page.light-mode {
+    background: #f4f4f4;
+
+    color: #111111;
+}
+
+
+.settings-page.light-mode .settings-header {
+    border-color: #bbbbbb;
+}
+
+
+.settings-page.light-mode .settings-header-en {
+    color: #666666;
+}
+
+
+.settings-page.light-mode .settings-section {
+    background: #ffffff;
+
+    border-color: #cccccc;
+}
+
+
+.settings-page.light-mode .settings-section-en {
+    color: #666666;
+}
+
+
+.settings-page.light-mode .settings-option {
+    background: #f5f5f5;
+
+    border-color: #cccccc;
+}
+
+
+.settings-page.light-mode .settings-option:hover {
+    background: #e9e9e9;
+
+    border-color: #999999;
+}
+
+
+.settings-page.light-mode .settings-option:has(input:checked) {
+    background: #e2e2e2;
+
+    border-color: #333333;
+}
+
+
+.settings-page.light-mode .settings-option-text small {
+    color: #666666;
+}
+
+
+.settings-page.light-mode .settings-back-button {
+    background: #ffffff;
+
+    color: #111111;
+
+    border-color: #cccccc;
+}
+
+
+.settings-page.light-mode .settings-back-button small {
+    color: #666666;
+}
