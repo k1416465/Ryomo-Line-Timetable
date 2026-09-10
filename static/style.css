@@ -1787,7 +1787,7 @@ body {
 
 .operation-status {
     display: none;
-}
+
 
 /* ==================================================
    設定画面
@@ -2269,4 +2269,112 @@ body {
 
 .settings-page.light-mode .settings-back-button small {
     color: #666666;
+}
+
+
+/* ==================================================
+   ホーム画面 ライトモード
+================================================== */
+
+body.light-mode {
+    background: #f4f4f4;
+    color: #111111;
+}
+
+
+/* ===== ヘッダー ===== */
+
+body.light-mode .home-header h1 {
+    color: #111111;
+}
+
+body.light-mode .english-title {
+    color: #333333;
+}
+
+
+/* ===== 現在日時 ===== */
+
+body.light-mode .current-info {
+    color: #111111;
+}
+
+body.light-mode .date-divider {
+    background: #999999;
+}
+
+
+/* ===== 駅選択タイトル ===== */
+
+body.light-mode .select-title {
+    color: #111111;
+}
+
+
+/* ===== 駅カード ===== */
+
+body.light-mode .station-card {
+    background: #ffffff;
+    color: #111111;
+}
+
+
+/* ===== 駅カード hover ===== */
+
+body.light-mode .station-card:hover {
+    background: #eeeeee;
+}
+
+
+/* ===== 運行情報 ===== */
+
+body.light-mode .operation-info.normal {
+    background: #fffde8;
+}
+
+body.light-mode .operation-info.delay {
+    background: #fff4e8;
+}
+
+body.light-mode .operation-info.suspended {
+    background: #ffecef;
+}
+
+body.light-mode .operation-info.unknown {
+    background: #eeeeee;
+}
+
+
+/* ===== 運行情報の文字 ===== */
+
+body.light-mode .operation-info .operation-text {
+    color: #111111;
+}
+
+body.light-mode .operation-info .operation-updated {
+    color: #666666;
+}
+
+
+/* ===== 運行情報アイコン ===== */
+
+body.light-mode .operation-icon {
+    background: #ffffff;
+}
+
+
+/* ===== フッター ===== */
+
+body.light-mode .home-footer {
+    border-color: #999999;
+}
+
+body.light-mode .footer-date,
+body.light-mode .footer-time {
+    color: #111111;
+}
+
+body.light-mode .footer-date svg,
+body.light-mode .footer-time svg {
+    stroke: #111111;
 }
