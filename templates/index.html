@@ -21,7 +21,7 @@
 </head>
 
 
-<body onload="applySavedDisplayMode()">
+<body onload="initializeHome()">
 
 
 <div class="home">
@@ -290,16 +290,135 @@
 
 
 /* ==================================
+   ホーム初期化
+================================== */
+
+function initializeHome() {
+
+
+    /* ==================================
+       表示モード
+    ================================== */
+
+    applySavedDisplayMode();
+
+
+
+    /* ==================================
+       デフォルト駅
+    ================================== */
+
+    const defaultStation =
+        localStorage.getItem(
+            "defaultStation"
+        ) || "none";
+
+
+
+    /*
+     * 「選択しない」の場合
+     *
+     * → ホーム画面をそのまま表示
+     */
+
+    if (
+        defaultStation === "none"
+    ) {
+
+        updateClock();
+
+        setInterval(
+            updateClock,
+            1000
+        );
+
+
+        loadOperationInfo();
+
+        setInterval(
+            loadOperationInfo,
+            60000
+        );
+
+
+        return;
+
+    }
+
+
+
+    /*
+     * デフォルト駅が設定されている場合
+     *
+     * → その駅へ自動移動
+     */
+
+    if (
+
+        defaultStation === "tochigi"
+
+        ||
+
+        defaultStation === "sano"
+
+        ||
+
+        defaultStation === "ashikaga"
+
+    ) {
+
+        window.location.href =
+            "/station/" +
+            defaultStation;
+
+        return;
+
+    }
+
+
+
+    /*
+     * 万が一、
+     * 不正な値が保存されていた場合
+     *
+     * → ホーム画面を表示
+     */
+
+    updateClock();
+
+    setInterval(
+        updateClock,
+        1000
+    );
+
+
+    loadOperationInfo();
+
+    setInterval(
+        loadOperationInfo,
+        60000
+
+    );
+
+}
+
+
+
+/* ==================================
    表示モード
 ================================== */
 
 function applySavedDisplayMode() {
 
     const displayMode =
-        localStorage.getItem("displayMode") || "dark";
+        localStorage.getItem(
+            "displayMode"
+        ) || "dark";
 
 
-    if (displayMode === "light") {
+    if (
+        displayMode === "light"
+    ) {
 
         document.body.classList.add(
             "light-mode"
@@ -356,31 +475,58 @@ function updateClock() {
 
     const now = new Date();
 
+
     const year =
         now.getFullYear();
 
+
     const month =
-        String(now.getMonth() + 1)
-        .padStart(2, "0");
+        String(
+            now.getMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        );
+
 
     const day =
-        String(now.getDate())
-        .padStart(2, "0");
+        String(
+            now.getDate()
+        ).padStart(
+            2,
+            "0"
+        );
+
 
     const hours =
-        String(now.getHours())
-        .padStart(2, "0");
+        String(
+            now.getHours()
+        ).padStart(
+            2,
+            "0"
+        );
+
 
     const minutes =
-        String(now.getMinutes())
-        .padStart(2, "0");
+        String(
+            now.getMinutes()
+        ).padStart(
+            2,
+            "0"
+        );
+
 
     const seconds =
-        String(now.getSeconds())
-        .padStart(2, "0");
+        String(
+            now.getSeconds()
+        ).padStart(
+            2,
+            "0"
+        );
 
 
     const weekdays = [
+
         "日",
         "月",
         "火",
@@ -388,11 +534,14 @@ function updateClock() {
         "木",
         "金",
         "土"
+
     ];
 
 
     const weekday =
-        weekdays[now.getDay()];
+        weekdays[
+            now.getDay()
+        ];
 
 
     document.getElementById(
@@ -407,15 +556,6 @@ function updateClock() {
         `${hours}:${minutes}:${seconds}`;
 
 }
-
-
-updateClock();
-
-
-setInterval(
-    updateClock,
-    1000
-);
 
 
 
@@ -479,13 +619,13 @@ async function loadOperationInfo() {
             await response.json();
 
 
-        /* 表示をリセット */
-
         operationBox.className =
             "operation-info";
 
 
-        /* 平常運転 */
+        /* ==================================
+           平常運転
+        ================================== */
 
         if (
             data.status === "平常運転"
@@ -495,11 +635,14 @@ async function loadOperationInfo() {
                 "normal"
             );
 
+
             operationIcon.textContent =
                 "○";
 
+
             operationStatus.textContent =
                 "平常運転";
+
 
             operationText.textContent =
                 data.message ||
@@ -508,7 +651,9 @@ async function loadOperationInfo() {
         }
 
 
-        /* 遅延 */
+        /* ==================================
+           遅延
+        ================================== */
 
         else if (
             data.status === "遅延"
@@ -518,11 +663,14 @@ async function loadOperationInfo() {
                 "delay"
             );
 
+
             operationIcon.textContent =
                 "△";
 
+
             operationStatus.textContent =
                 "遅延";
+
 
             operationText.textContent =
                 data.message ||
@@ -531,7 +679,9 @@ async function loadOperationInfo() {
         }
 
 
-        /* 運転見合わせ・運休 */
+        /* ==================================
+           運転見合わせ・運休
+        ================================== */
 
         else if (
 
@@ -547,11 +697,14 @@ async function loadOperationInfo() {
                 "suspended"
             );
 
+
             operationIcon.textContent =
                 "×";
 
+
             operationStatus.textContent =
                 data.status;
+
 
             operationText.textContent =
                 data.message ||
@@ -560,7 +713,9 @@ async function loadOperationInfo() {
         }
 
 
-        /* その他 */
+        /* ==================================
+           その他
+        ================================== */
 
         else {
 
@@ -568,12 +723,15 @@ async function loadOperationInfo() {
                 "unknown"
             );
 
+
             operationIcon.textContent =
                 "－";
+
 
             operationStatus.textContent =
                 data.status ||
                 "情報取得中";
+
 
             operationText.textContent =
                 data.message ||
@@ -582,12 +740,17 @@ async function loadOperationInfo() {
         }
 
 
-        /* 更新時刻 */
+        /* ==================================
+           更新時刻
+        ================================== */
 
-        if (data.updated) {
+        if (
+            data.updated
+        ) {
 
             operationUpdated.textContent =
-                "更新：" + data.updated;
+                "更新：" +
+                data.updated;
 
         } else {
 
@@ -669,13 +832,19 @@ operationInfo.addEventListener(
 ================================== */
 
 operationInfo.addEventListener(
+
     "keydown",
+
     function(event) {
 
         if (
+
             event.key === "Enter"
+
             ||
+
             event.key === " "
+
         ) {
 
             event.preventDefault();
@@ -685,25 +854,7 @@ operationInfo.addEventListener(
         }
 
     }
-);
 
-
-
-/* ==================================
-   最初に取得
-================================== */
-
-loadOperationInfo();
-
-
-
-/* ==================================
-   60秒ごとに更新
-================================== */
-
-setInterval(
-    loadOperationInfo,
-    60000
 );
 
 
@@ -727,13 +878,16 @@ function openSettings() {
 
 function findNearestStation() {
 
-    if (!navigator.geolocation) {
+    if (
+        !navigator.geolocation
+    ) {
 
         alert(
             "このブラウザでは現在地を取得できません。"
         );
 
         return;
+
     }
 
 
@@ -744,12 +898,14 @@ function findNearestStation() {
             const userLat =
                 position.coords.latitude;
 
+
             const userLon =
                 position.coords.longitude;
 
 
             let nearestStation =
                 null;
+
 
             let nearestDistance =
                 Infinity;
@@ -760,10 +916,13 @@ function findNearestStation() {
 
                     const distance =
                         calculateDistance(
+
                             userLat,
                             userLon,
+
                             station.lat,
                             station.lon
+
                         );
 
 
@@ -775,6 +934,7 @@ function findNearestStation() {
                         nearestDistance =
                             distance;
 
+
                         nearestStation =
                             station;
 
@@ -784,7 +944,9 @@ function findNearestStation() {
             );
 
 
-            if (nearestStation) {
+            if (
+                nearestStation
+            ) {
 
                 window.location.href =
                     "/station/" +
@@ -797,7 +959,9 @@ function findNearestStation() {
 
         function(error) {
 
-            if (error.code === 1) {
+            if (
+                error.code === 1
+            ) {
 
                 alert(
                     "現在地の取得が許可されていません。"
@@ -815,9 +979,13 @@ function findNearestStation() {
 
 
         {
+
             enableHighAccuracy: true,
+
             timeout: 10000,
+
             maximumAge: 60000
+
         }
 
     );
@@ -831,10 +999,12 @@ function findNearestStation() {
 ================================== */
 
 function calculateDistance(
+
     lat1,
     lon1,
     lat2,
     lon2
+
 ) {
 
     const R =
@@ -843,18 +1013,25 @@ function calculateDistance(
 
     const dLat =
         (lat2 - lat1)
-        * Math.PI / 180;
+        * Math.PI
+        / 180;
 
 
     const dLon =
         (lon2 - lon1)
-        * Math.PI / 180;
+        * Math.PI
+        / 180;
 
 
     const a =
 
-        Math.sin(dLat / 2) *
-        Math.sin(dLat / 2)
+        Math.sin(
+            dLat / 2
+        )
+        *
+        Math.sin(
+            dLat / 2
+        )
 
         +
 
@@ -870,15 +1047,25 @@ function calculateDistance(
 
         *
 
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
+        Math.sin(
+            dLon / 2
+        )
+        *
+        Math.sin(
+            dLon / 2
+        );
 
 
     const c =
         2 *
         Math.atan2(
+
             Math.sqrt(a),
-            Math.sqrt(1 - a)
+
+            Math.sqrt(
+                1 - a
+            )
+
         );
 
 
