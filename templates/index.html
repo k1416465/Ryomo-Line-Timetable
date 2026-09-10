@@ -4,28 +4,27 @@
 
 <head>
 
-    <meta charset="UTF-8">
+```
+<meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
-    <title>両毛線 時刻表</title>
+<title>両毛線 時刻表</title>
 
-    <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='style.css') }}"
-    >
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}"
+>
+```
 
 </head>
 
-
 <body onload="initializeHome()">
 
-
 <div class="home">
-
 
 <!-- ==================================
      ヘッダー
@@ -33,32 +32,32 @@
 
 <header class="home-header">
 
-    <h1>両毛線 時刻表</h1>
+```
+<h1>両毛線 時刻表</h1>
 
-    <div class="english-title">
-        Ryomo Line Timetable
-    </div>
+<div class="english-title">
+    Ryomo Line Timetable
+</div>
 
 
-    <!-- 設定ボタン -->
+<!-- 設定ボタン -->
 
-    <button
-        class="settings-button"
-        onclick="openSettings()"
-        aria-label="設定"
-        type="button"
+<button
+    class="settings-button"
+    onclick="openSettings()"
+    aria-label="設定"
+    type="button"
+>
+
+    <img
+        src="{{ url_for('static', filename='icons/settings.png') }}"
+        alt="設定"
     >
 
-        <img
-            src="{{ url_for('static', filename='icons/settings.png') }}"
-            alt="設定"
-        >
-
-    </button>
+</button>
+```
 
 </header>
-
-
 
 <!-- ==================================
      現在日時
@@ -66,19 +65,19 @@
 
 <div class="current-info">
 
-    <span id="current-date">
-        2026/09/10(木)
-    </span>
+```
+<span id="current-date">
+    2026/09/10(木)
+</span>
 
-    <div class="date-divider"></div>
+<div class="date-divider"></div>
 
-    <span id="current-time">
-        23:00:00
-    </span>
+<span id="current-time">
+    23:00:00
+</span>
+```
 
 </div>
-
-
 
 <!-- ==================================
      駅選択タイトル
@@ -86,11 +85,11 @@
 
 <div class="select-title">
 
-    表示する駅を選択してください
+```
+表示する駅を選択してください
+```
 
 </div>
-
-
 
 <!-- ==================================
      駅一覧
@@ -98,130 +97,128 @@
 
 <main class="station-grid">
 
+```
+<!-- 栃木駅 -->
 
-    <!-- 栃木駅 -->
+<a
+    href="/station/tochigi"
+    class="station-card tochigi"
+>
 
-    <a
-        href="/station/tochigi"
-        class="station-card tochigi"
-    >
+    <div class="station-icon">
 
-        <div class="station-icon">
+        <img
+            src="{{ url_for('static', filename='icons/tochigi.png') }}"
+            alt="栃木駅"
+        >
 
-            <img
-                src="{{ url_for('static', filename='icons/tochigi.png') }}"
-                alt="栃木駅"
-            >
-
-        </div>
-
-
-        <div class="station-name">
-            栃木駅
-        </div>
+    </div>
 
 
-        <div class="station-en">
-            Tochigi Station
-        </div>
-
-    </a>
+    <div class="station-name">
+        栃木駅
+    </div>
 
 
+    <div class="station-en">
+        Tochigi Station
+    </div>
 
-    <!-- 佐野駅 -->
-
-    <a
-        href="/station/sano"
-        class="station-card sano"
-    >
-
-        <div class="station-icon">
-
-            <img
-                src="{{ url_for('static', filename='icons/sano.png') }}"
-                alt="佐野駅"
-            >
-
-        </div>
-
-
-        <div class="station-name">
-            佐野駅
-        </div>
-
-
-        <div class="station-en">
-            Sano Station
-        </div>
-
-    </a>
+</a>
 
 
 
-    <!-- 足利駅 -->
+<!-- 佐野駅 -->
 
-    <a
-        href="/station/ashikaga"
-        class="station-card ashikaga"
-    >
+<a
+    href="/station/sano"
+    class="station-card sano"
+>
 
-        <div class="station-icon">
+    <div class="station-icon">
 
-            <img
-                src="{{ url_for('static', filename='icons/ashikaga.png') }}"
-                alt="足利駅"
-            >
+        <img
+            src="{{ url_for('static', filename='icons/sano.png') }}"
+            alt="佐野駅"
+        >
 
-        </div>
-
-
-        <div class="station-name">
-            足利駅
-        </div>
+    </div>
 
 
-        <div class="station-en">
-            Ashikaga Station
-        </div>
-
-    </a>
+    <div class="station-name">
+        佐野駅
+    </div>
 
 
+    <div class="station-en">
+        Sano Station
+    </div>
 
-    <!-- 現在地 -->
-
-    <button
-        class="station-card current-location"
-        onclick="findNearestStation()"
-        type="button"
-    >
-
-        <div class="station-icon">
-
-            <img
-                src="{{ url_for('static', filename='icons/location.png') }}"
-                alt="現在地"
-            >
-
-        </div>
+</a>
 
 
-        <div class="station-name">
-            現在地
-        </div>
+
+<!-- 足利駅 -->
+
+<a
+    href="/station/ashikaga"
+    class="station-card ashikaga"
+>
+
+    <div class="station-icon">
+
+        <img
+            src="{{ url_for('static', filename='icons/ashikaga.png') }}"
+            alt="足利駅"
+        >
+
+    </div>
 
 
-        <div class="station-en">
-            Current Location
-        </div>
+    <div class="station-name">
+        足利駅
+    </div>
 
-    </button>
 
+    <div class="station-en">
+        Ashikaga Station
+    </div>
+
+</a>
+
+
+
+<!-- 現在地 -->
+
+<button
+    class="station-card current-location"
+    onclick="findNearestStation()"
+    type="button"
+>
+
+    <div class="station-icon">
+
+        <img
+            src="{{ url_for('static', filename='icons/location.png') }}"
+            alt="現在地"
+        >
+
+    </div>
+
+
+    <div class="station-name">
+        現在地
+    </div>
+
+
+    <div class="station-en">
+        Current Location
+    </div>
+
+</button>
+```
 
 </main>
-
-
 
 <!-- ==================================
      運行情報
@@ -235,56 +232,53 @@
     aria-label="両毛線の運行情報を開く"
 >
 
-
-    <div
-        class="operation-icon"
-        id="operation-icon"
-    >
-        ○
-    </div>
-
-
-    <div class="operation-content">
-
-
-        <div class="operation-title">
-            運行情報
-        </div>
-
-
-        <div
-            class="operation-status"
-            id="operation-status"
-        >
-            平常運転
-        </div>
-
-
-        <div
-            class="operation-text"
-            id="operation-text"
-        >
-            両毛線は平常通り運転しています。
-        </div>
-
-
-        <div
-            class="operation-updated"
-            id="operation-updated"
-        >
-            情報取得中
-        </div>
-
-
-    </div>
-
-
-</section>
-
-
+```
+<div
+    class="operation-icon"
+    id="operation-icon"
+>
+    ○
 </div>
 
 
+<div class="operation-content">
+
+
+    <div class="operation-title">
+        運行情報
+    </div>
+
+
+    <div
+        class="operation-status"
+        id="operation-status"
+    >
+        平常運転
+    </div>
+
+
+    <div
+        class="operation-text"
+        id="operation-text"
+    >
+        両毛線は平常通り運転しています。
+    </div>
+
+
+    <div
+        class="operation-updated"
+        id="operation-updated"
+    >
+        情報取得中
+    </div>
+
+
+</div>
+```
+
+</section>
+
+</div>
 
 <script>
 
@@ -301,6 +295,68 @@ function initializeHome() {
     ================================== */
 
     applySavedDisplayMode();
+
+
+
+    /* ==================================
+       時刻表ページから戻ってきた場合
+    ================================== */
+
+    const returnToHome =
+        sessionStorage.getItem(
+            "returnToHome"
+        );
+
+
+    /*
+     * 時刻表ページの
+     * 「ホームへ戻る」ボタンから来た場合
+     *
+     * デフォルト駅への自動移動を行わず、
+     * ホーム画面を表示する
+     */
+
+    if (
+        returnToHome === "true"
+    ) {
+
+
+        /*
+         * 一度使用したら削除
+         */
+
+        sessionStorage.removeItem(
+            "returnToHome"
+        );
+
+
+        /*
+         * ホーム画面の時計を開始
+         */
+
+        updateClock();
+
+        setInterval(
+            updateClock,
+            1000
+        );
+
+
+        /*
+         * 運行情報を取得
+         */
+
+        loadOperationInfo();
+
+        setInterval(
+            loadOperationInfo,
+            60000
+        );
+
+
+        return;
+
+    }
 
 
 
@@ -1075,7 +1131,6 @@ function calculateDistance(
 
 
 </script>
-
 
 </body>
 
