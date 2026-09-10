@@ -17,8 +17,9 @@ body {
     overflow-x: hidden;
 }
 
+
 /* ==================================
-   全体
+    S
 ================================== */
 
 .home {
@@ -26,8 +27,9 @@ body {
     margin: 0 auto;
 }
 
+
 /* ==================================
-   ヘッダー
+    w b _ [
 ================================== */
 
 .home-header {
@@ -52,8 +54,9 @@ body {
     font-weight: 500;
 }
 
+
 /* ==================================
-   設定ボタン
+    ݒ { ^
 ================================== */
 
 .settings-button {
@@ -81,8 +84,9 @@ body {
     display: block;
 }
 
+
 /* ==================================
-   現在日時
+      ݓ
 ================================== */
 
 .current-info {
@@ -105,8 +109,9 @@ body {
     background: #777777;
 }
 
+
 /* ==================================
-   駅選択タイトル
+    w I ^ C g
 ================================== */
 
 .select-title {
@@ -118,8 +123,9 @@ body {
     font-weight: 800;
 }
 
+
 /* ==================================
-   駅カード
+    w J [ h
 ================================== */
 
 .station-grid {
@@ -166,8 +172,9 @@ body {
     transform: scale(0.98);
 }
 
+
 /* ==================================
-   駅ごとの枠色
+    w Ƃ̘g F
 ================================== */
 
 .tochigi {
@@ -186,8 +193,9 @@ body {
     border-color: #ff9700;
 }
 
+
 /* ==================================
-   駅アイコン
+    w A C R
 ================================== */
 
 .station-icon {
@@ -210,8 +218,9 @@ body {
     display: block;
 }
 
+
 /* ==================================
-   駅名
+    w
 ================================== */
 
 .station-name {
@@ -234,8 +243,9 @@ body {
     text-align: center;
 }
 
+
 /* ==================================
-   矢印
+      
 ================================== */
 
 .arrow {
@@ -250,8 +260,9 @@ body {
     font-weight: 300;
 }
 
+
 /* ==================================
-   運行情報
+    ^ s
 ================================== */
 
 .operation-info {
@@ -272,8 +283,9 @@ body {
     background: #171509;
 }
 
+
 /* ==================================
-   運行情報アイコン
+    ^ s A C R
 ================================== */
 
 .operation-icon {
@@ -299,8 +311,9 @@ body {
     position: relative;
 }
 
+
 /* ==================================
-   自然な○
+      R ȁ
 ================================== */
 
 .operation-icon::after {
@@ -316,8 +329,9 @@ body {
     display: block;
 }
 
+
 /* ==================================
-   運行情報内容
+    ^ s e
 ================================== */
 
 .operation-content {
@@ -365,8 +379,9 @@ body {
     color: #aaaaaa;
 }
 
+
 /* ==================================
-   平常運転
+       ^ ]
 ================================== */
 
 .operation-info.normal {
@@ -383,8 +398,9 @@ body {
     color: #000000;
 }
 
+
 /* ==================================
-   遅延
+    x
 ================================== */
 
 .operation-info.delay {
@@ -401,8 +417,9 @@ body {
     color: #000000;
 }
 
+
 /* ==================================
-   運転見合わせ・運休
+    ^ ]     킹 E ^ x
 ================================== */
 
 .operation-info.suspended {
@@ -419,8 +436,9 @@ body {
     color: #ffffff;
 }
 
+
 /* ==================================
-   情報取得中
+      擾
 ================================== */
 
 .operation-info.unknown {
@@ -437,8 +455,9 @@ body {
     color: #ffffff;
 }
 
+
 /* ==================================
-   運行情報の矢印
+    ^ s   ̖
 ================================== */
 
 .operation-arrow {
@@ -446,8 +465,9 @@ body {
     flex-shrink: 0;
 }
 
+
 /* ==================================
-   フッター
+    t b ^ [
 ================================== */
 
 .home-footer {
@@ -494,15 +514,9 @@ body {
     flex-shrink: 0;
 }
 
-.footer-divider {
-    width: 1px;
-    height: 50px;
-
-    background: #555555;
-}
 
 /* ==================================
-   タブレット
+    ^ u   b g
 ================================== */
 
 @media (max-width: 800px) {
@@ -603,8 +617,9 @@ body {
     }
 }
 
+
 /* ==================================
-   スマートフォン
+    X } [ g t H
 ================================== */
 
 @media (max-width: 600px) {
@@ -771,8 +786,9 @@ body {
     }
 }
 
+
 /* ==================================
-   小さいスマートフォン
+          X } [ g t H
 ================================== */
 
 @media (max-width: 390px) {
@@ -837,12 +853,13 @@ body {
     }
 }
 
-```css
+
 /* ==================================================
-   駅ページ
+    w y [ W
 ================================================== */
 
-/* ===== 全体 ===== */
+
+/* =====  S   ===== */
 
 .board {
     width: min(540px, 100%);
@@ -850,7 +867,7 @@ body {
 }
 
 
-/* ===== 駅名 ===== */
+/* =====  w   ===== */
 
 .station-header {
     border: 1px solid #fff;
@@ -874,7 +891,7 @@ body {
 }
 
 
-/* ===== ホーム ===== */
+/* =====  z [   ===== */
 
 .platform {
     border: 1px solid #fff;
@@ -884,56 +901,75 @@ body {
     overflow: hidden;
 }
 
+
+/* =====    ʃw b _ [ ===== */
+
 .platform-header {
     display: flex;
     align-items: center;
-    min-height: 54px;
+
+    min-height: 62px;
+
     border-bottom: 1px solid #fff;
-    padding-bottom: 6px;
+
+    padding: 6px 0 8px;
+
     justify-content: flex-start;
+
     width: 100%;
 }
 
 
-/* ===== ホーム番号 ===== */
+/* =====  z [   ԍ  ===== */
 
 .platform-number {
     width: 48px;
     flex-shrink: 0;
+
     font-size: 46px;
     line-height: 1;
     font-weight: 800;
     text-align: center;
+
     padding-left: 7px;
 }
 
 
-/* ===== 黄色の縦線 ===== */
+/* =====    F ̏c   ===== */
 
 .yellow-bar {
     width: 8px;
     height: 42px;
+
     background: #ffe600;
+
     margin: 0 22px 0 4px;
+
     flex-shrink: 0;
 }
 
 
-/* ===== 方面表示 ===== */
+/* =====    ʕ\   ===== */
 
 .direction {
     text-align: left;
+
     min-width: 0;
+
     flex: 1;
 }
 
 .direction-jp {
     display: grid;
+
     grid-template-columns: 100px 1fr;
+
     column-gap: 12px;
+
     font-size: 27px;
     font-weight: 800;
-    line-height: 1;
+
+    line-height: 1.15;
 }
 
 .line-name {
@@ -942,17 +978,23 @@ body {
 
 .direction-en {
     display: grid;
+
     grid-template-columns: 100px 1fr;
+
     column-gap: 12px;
+
     margin-top: 3px;
+
     font-size: 13px;
     font-weight: 700;
+
     padding-left: 0;
+
     line-height: 1;
 }
 
 
-/* ===== 発車案内 ===== */
+/* =====    Ԉē  ===== */
 
 .train-table {
     width: 100%;
@@ -960,58 +1002,76 @@ body {
 }
 
 
-/* ===== 表 ===== */
+/* =====  \ ===== */
 
 .table-head,
 .train-row {
     display: grid;
+
     grid-template-columns:
         21%
         24%
         20%
         15%
         20%;
+
     width: 100%;
+
     align-items: center;
+
     text-align: center;
 }
 
 .table-head {
     height: 30px;
+
     border-bottom: none;
+
     font-size: 13px;
     font-weight: 300;
 }
 
 .train-row {
     min-height: 60px;
+
     border-bottom: none;
 }
 
 .table-head > div,
 .train-row > div {
     display: flex;
+
     align-items: center;
     justify-content: center;
+
     min-width: 0;
 }
 
 
-/* ===== 種別 ===== */
+/* =====     ===== */
 
 .local-box {
     width: 64px;
+
     max-width: 90%;
+
     min-height: 38px;
+
     background: #fff;
     color: #000;
+
     border: 2px solid #fff;
     border-radius: 4px;
+
     display: flex;
+
     flex-direction: column;
+
     align-items: center;
     justify-content: center;
+
     gap: 0;
+
     line-height: 1;
 }
 
@@ -1022,43 +1082,53 @@ body {
 
 .local-box span {
     margin-top: 0;
+
     font-size: 9px;
     line-height: 10px;
+
     font-weight: 700;
 }
 
 
-/* ===== 発車時刻 ===== */
+/* =====    Ԏ    ===== */
 
 .departure-time {
     font-size: 29px;
+
     font-weight: 800;
+
     white-space: nowrap;
 }
 
 
-/* ===== 行先 ===== */
+/* =====  s   ===== */
 
 .destination {
     flex-direction: column;
+
     line-height: 1;
+
     min-width: 0;
 }
 
 .destination strong {
     font-size: 24px;
+
     white-space: nowrap;
 }
 
 .destination span {
     margin-top: 2px;
+
     font-size: 12px;
+
     font-weight: 700;
+
     white-space: nowrap;
 }
 
 
-/* ===== 両数 ===== */
+/* =====      ===== */
 
 .cars strong,
 .remaining strong {
@@ -1068,46 +1138,79 @@ body {
 
 .car-badge {
     min-width: 52px;
+
     width: 52px;
+
     max-width: 90%;
+
     height: 40px;
+
     padding: 0 4px;
+
     border-radius: 7px;
+
     display: flex;
+
     align-items: center;
+
     justify-content: center;
+
     gap: 2px;
+
     color: #fff;
 }
 
 .car-badge strong {
     color: #fff;
+
+    font-size: 31px;
+    font-weight: 900;
     line-height: 1;
 }
 
 .car-badge span {
     color: #fff;
+
     font-size: 11px;
+
     font-weight: 700;
+
+    line-height: 1;
+
+    position: relative;
+
+    top: 8px;
 }
 
 
-/* ===== 残り時間 ===== */
+/* =====  c 莞   ===== */
 
 .remaining {
     white-space: nowrap;
+
+    display: flex;
+
+    align-items: baseline;
+
+    justify-content: center;
 }
 
 .remaining span {
-    margin-left: 4px;
+    margin-left: 1px;
+
     font-size: 11px;
+
     font-weight: 700;
-    align-self: flex-end;
-    margin-bottom: 8px;
+
+    line-height: 1;
+
+    align-self: auto;
+
+    margin-bottom: 0;
 }
 
 
-/* ===== 両数カラー ===== */
+/* =====      J   [ ===== */
 
 .cars-green {
     background: #00b83f;
@@ -1118,76 +1221,110 @@ body {
 }
 
 
-/* ===== 備考 ===== */
+/* =====    l ===== */
 
 .note {
     min-height: 14px;
+
     height: 14px;
+
     border-bottom: 1px solid #888;
+
     padding: 1px 6px 1px;
+
     text-align: left;
+
     font-size: 8px;
+
     font-weight: 700;
+
     overflow: hidden;
 }
 
 .empty-note {
     min-height: 14px;
+
     height: 14px;
+
     padding: 1px 6px 1px;
+
     border-bottom: 1px solid #888;
 }
 
 
-/* ===== 駅ページ下部：日付・時刻・更新 ===== */
+/* =====  w y [ W     F   t E     E X V ===== */
 
 .footer {
     display: grid;
+
     grid-template-columns: 1fr 1fr 1fr;
+
     gap: 5px;
+
     align-items: stretch;
+
     width: 100%;
 }
 
 .footer > div,
 .footer button {
     height: 36px;
+
     min-height: 36px;
+
     min-width: 0;
+
     border: 1px solid #fff;
+
     border-radius: 8px;
+
     background: transparent;
+
     color: #fff;
+
     display: flex;
+
     align-items: center;
+
     justify-content: center;
+
     font-size: 14px;
+
     font-weight: 800;
+
     margin: 0;
+
     padding: 0 4px;
+
     box-sizing: border-box;
+
     overflow: hidden;
 }
 
 .footer button {
     cursor: pointer;
+
     gap: 6px;
+
     appearance: none;
+
     -webkit-appearance: none;
 }
 
 .refresh-icon {
     font-size: 20px;
+
     line-height: 1;
 }
 
 
 /* ==================================================
-   ホームへ戻るボタン
+    z [   ֖߂ { ^
 ================================================== */
 
 .back-home-area {
     display: flex;
+
     justify-content: center;
     align-items: center;
 
@@ -1199,10 +1336,12 @@ body {
 
 .back-home-button {
     display: flex;
+
     align-items: center;
     justify-content: center;
 
     width: 100%;
+
     min-height: 58px;
 
     padding: 9px 20px;
@@ -1222,6 +1361,7 @@ body {
 
 .back-home-button:hover {
     background: #202020;
+
     transform: translateY(-2px);
 }
 
@@ -1230,52 +1370,57 @@ body {
 }
 
 .back-home-arrow {
-    font-size: 30px;
-    font-weight: 400;
-    line-height: 1;
-
-    margin-right: 14px;
+    display: none;
 }
 
 .back-home-text {
     display: flex;
+
     flex-direction: column;
+
     align-items: center;
 
-    line-height: 1.15;
+    line-height: 1;
 }
 
 .back-home-jp {
     font-size: 18px;
+
     font-weight: 900;
 }
 
 .back-home-en {
-    margin-top: 4px;
+    margin-top: 1px;
 
     font-size: 10px;
+
     font-weight: 600;
 
     letter-spacing: 1px;
 }
 
 
-/* ===== 本日の列車終了 ===== */
+/* =====  {   ̗ ԏI   ===== */
 
 .service-finished {
     min-height: 60px;
+
     display: flex;
+
     align-items: center;
     justify-content: center;
+
     text-align: center;
+
     font-size: 18px;
+
     font-weight: 700;
 }
 
 
 /* ==================================================
-   駅ページ
-   スマートフォン
+    w y [ W
+    X } [ g t H
 ================================================== */
 
 @media (max-width: 800px) {
@@ -1292,34 +1437,43 @@ body {
 
     .station-header h1 {
         font-size: clamp(25px, 8vw, 38px);
+
         line-height: 1;
     }
 
     .station-en {
         font-size: clamp(11px, 3.5vw, 17px);
+
         letter-spacing: 1px;
+
         white-space: nowrap;
     }
 
     .platform {
         margin-bottom: 8px;
+
         padding: 7px 0 8px;
     }
 
     .platform-header {
-        min-height: 48px;
-        padding-bottom: 5px;
+        min-height: 55px;
+
+        padding: 5px 0 7px;
     }
 
     .platform-number {
         width: 42px;
+
         font-size: 40px;
+
         padding-left: 4px;
     }
 
     .yellow-bar {
         width: 7px;
+
         height: 37px;
+
         margin: 0 12px 0 3px;
     }
 
@@ -1329,8 +1483,12 @@ body {
 
     .direction-jp {
         grid-template-columns: 70px 1fr;
+
         column-gap: 7px;
+
         font-size: clamp(17px, 5vw, 24px);
+
+        line-height: 1.15;
     }
 
     .line-name {
@@ -1339,8 +1497,11 @@ body {
 
     .direction-en {
         grid-template-columns: 70px 1fr;
+
         column-gap: 7px;
+
         margin-top: 3px;
+
         font-size: clamp(8px, 2.5vw, 13px);
     }
 
@@ -1356,6 +1517,7 @@ body {
 
     .table-head {
         height: 27px;
+
         font-size: clamp(10px, 3vw, 13px);
     }
 
@@ -1365,21 +1527,25 @@ body {
 
     .local-box {
         width: clamp(52px, 16vw, 64px);
+
         min-height: 36px;
     }
 
     .local-box strong {
         font-size: clamp(14px, 4vw, 17px);
+
         line-height: 16px;
     }
 
     .local-box span {
         font-size: clamp(8px, 2.5vw, 9px);
+
         line-height: 9px;
     }
 
     .departure-time {
         font-size: clamp(20px, 6.5vw, 29px);
+
         white-space: nowrap;
     }
 
@@ -1393,7 +1559,9 @@ body {
 
     .car-badge {
         min-width: clamp(42px, 13vw, 52px);
+
         width: clamp(42px, 13vw, 52px);
+
         height: clamp(34px, 10vw, 40px);
     }
 
@@ -1403,21 +1571,42 @@ body {
 
     .car-badge span {
         font-size: clamp(9px, 2.7vw, 11px);
+
+        line-height: 1;
+
+        position: relative;
+
+        top: 8px;
+
+        transform: none;
     }
 
     .remaining strong {
         font-size: clamp(24px, 7vw, 31px);
     }
 
+    .remaining {
+        display: flex;
+
+        align-items: baseline;
+
+        justify-content: center;
+    }
+
     .remaining span {
-        margin-left: 2px;
+        margin-left: 1px;
+
         font-size: clamp(8px, 2.5vw, 11px);
-        margin-bottom: 6px;
+
+        line-height: 1;
+
+        margin-bottom: 0;
     }
 
     .note,
     .empty-note {
         font-size: 7px;
+
         padding-left: 5px;
         padding-right: 5px;
     }
@@ -1429,8 +1618,11 @@ body {
     .footer > div,
     .footer button {
         height: 36px;
+
         min-height: 36px;
+
         font-size: clamp(10px, 3.2vw, 14px);
+
         padding: 0 2px;
     }
 
@@ -1439,21 +1631,26 @@ body {
     }
 
 
-    /* ===== ホームへ戻る ===== */
+    /* =====  z [   ֖߂ ===== */
 
     .back-home-area {
         margin-top: 15px;
+
         margin-bottom: 15px;
     }
 
     .back-home-button {
         min-height: 52px;
+
         padding: 8px 15px;
     }
 
     .back-home-arrow {
-        font-size: 27px;
-        margin-right: 10px;
+        display: none;
+    }
+
+    .back-home-text {
+        line-height: 1;
     }
 
     .back-home-jp {
@@ -1461,6 +1658,8 @@ body {
     }
 
     .back-home-en {
+        margin-top: 1px;
+
         font-size: 9px;
     }
 
@@ -1468,7 +1667,7 @@ body {
 
 
 /* ==================================================
-   小さいスマートフォン
+          X } [ g t H
 ================================================== */
 
 @media (max-width: 380px) {
@@ -1480,6 +1679,7 @@ body {
 
     .platform-number {
         width: 36px;
+
         font-size: 35px;
     }
 
@@ -1489,11 +1689,15 @@ body {
 
     .direction-jp {
         grid-template-columns: 62px 1fr;
+
         column-gap: 5px;
+
+        line-height: 1.15;
     }
 
     .direction-en {
         grid-template-columns: 62px 1fr;
+
         column-gap: 5px;
     }
 
@@ -1518,21 +1722,26 @@ body {
     }
 
 
-    /* ===== ホームへ戻る ===== */
+    /* =====  z [   ֖߂ ===== */
 
     .back-home-area {
         margin-top: 12px;
+
         margin-bottom: 10px;
     }
 
     .back-home-button {
         min-height: 48px;
+
         padding: 7px 10px;
     }
 
     .back-home-arrow {
-        font-size: 24px;
-        margin-right: 8px;
+        display: none;
+    }
+
+    .back-home-text {
+        line-height: 1;
     }
 
     .back-home-jp {
@@ -1540,18 +1749,23 @@ body {
     }
 
     .back-home-en {
+        margin-top: 1px;
+
         font-size: 8px;
     }
 
 }
 
-/* 運行情報をリンクにしても見た目を変えない */
+
+/*  ^ s         N ɂ  Ă      ڂ ς  Ȃ  */
+
 .operation-info,
 .operation-info:link,
 .operation-info:visited,
 .operation-info:hover,
 .operation-info:active {
     color: inherit;
+
     text-decoration: none;
 }
 
@@ -1560,10 +1774,13 @@ body {
 .operation-info .operation-text,
 .operation-info .operation-updated {
     color: inherit;
+
     text-decoration: none;
 }
 
-/* 日付と曜日を1行にする */
+
+/*    t Ɨj    1 s ɂ    */
+
 #current-date {
     white-space: nowrap;
 }
