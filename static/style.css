@@ -1784,3 +1784,7 @@ body {
 #current-date {
     white-space: nowrap;
 }
+
+.operation-status {
+    display: none;
+}
