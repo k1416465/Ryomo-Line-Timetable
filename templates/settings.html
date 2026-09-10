@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>設定 - 両毛線 時刻表</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body class="settings-page">
+
+
+<div class="settings-container">
+
+
+    <!-- ==================================
+         ヘッダー
+    ================================== -->
+
+    <header class="settings-header">
+
+        <div class="settings-header-icon">
+            ⚙
+        </div>
+
+        <h1>
+            設定
+        </h1>
+
+        <div class="settings-header-en">
+            Settings
+        </div>
+
+    </header>
+
+
+
+    <!-- ==================================
+         デフォルト駅
+    ================================== -->
+
+    <section class="settings-section">
+
+        <div class="settings-section-title">
+            デフォルト駅
+        </div>
+
+        <div class="settings-section-en">
+            Default Station
+        </div>
+
+
+        <div class="settings-options">
+
+
+            <label class="settings-option">
+
+                <input
+                    type="radio"
+                    name="defaultStation"
+                    value="tochigi"
+                >
+
+                <span class="settings-option-text">
+
+                    <strong>
+                        栃木駅
+                    </strong>
+
+                    <small>
+                        Tochigi Station
+                    </small>
+
+                </span>
+
+            </label>
+
+
+
+            <label class="settings-option">
+
+                <input
+                    type="radio"
+                    name="defaultStation"
+                    value="sano"
+                >
+
+                <span class="settings-option-text">
+
+                    <strong>
+                        佐野駅
+                    </strong>
+
+                    <small>
+                        Sano Station
+                    </small>
+
+                </span>
+
+            </label>
+
+
+
+            <label class="settings-option">
+
+                <input
+                    type="radio"
+                    name="defaultStation"
+                    value="ashikaga"
+                >
+
+                <span class="settings-option-text">
+
+                    <strong>
+                        足利駅
+                    </strong>
+
+                    <small>
+                        Ashikaga Station
+                    </small>
+
+                </span>
+
+            </label>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ==================================
+         表示モード
+    ================================== -->
+
+    <section class="settings-section">
+
+        <div class="settings-section-title">
+            表示モード
+        </div>
+
+        <div class="settings-section-en">
+            Display Mode
+        </div>
+
+
+        <div class="settings-options">
+
+
+            <label class="settings-option">
+
+                <input
+                    type="radio"
+                    name="displayMode"
+                    value="dark"
+                >
+
+                <span class="settings-option-text">
+
+                    <strong>
+                        ダーク
+                    </strong>
+
+                    <small>
+                        Dark
+                    </small>
+
+                </span>
+
+            </label>
+
+
+
+            <label class="settings-option">
+
+                <input
+                    type="radio"
+                    name="displayMode"
+                    value="light"
+                >
+
+                <span class="settings-option-text">
+
+                    <strong>
+                        ライト
+                    </strong>
+
+                    <small>
+                        Light
+                    </small>
+
+                </span>
+
+            </label>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ==================================
+         保存ボタン
+    ================================== -->
+
+    <button
+        class="settings-save-button"
+        onclick="saveSettings()"
+        type="button"
+    >
+
+        設定を保存
+
+    </button>
+
+
+
+    <!-- ==================================
+         ホームへ戻る
+    ================================== -->
+
+    <div class="settings-back-area">
+
+        <a
+            href="/"
+            class="settings-back-button"
+        >
+
+            <span>
+                ホームへ戻る
+            </span>
+
+            <small>
+                Back to Home
+            </small>
+
+        </a>
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+
+/* ==================================
+   初期設定を読み込む
+================================== */
+
+function loadSettings() {
+
+    const defaultStation =
+        localStorage.getItem(
+            "defaultStation"
+        ) || "sano";
+
+
+    const displayMode =
+        localStorage.getItem(
+            "displayMode"
+        ) || "dark";
+
+
+    const stationRadio =
+        document.querySelector(
+            `input[name="defaultStation"][value="${defaultStation}"]`
+        );
+
+
+    if (stationRadio) {
+
+        stationRadio.checked = true;
+
+    }
+
+
+    const modeRadio =
+        document.querySelector(
+            `input[name="displayMode"][value="${displayMode}"]`
+        );
+
+
+    if (modeRadio) {
+
+        modeRadio.checked = true;
+
+    }
+
+}
+
+
+
+/* ==================================
+   設定を保存
+================================== */
+
+function saveSettings() {
+
+    const station =
+        document.querySelector(
+            'input[name="defaultStation"]:checked'
+        );
+
+
+    const mode =
+        document.querySelector(
+            'input[name="displayMode"]:checked'
+        );
+
+
+    if (!station) {
+
+        alert(
+            "デフォルト駅を選択してください。"
+        );
+
+        return;
+
+    }
+
+
+    if (!mode) {
+
+        alert(
+            "表示モードを選択してください。"
+        );
+
+        return;
+
+    }
+
+
+    localStorage.setItem(
+        "defaultStation",
+        station.value
+    );
+
+
+    localStorage.setItem(
+        "displayMode",
+        mode.value
+    );
+
+
+    applyDisplayMode(
+        mode.value
+    );
+
+
+    alert(
+        "設定を保存しました。"
+    );
+
+}
+
+
+
+/* ==================================
+   表示モード
+================================== */
+
+function applyDisplayMode(mode) {
+
+    if (mode === "light") {
+
+        document.body.classList.add(
+            "light-mode"
+        );
+
+    } else {
+
+        document.body.classList.remove(
+            "light-mode"
+        );
+
+    }
+
+}
+
+
+const savedMode =
+    localStorage.getItem(
+        "displayMode"
+    ) || "dark";
+
+
+applyDisplayMode(
+    savedMode
+);
+
+
+/* 初期設定 */
+
+loadSettings();
+
+</script>
+
+
+</body>
+
+</html>
