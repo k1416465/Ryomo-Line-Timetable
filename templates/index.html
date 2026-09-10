@@ -21,7 +21,7 @@
 </head>
 
 
-<body>
+<body onload="applySavedDisplayMode()">
 
 
 <div class="home">
@@ -287,6 +287,34 @@
 
 
 <script>
+
+
+/* ==================================
+   表示モード
+================================== */
+
+function applySavedDisplayMode() {
+
+    const displayMode =
+        localStorage.getItem("displayMode") || "dark";
+
+
+    if (displayMode === "light") {
+
+        document.body.classList.add(
+            "light-mode"
+        );
+
+    } else {
+
+        document.body.classList.remove(
+            "light-mode"
+        );
+
+    }
+
+}
+
 
 
 /* ==================================
@@ -686,9 +714,11 @@ setInterval(
 
 function openSettings() {
 
-    window.location.href = "/settings";
+    window.location.href =
+        "/settings";
 
 }
+
 
 
 /* ==================================
