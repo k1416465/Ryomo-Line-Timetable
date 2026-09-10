@@ -364,7 +364,7 @@
       "direction": "上り",
       "origin": "小山",
       "destination": "桐生",
-      "note": "",
+      "note": "終点桐生で高崎行の列車にお乗り換えできます。",
       "stops": {
         "小山": {
           "arrival": null,
@@ -2304,7 +2304,7 @@
       "direction": "上り",
       "origin": "小山",
       "destination": "桐生",
-      "note": "",
+      "note": "栃木で南栗橋行最終電車にお乗り換えできます。",
       "stops": {
         "小山": {
           "arrival": null,
@@ -2363,7 +2363,7 @@
       "direction": "上り",
       "origin": "小山",
       "destination": "桐生",
-      "note": "",
+      "note": "桐生行最終列車です。",
       "stops": {
         "小山": {
           "arrival": null,
