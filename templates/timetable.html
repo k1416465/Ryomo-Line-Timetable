@@ -1002,10 +1002,25 @@ function createTrainHTML(train) {
 
     if (note) {
 
+        /*
+         * PCでは先頭に全角スペース2個
+         * スマホ・タブレットではスペースなし
+         */
+
+        const isMobile =
+            window.innerWidth <= 800;
+
+
+        const noteText =
+            isMobile
+                ? note
+                : `　　${note}`;
+
+
         noteHTML = `
 
             <div class="note">
-                &emsp;&emsp;${note}
+                ${noteText}
             </div>
 
         `;
