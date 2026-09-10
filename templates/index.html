@@ -794,7 +794,7 @@ async function loadOperationInfo() {
 
             operationUpdated.textContent =
                 "更新：" +
-                data.updated;
+                data.updated.replace(/\s*更新\s*$/, "");
 
         } else {
 
