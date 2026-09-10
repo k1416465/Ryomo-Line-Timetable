@@ -1797,7 +1797,7 @@ body {
 }
 
 
-/* ★ ここが今回の修正箇所 ★ */
+/* ★ 運行情報の「平常運転」非表示 ★ */
 
 .operation-status {
     display: none;
@@ -2392,4 +2392,274 @@ body.light-mode .footer-time {
 body.light-mode .footer-date svg,
 body.light-mode .footer-time svg {
     stroke: #111111;
+}
+
+
+/* ==================================================
+    時刻表ページ ライトモード
+================================================== */
+
+
+/*
+ * ページの外側をライトモードにする
+ */
+
+body.light-mode {
+    background: #f4f4f4;
+    color: #111111;
+}
+
+
+/* ===== 駅名部分 ===== */
+
+body.light-mode .station-header {
+    background: #ffffff;
+
+    border-color: #333333;
+
+    color: #111111;
+}
+
+body.light-mode .station-header h1 {
+    color: #111111;
+}
+
+body.light-mode .station-header .station-en {
+    color: #333333;
+}
+
+
+/* ===== 番線の外側 ===== */
+
+body.light-mode .platform {
+    background: #ffffff;
+
+    border-color: #333333;
+
+    color: #111111;
+}
+
+
+/* ===== 番線ヘッダー ===== */
+
+body.light-mode .platform-header {
+    border-bottom-color: #333333;
+}
+
+body.light-mode .platform-number {
+    color: #111111;
+}
+
+body.light-mode .direction {
+    color: #111111;
+}
+
+body.light-mode .direction-jp,
+body.light-mode .line-name {
+    color: #111111;
+}
+
+body.light-mode .direction-en {
+    color: #444444;
+}
+
+
+/*
+ * ==================================================
+ * 電光掲示板部分
+ *
+ * ここはライトモードでも黒のまま
+ * ==================================================
+ */
+
+
+/* 列車表全体 */
+
+body.light-mode .train-table {
+    background: #080909;
+
+    color: #ffffff;
+}
+
+
+/* 表の見出し */
+
+body.light-mode .table-head {
+    background: #080909;
+
+    color: #ffffff;
+}
+
+
+/* 列車 */
+
+body.light-mode .train-row {
+    background: #080909;
+
+    color: #ffffff;
+}
+
+
+/* 列車内の文字 */
+
+body.light-mode .departure-time {
+    color: #ffffff;
+}
+
+body.light-mode .destination {
+    color: #ffffff;
+}
+
+body.light-mode .destination strong {
+    color: #ffffff;
+}
+
+body.light-mode .destination span {
+    color: #ffffff;
+}
+
+
+/* 種別 */
+
+body.light-mode .local-box {
+    background: #ffffff;
+
+    color: #000000;
+
+    border-color: #ffffff;
+}
+
+body.light-mode .local-box strong,
+body.light-mode .local-box span {
+    color: #000000;
+}
+
+
+/* 両数 */
+
+body.light-mode .car-badge {
+    color: #ffffff;
+}
+
+body.light-mode .car-badge strong,
+body.light-mode .car-badge span {
+    color: #ffffff;
+}
+
+
+/* 残り時間 */
+
+body.light-mode .remaining {
+    color: #ffffff;
+}
+
+body.light-mode .remaining strong,
+body.light-mode .remaining span {
+    color: #ffffff;
+}
+
+
+/* 備考 */
+
+body.light-mode .note {
+    background: #080909;
+
+    color: #ffffff;
+
+    border-bottom-color: #888888;
+}
+
+body.light-mode .empty-note {
+    background: #080909;
+
+    border-bottom-color: #888888;
+}
+
+
+/* 列車終了メッセージ */
+
+body.light-mode .service-finished {
+    background: #080909;
+
+    color: #ffffff;
+}
+
+
+/* ===== フッター ===== */
+
+body.light-mode .footer {
+    background: transparent;
+}
+
+body.light-mode .footer > div,
+body.light-mode .footer button {
+    background: #ffffff;
+
+    color: #111111;
+
+    border-color: #333333;
+}
+
+body.light-mode .refresh-icon {
+    color: #111111;
+}
+
+
+/* ===== ホームへ戻る ===== */
+
+body.light-mode .back-home-button {
+    background: #ffffff;
+
+    color: #111111;
+
+    border-color: #333333;
+}
+
+body.light-mode .back-home-button:hover {
+    background: #eeeeee;
+}
+
+body.light-mode .back-home-jp,
+body.light-mode .back-home-en {
+    color: #111111;
+}
+
+
+/* ===== 黄色の縦線はそのまま ===== */
+
+body.light-mode .yellow-bar {
+    background: #ffe600;
+}
+
+
+/* ==================================================
+    時刻表ページ ライトモード
+    スマホ・タブレット
+================================================== */
+
+@media (max-width: 800px) {
+
+    body.light-mode .station-header {
+        background: #ffffff;
+    }
+
+    body.light-mode .platform {
+        background: #ffffff;
+    }
+
+    /*
+     * 電光掲示板はスマホでも黒のまま
+     */
+
+    body.light-mode .train-table,
+    body.light-mode .table-head,
+    body.light-mode .train-row,
+    body.light-mode .note,
+    body.light-mode .empty-note,
+    body.light-mode .service-finished {
+        background: #080909;
+
+        color: #ffffff;
+    }
+
 }
