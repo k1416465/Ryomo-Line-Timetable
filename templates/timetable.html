@@ -1,276 +1,276 @@
 <!DOCTYPE html>
+
 <html lang="ja">
 
 <head>
 
-    <meta charset="UTF-8">
+```
+<meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
-    <title>両毛線{{ station_name }}時刻表</title>
+<title>両毛線{{ station_name }}時刻表</title>
 
-    <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='style.css') }}"
-    >
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}"
+>
+```
 
 </head>
 
-
 <body>
-
 
 <div class="board">
 
+```
+<!-- ==========================================
+     駅名
+=========================================== -->
 
-    <!-- ==========================================
-         駅名
-    =========================================== -->
+<div class="station-header">
 
-    <div class="station-header">
+    <h1>
+        両毛線{{ station_name }}時刻表
+    </h1>
 
-        <h1>
-            両毛線{{ station_name }}時刻表
-        </h1>
-
-        <div class="station-en">
-            Ryomo Line {{ station_english }} Timetable
-        </div>
-
+    <div class="station-en">
+        Ryomo Line {{ station_english }} Timetable
     </div>
-
-
-    <!-- ==========================================
-         1番線
-    =========================================== -->
-
-    <div class="platform">
-
-        <div class="platform-header">
-
-            <div class="platform-number">
-                1
-            </div>
-
-            <div class="yellow-bar"></div>
-
-            <div class="direction">
-
-                <div class="direction-jp">
-
-                    <div class="line-name">
-                        両毛線
-                    </div>
-
-                    <div id="platform1-direction">
-                        読み込み中
-                    </div>
-
-                </div>
-
-
-                <div class="direction-en">
-
-                    <div>
-                        Ryomo Line
-                    </div>
-
-                    <div id="platform1-direction-en">
-                        Loading...
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="train-table">
-
-            <div
-                class="table-head"
-                id="platform1-header"
-            >
-
-                <div>
-                    種別
-                </div>
-
-                <div>
-                    発車時刻
-                </div>
-
-                <div>
-                    行先
-                </div>
-
-                <div>
-                    両数
-                </div>
-
-                <div>
-                    発車まで
-                </div>
-
-            </div>
-
-
-            <div id="platform1-trains"></div>
-
-        </div>
-
-    </div>
-
-
-    <!-- ==========================================
-         2番線
-    =========================================== -->
-
-    <div class="platform">
-
-        <div class="platform-header">
-
-            <div class="platform-number">
-                2
-            </div>
-
-            <div class="yellow-bar"></div>
-
-            <div class="direction">
-
-                <div class="direction-jp">
-
-                    <div class="line-name">
-                        両毛線
-                    </div>
-
-                    <div id="platform2-direction">
-                        読み込み中
-                    </div>
-
-                </div>
-
-
-                <div class="direction-en">
-
-                    <div>
-                        Ryomo Line
-                    </div>
-
-                    <div id="platform2-direction-en">
-                        Loading...
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="train-table">
-
-            <div
-                class="table-head"
-                id="platform2-header"
-            >
-
-                <div>
-                    種別
-                </div>
-
-                <div>
-                    発車時刻
-                </div>
-
-                <div>
-                    行先
-                </div>
-
-                <div>
-                    両数
-                </div>
-
-                <div>
-                    発車まで
-                </div>
-
-            </div>
-
-
-            <div id="platform2-trains"></div>
-
-        </div>
-
-    </div>
-
-
-    <!-- ==========================================
-         日付・時刻・更新
-    =========================================== -->
-
-    <div class="footer">
-
-        <div id="current-date">
-            ----年--月--日
-        </div>
-
-        <div id="current-time">
-            --:--:--
-        </div>
-
-        <button onclick="loadTimetable()">
-
-            <span class="refresh-icon">
-                ↻
-            </span>
-
-            更新
-
-        </button>
-
-    </div>
-
-
-    <!-- ==========================================
-         ホームへ戻る
-    =========================================== -->
-
-    <div class="back-home-area">
-
-        <a
-            href="/"
-            class="back-home-button"
-        >
-
-            <span class="back-home-arrow">
-                ←
-            </span>
-
-            <span class="back-home-text">
-
-                <span class="back-home-jp">
-                    ホームへ戻る
-                </span>
-
-                <span class="back-home-en">
-                    Back to Home
-                </span>
-
-            </span>
-
-        </a>
-
-    </div>
-
 
 </div>
 
 
+<!-- ==========================================
+     1番線
+=========================================== -->
+
+<div class="platform">
+
+    <div class="platform-header">
+
+        <div class="platform-number">
+            1
+        </div>
+
+        <div class="yellow-bar"></div>
+
+        <div class="direction">
+
+            <div class="direction-jp">
+
+                <div class="line-name">
+                    両毛線
+                </div>
+
+                <div id="platform1-direction">
+                    読み込み中
+                </div>
+
+            </div>
+
+
+            <div class="direction-en">
+
+                <div>
+                    Ryomo Line
+                </div>
+
+                <div id="platform1-direction-en">
+                    Loading...
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="train-table">
+
+        <div
+            class="table-head"
+            id="platform1-header"
+        >
+
+            <div>
+                種別
+            </div>
+
+            <div>
+                発車時刻
+            </div>
+
+            <div>
+                行先
+            </div>
+
+            <div>
+                両数
+            </div>
+
+            <div>
+                発車まで
+            </div>
+
+        </div>
+
+
+        <div id="platform1-trains"></div>
+
+    </div>
+
+</div>
+
+
+<!-- ==========================================
+     2番線
+=========================================== -->
+
+<div class="platform">
+
+    <div class="platform-header">
+
+        <div class="platform-number">
+            2
+        </div>
+
+        <div class="yellow-bar"></div>
+
+        <div class="direction">
+
+            <div class="direction-jp">
+
+                <div class="line-name">
+                    両毛線
+                </div>
+
+                <div id="platform2-direction">
+                    読み込み中
+                </div>
+
+            </div>
+
+
+            <div class="direction-en">
+
+                <div>
+                    Ryomo Line
+                </div>
+
+                <div id="platform2-direction-en">
+                    Loading...
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="train-table">
+
+        <div
+            class="table-head"
+            id="platform2-header"
+        >
+
+            <div>
+                種別
+            </div>
+
+            <div>
+                発車時刻
+            </div>
+
+            <div>
+                行先
+            </div>
+
+            <div>
+                両数
+            </div>
+
+            <div>
+                発車まで
+            </div>
+
+        </div>
+
+
+        <div id="platform2-trains"></div>
+
+    </div>
+
+</div>
+
+
+<!-- ==========================================
+     日付・時刻・更新
+=========================================== -->
+
+<div class="footer">
+
+    <div id="current-date">
+        ----年--月--日
+    </div>
+
+    <div id="current-time">
+        --:--:--
+    </div>
+
+    <button onclick="loadTimetable()">
+
+        <span class="refresh-icon">
+            ↻
+        </span>
+
+        更新
+
+    </button>
+
+</div>
+
+
+<!-- ==========================================
+     ホームへ戻る
+=========================================== -->
+
+<div class="back-home-area">
+
+    <a
+        href="/"
+        class="back-home-button"
+        onclick="goHome(event)"
+    >
+
+        <span class="back-home-arrow">
+            ←
+        </span>
+
+        <span class="back-home-text">
+
+            <span class="back-home-jp">
+                ホームへ戻る
+            </span>
+
+            <span class="back-home-en">
+                Back to Home
+            </span>
+
+        </span>
+
+    </a>
+
+</div>
+```
+
+</div>
 
 <script>
 
@@ -689,27 +689,6 @@ function getStationDeparture(train) {
         train.stops || {};
 
 
-    /*
-     * 画面では
-     *
-     * 栃木駅
-     * 佐野駅
-     * 足利駅
-     *
-     * と表示していますが、
-     *
-     * timetable.jsonでは
-     *
-     * 栃木
-     * 佐野
-     * 足利
-     *
-     * となっています。
-     *
-     * そこで最後の「駅」を取り除いて
-     * JSONの駅名と一致させます。
-     */
-
     const stationKey =
         stationName.replace(/駅$/, "");
 
@@ -840,10 +819,6 @@ function getRemaining(departure) {
         currentSeconds;
 
 
-    /*
-     * 発車済み
-     */
-
     if (diffSeconds < 0) {
 
         return {
@@ -858,10 +833,6 @@ function getRemaining(departure) {
 
     }
 
-
-    /*
-     * ちょうど発車時刻
-     */
 
     if (diffSeconds === 0) {
 
@@ -936,10 +907,6 @@ function createTrainHTML(train) {
     const remaining =
         getRemaining(departure);
 
-
-    /*
-     * 発車済みなら表示しない
-     */
 
     if (remaining.finished) {
 
@@ -1156,11 +1123,6 @@ function getTodayUpcomingTrains(direction) {
         new Date();
 
 
-    /*
-     * 午前4時より前は
-     * 前日の列車扱い
-     */
-
     if (
 
         now.getHours() < 4
@@ -1197,7 +1159,6 @@ function getTodayUpcomingTrains(direction) {
 
             )
 
-
             .filter(
 
                 train => {
@@ -1219,10 +1180,6 @@ function getTodayUpcomingTrains(direction) {
                     }
 
 
-                    /*
-                     * まだ発車していない列車だけ
-                     */
-
                     return (
 
                         seconds >=
@@ -1234,10 +1191,6 @@ function getTodayUpcomingTrains(direction) {
 
             );
 
-
-    /*
-     * 発車時刻の早い順に並べる
-     */
 
     trains.sort(
 
@@ -1261,10 +1214,6 @@ function getTodayUpcomingTrains(direction) {
 
     );
 
-
-    /*
-     * 各方面2列車だけ
-     */
 
     return trains.slice(0, 2);
 
@@ -1324,10 +1273,6 @@ function renderPlatform(
         );
 
 
-    /*
-     * 列車がない
-     */
-
     if (trains.length === 0) {
 
         header.style.display =
@@ -1340,10 +1285,6 @@ function renderPlatform(
 
     }
 
-
-    /*
-     * 列車がある
-     */
 
     else {
 
@@ -1618,6 +1559,39 @@ function updateClock() {
 
 
 /* ==================================================
+   ホームへ戻る
+================================================== */
+
+function goHome(event) {
+
+    /*
+     * 通常のリンク移動を一旦止める
+     */
+
+    event.preventDefault();
+
+
+    /*
+     * 時刻表ページからホームへ戻ったことを記録
+     */
+
+    sessionStorage.setItem(
+        "returnToHome",
+        "true"
+    );
+
+
+    /*
+     * ホームへ移動
+     */
+
+    window.location.href = "/";
+
+}
+
+
+
+/* ==================================================
    初期処理
 ================================================== */
 
@@ -1673,7 +1647,6 @@ setInterval(
 
 
 </script>
-
 
 </body>
 
