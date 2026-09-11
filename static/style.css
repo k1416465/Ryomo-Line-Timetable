@@ -1353,9 +1353,10 @@ body {
 
     width: 100%;
 
-    min-height: 58px;
+    /* 英語表記を消した分だけ高さを調整 */
+    min-height: 48px;
 
-    padding: 9px 20px;
+    padding: 7px 20px;
 
     border: 1px solid #fff;
     border-radius: 8px;
@@ -1400,14 +1401,11 @@ body {
     font-weight: 900;
 }
 
+
+/* ===== 英語表記を非表示 ===== */
+
 .back-home-en {
-    margin-top: 1px;
-
-    font-size: 10px;
-
-    font-weight: 600;
-
-    letter-spacing: 1px;
+    display: none !important;
 }
 
 
@@ -1660,9 +1658,10 @@ body {
     }
 
     .back-home-button {
-        min-height: 52px;
+        /* 英語表記を消した分だけ高さを調整 */
+        min-height: 46px;
 
-        padding: 8px 15px;
+        padding: 6px 15px;
     }
 
     .back-home-arrow {
@@ -1678,9 +1677,7 @@ body {
     }
 
     .back-home-en {
-        margin-top: 1px;
-
-        font-size: 9px;
+        display: none !important;
     }
 
 }
@@ -1751,9 +1748,10 @@ body {
     }
 
     .back-home-button {
-        min-height: 48px;
+        /* 英語表記を消した分だけ高さを調整 */
+        min-height: 42px;
 
-        padding: 7px 10px;
+        padding: 6px 10px;
     }
 
     .back-home-arrow {
@@ -1769,9 +1767,7 @@ body {
     }
 
     .back-home-en {
-        margin-top: 1px;
-
-        font-size: 8px;
+        display: none !important;
     }
 
 }
@@ -2408,20 +2404,8 @@ body.light-mode .footer-time svg {
     時刻表ページ ライトモード
 ================================================== */
 
-/*
-    ライトモードでは
 
-    ・駅名部分                 → 白
-    ・1番線 ○○方面            → 黒
-    ・種別・発車時刻などの見出し → 黒
-    ・列車情報                 → 黒
-    ・備考欄                   → 黒
-    ・2列車目より下            → 黒
-    ・下部ボタン               → 白
-*/
-
-
-/* ===== 駅名部分は白 ===== */
+/* ===== 駅名部分 ===== */
 
 body.light-mode .board {
     color: #111111;
@@ -2441,39 +2425,31 @@ body.light-mode .station-header .station-en {
 
 /* ==================================================
     番線部分
-    「1番線 ○○方面」から電光掲示板なので黒
+    ★ 白背景・黒文字
 ================================================== */
 
 body.light-mode .platform {
-    background: #080909 !important;
+    background: #ffffff !important;
     border-color: #999999;
-    color: #ffffff;
+    color: #111111;
 }
 
-
-/* ===== 番線ヘッダーも黒 ===== */
 
 body.light-mode .platform-header {
-    background: #080909 !important;
-
-    border-color: #ffffff;
-
-    color: #ffffff;
+    background: #ffffff !important;
+    border-color: #999999;
+    color: #111111;
 }
 
-
-/* ===== 番線文字 ===== */
 
 body.light-mode .platform-number,
 body.light-mode .direction,
 body.light-mode .direction-jp,
 body.light-mode .direction-en,
 body.light-mode .line-name {
-    color: #ffffff;
+    color: #111111;
 }
 
-
-/* ===== 黄色縦線 ===== */
 
 body.light-mode .yellow-bar {
     background: #ffe600;
@@ -2482,34 +2458,32 @@ body.light-mode .yellow-bar {
 
 /* ==================================================
     電光掲示板
+    ★ 白背景・黒文字
 ================================================== */
 
 body.light-mode .train-table {
-    background: #080909 !important;
-    color: #ffffff !important;
+    background: #ffffff !important;
+    color: #111111 !important;
 }
 
 
-/* =====
-    「種別・発車時刻・行先・両数・発車まで」
-    も黒
-===== */
+/* ===== 表の見出し ===== */
 
 body.light-mode .train-table .table-head {
-    background: #080909 !important;
-    color: #ffffff !important;
+    background: #ffffff !important;
+    color: #111111 !important;
 }
 
 
-/* ===== 列車部分も黒 ===== */
+/* ===== 列車部分 ===== */
 
 body.light-mode .train-table .train-row {
-    background: #080909 !important;
-    color: #ffffff !important;
+    background: #ffffff !important;
+    color: #111111 !important;
 }
 
 
-/* ===== 列車の各文字 ===== */
+/* ===== 列車の文字 ===== */
 
 body.light-mode .train-table .departure-time,
 body.light-mode .train-table .destination,
@@ -2517,27 +2491,41 @@ body.light-mode .train-table .destination strong,
 body.light-mode .train-table .destination span,
 body.light-mode .train-table .cars,
 body.light-mode .train-table .remaining {
-    color: #ffffff;
+    color: #111111 !important;
 }
 
 
-/* ===== 種別ボックス ===== */
+/* ==================================================
+    普通 Local
+    ★ 黒背景・白文字
+================================================== */
 
 body.light-mode .train-table .local-box {
-    background: #ffffff;
-    color: #000000;
+    background: #000000 !important;
+    color: #ffffff !important;
+    border-color: #000000 !important;
 }
 
 
-/* ===== 両数 ===== */
+body.light-mode .train-table .local-box strong,
+body.light-mode .train-table .local-box span {
+    color: #ffffff !important;
+}
+
+
+/* ==================================================
+    両数
+    ★ 背景色はそのまま・文字だけ黒
+================================================== */
 
 body.light-mode .train-table .car-badge {
-    color: #ffffff;
+    color: #000000 !important;
 }
+
 
 body.light-mode .train-table .car-badge strong,
 body.light-mode .train-table .car-badge span {
-    color: #ffffff;
+    color: #000000 !important;
 }
 
 
@@ -2557,12 +2545,13 @@ body.light-mode .train-table .cars-orange {
 
 /* ==================================================
     備考欄
+    ★ 白背景・黒文字
 ================================================== */
 
 body.light-mode .train-table .note,
 body.light-mode .train-table .empty-note {
-    background: #080909 !important;
-    color: #ffffff !important;
+    background: #ffffff !important;
+    color: #111111 !important;
 
     border-bottom-color: #888888;
 }
@@ -2570,26 +2559,27 @@ body.light-mode .train-table .empty-note {
 
 /* ==================================================
     列車終了表示
+    ★ 白背景・黒文字
 ================================================== */
 
 body.light-mode .train-table .service-finished {
-    background: #080909 !important;
-    color: #ffffff !important;
+    background: #ffffff !important;
+    color: #111111 !important;
 }
 
 
 /* ==================================================
-    電光掲示板の下部まで黒
+    電光掲示板全体
 ================================================== */
 
 body.light-mode .train-table {
-    background-color: #080909 !important;
+    background-color: #ffffff !important;
 }
 
 
 /* ==================================================
     下部ボタン
-    日付・時刻・更新 → 白
+    ここは変更しない
 ================================================== */
 
 body.light-mode .footer > div,
@@ -2608,7 +2598,7 @@ body.light-mode .refresh-icon {
 
 /* ==================================================
     ホームへ戻る
-    → 白
+    ここは変更しない
 ================================================== */
 
 body.light-mode .back-home-button {
@@ -2624,7 +2614,7 @@ body.light-mode .back-home-button:hover {
 }
 
 body.light-mode .back-home-en {
-    color: #666666;
+    display: none !important;
 }
 
 
@@ -2635,7 +2625,7 @@ body.light-mode .back-home-en {
 
 @media (max-width: 800px) {
 
-    /* ===== 駅名部分は白 ===== */
+    /* ===== 駅名部分 ===== */
 
     body.light-mode .station-header {
         background: #ffffff;
@@ -2643,19 +2633,17 @@ body.light-mode .back-home-en {
     }
 
 
-    /* =====
-        1番線 ○○方面から下は黒
-    ===== */
+    /* ===== 1番線 ○○方面 ===== */
 
     body.light-mode .platform {
-        background: #080909 !important;
-        color: #ffffff;
+        background: #ffffff !important;
+        color: #111111;
     }
 
     body.light-mode .platform-header {
-        background: #080909 !important;
-        color: #ffffff;
-        border-color: #ffffff;
+        background: #ffffff !important;
+        color: #111111;
+        border-color: #999999;
     }
 
     body.light-mode .platform-number,
@@ -2663,31 +2651,70 @@ body.light-mode .back-home-en {
     body.light-mode .direction-jp,
     body.light-mode .direction-en,
     body.light-mode .line-name {
-        color: #ffffff;
+        color: #111111;
     }
 
 
     /* ===== 電光掲示板 ===== */
 
     body.light-mode .train-table {
-        background: #080909 !important;
-        color: #ffffff !important;
+        background: #ffffff !important;
+        color: #111111 !important;
     }
 
 
     /* ===== 見出し ===== */
 
     body.light-mode .train-table .table-head {
-        background: #080909 !important;
-        color: #ffffff !important;
+        background: #ffffff !important;
+        color: #111111 !important;
     }
 
 
     /* ===== 列車 ===== */
 
     body.light-mode .train-table .train-row {
-        background: #080909 !important;
+        background: #ffffff !important;
+        color: #111111 !important;
+    }
+
+
+    /* ===== 列車の文字 ===== */
+
+    body.light-mode .train-table .departure-time,
+    body.light-mode .train-table .destination,
+    body.light-mode .train-table .destination strong,
+    body.light-mode .train-table .destination span,
+    body.light-mode .train-table .cars,
+    body.light-mode .train-table .remaining {
+        color: #111111 !important;
+    }
+
+
+    /* ===== 普通 Local ===== */
+
+    body.light-mode .train-table .local-box {
+        background: #000000 !important;
         color: #ffffff !important;
+        border-color: #000000 !important;
+    }
+
+
+    body.light-mode .train-table .local-box strong,
+    body.light-mode .train-table .local-box span {
+        color: #ffffff !important;
+    }
+
+
+    /* ===== 両数：背景色はそのまま、文字だけ黒 ===== */
+
+    body.light-mode .train-table .car-badge {
+        color: #000000 !important;
+    }
+
+    body.light-mode .train-table .car-badge strong,
+    body.light-mode .train-table .car-badge span {
+        color: #000000 !important;
     }
 
 
@@ -2695,16 +2722,16 @@ body.light-mode .back-home-en {
 
     body.light-mode .train-table .note,
     body.light-mode .train-table .empty-note {
-        background: #080909 !important;
-        color: #ffffff !important;
+        background: #ffffff !important;
+        color: #111111 !important;
     }
 
 
     /* ===== 列車終了 ===== */
 
     body.light-mode .train-table .service-finished {
-        background: #080909 !important;
-        color: #ffffff !important;
+        background: #ffffff !important;
+        color: #111111 !important;
     }
 
 
@@ -2724,6 +2751,13 @@ body.light-mode .back-home-en {
         background: #ffffff !important;
         color: #111111 !important;
         border-color: #999999;
+
+        /* 英語を消した分だけ縦幅を調整 */
+        min-height: 46px;
+    }
+
+    body.light-mode .back-home-en {
+        display: none !important;
     }
 
 }
@@ -2736,28 +2770,94 @@ body.light-mode .back-home-en {
 @media (max-width: 380px) {
 
     body.light-mode .platform {
-        background: #080909 !important;
+        background: #ffffff !important;
     }
 
     body.light-mode .platform-header {
-        background: #080909 !important;
+        background: #ffffff !important;
     }
+
+    body.light-mode .platform-number,
+    body.light-mode .direction,
+    body.light-mode .direction-jp,
+    body.light-mode .direction-en,
+    body.light-mode .line-name {
+        color: #111111;
+    }
+
+
+    /* ===== 電光掲示板 ===== */
 
     body.light-mode .train-table {
-        background: #080909 !important;
+        background: #ffffff !important;
     }
 
+
     body.light-mode .train-table .table-head {
-        background: #080909 !important;
+        background: #ffffff !important;
+        color: #111111 !important;
+    }
+
+
+    body.light-mode .train-table .train-row {
+        background: #ffffff !important;
+        color: #111111 !important;
+    }
+
+
+    body.light-mode .train-table .departure-time,
+    body.light-mode .train-table .destination,
+    body.light-mode .train-table .destination strong,
+    body.light-mode .train-table .destination span,
+    body.light-mode .train-table .cars,
+    body.light-mode .train-table .remaining {
+        color: #111111 !important;
+    }
+
+
+    /* ===== 普通 Local ===== */
+
+    body.light-mode .train-table .local-box {
+        background: #000000 !important;
+        color: #ffffff !important;
+        border-color: #000000 !important;
+    }
+
+
+    body.light-mode .train-table .local-box strong,
+    body.light-mode .train-table .local-box span {
         color: #ffffff !important;
     }
 
-    body.light-mode .train-table .train-row,
+
+    /* ===== 両数 ===== */
+
+    body.light-mode .train-table .car-badge,
+    body.light-mode .train-table .car-badge strong,
+    body.light-mode .train-table .car-badge span {
+        color: #000000 !important;
+    }
+
+
+    /* ===== 備考・列車終了 ===== */
+
     body.light-mode .train-table .note,
     body.light-mode .train-table .empty-note,
     body.light-mode .train-table .service-finished {
-        background: #080909 !important;
-        color: #ffffff !important;
+        background: #ffffff !important;
+        color: #111111 !important;
+    }
+
+
+    /* ===== ホームへ戻る ===== */
+
+    body.light-mode .back-home-button {
+        min-height: 42px;
+        padding: 6px 10px;
+    }
+
+    body.light-mode .back-home-en {
+        display: none !important;
     }
 
 }
