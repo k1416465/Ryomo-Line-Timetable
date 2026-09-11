@@ -111,7 +111,7 @@
             </div>
 
             <div>
-                発車まで
+                到着まで
             </div>
 
         </div>
@@ -194,7 +194,7 @@
             </div>
 
             <div>
-                発車まで
+                到着まで
             </div>
 
         </div>
@@ -424,6 +424,15 @@ function setPlatformInfo() {
 ================================================== */
 
 let allTrains = [];
+
+/* ==================================================
+   両毛線の運行情報
+================================================== */
+
+let operationInfo = {
+    status: "情報取得中",
+    message: ""
+};
 
 
 
@@ -727,6 +736,79 @@ function getStationDeparture(train) {
 }
 
 
+/* ==================================================
+   ★ 駅の到着時刻を取得
+================================================== */
+
+function getStationArrival(train) {
+
+    const stops =
+        train.stops || {};
+
+    const stationKey =
+        stationName.replace(/駅$/, "");
+
+    const station =
+        stops[stationKey];
+
+    if (!station) {
+        return null;
+    }
+
+    return (
+        station.arrival
+        ||
+        station.departure
+        ||
+        null
+    );
+}
+
+
+/* ==================================================
+   ★ 時刻文字列をDateに変換
+================================================== */
+
+function timeToDate(time, baseDate = new Date()) {
+
+    if (!time) {
+        return null;
+    }
+
+    const parts = time.split(":");
+
+    if (parts.length !== 2) {
+        return null;
+    }
+
+    let hour = Number(parts[0]);
+    const minute = Number(parts[1]);
+
+    if (
+        !Number.isFinite(hour)
+        ||
+        !Number.isFinite(minute)
+        ||
+        minute < 0
+        ||
+        minute > 59
+    ) {
+        return null;
+    }
+
+    const date = new Date(baseDate);
+
+    if (hour >= 24) {
+        hour -= 24;
+        date.setDate(date.getDate() + 1);
+    }
+
+    date.setHours(hour, minute, 0, 0);
+
+    return date;
+}
+
+
 
 /* ==================================================
    両数を取得
@@ -760,122 +842,123 @@ function getCars(train) {
 
 
 /* ==================================================
-   発車までの時間
+   ★ 到着まで / 停車中 / 発車済
 ================================================== */
 
-function getRemaining(departure) {
+function getArrivalStatus(arrival, departure) {
 
-    if (!departure) {
-
+    if (!arrival) {
         return {
-
             number: "--",
-
             label: "",
-
-            finished: false
-
+            status: "normal"
         };
-
     }
 
+    const now = new Date();
 
-    const departureSeconds =
-        timeToSeconds(departure);
+    const arrivalDate =
+        timeToDate(arrival, now);
 
-
-    if (departureSeconds === null) {
-
-        return {
-
-            number: "--",
-
-            label: "",
-
-            finished: false
-
-        };
-
-    }
-
-
-    const now =
-        new Date();
-
-
-    const currentSeconds =
-
-        now.getHours() * 60 * 60
-
-        +
-
-        now.getMinutes() * 60
-
-        +
-
-        now.getSeconds();
-
-
-    const diffSeconds =
-
-        departureSeconds
-
-        -
-
-        currentSeconds;
-
-
-    if (diffSeconds < 0) {
-
-        return {
-
-            number: null,
-
-            label: null,
-
-            finished: true
-
-        };
-
-    }
-
-
-    if (diffSeconds === 0) {
-
-        return {
-
-            number: "0",
-
-            label: "分後",
-
-            finished: false
-
-        };
-
-    }
-
-
-    const remainingMinutes =
-
-        Math.floor(
-
-            diffSeconds / 60
-
+    const departureDate =
+        timeToDate(
+            departure || arrival,
+            now
         );
 
+    if (!arrivalDate) {
+        return {
+            number: "--",
+            label: "",
+            status: "normal"
+        };
+    }
+
+    if (now < arrivalDate) {
+
+        const diffSeconds =
+            Math.max(
+                0,
+                Math.floor(
+                    (arrivalDate - now) / 1000
+                )
+            );
+
+        const remainingMinutes =
+            Math.ceil(
+                diffSeconds / 60
+            );
+
+        return {
+            number: remainingMinutes,
+            label: "分後",
+            status: "normal"
+        };
+    }
+
+    if (
+        departureDate
+        &&
+        now < departureDate
+    ) {
+
+        return {
+            number: "停車中",
+            label: "",
+            status: "stopped"
+        };
+    }
 
     return {
-
-        number: remainingMinutes,
-
-        label: "分後",
-
-        finished: false
-
+        number: "発車済",
+        label: "",
+        status: "departed"
     };
-
 }
 
+
+/* ==================================================
+   ★ 発車後1分で一覧から削除
+================================================== */
+
+function isTrainStillDisplayed(train) {
+
+    const departure =
+        getStationDeparture(train);
+
+    if (!departure) {
+        return false;
+    }
+
+    const now = new Date();
+
+    const departureDate =
+        timeToDate(
+            departure,
+            now
+        );
+
+    if (!departureDate) {
+        return false;
+    }
+
+    /*
+     * 発車時刻になった瞬間は「発車済」と表示。
+     * 発車時刻から1分後になったら一覧から消す。
+     *
+     * 例：
+     * 17:53発 → 17:54になったら消える
+     * 18:00発 → 18:01になったら消える
+     */
+
+    const removeTime =
+        new Date(
+            departureDate.getTime()
+            + 60 * 1000
+        );
+
+    return now < removeTime;
+}
 
 
 /* ==================================================
@@ -902,6 +985,10 @@ function createTrainHTML(train) {
         );
 
 
+    const arrival =
+        getStationArrival(train);
+
+
     const departure =
         getStationDeparture(train);
 
@@ -911,10 +998,15 @@ function createTrainHTML(train) {
 
 
     const remaining =
-        getRemaining(departure);
+        getArrivalStatus(
+            arrival,
+            departure
+        );
 
 
-    if (remaining.finished) {
+    if (
+        !isTrainStillDisplayed(train)
+    ) {
 
         return "";
 
@@ -978,12 +1070,12 @@ function createTrainHTML(train) {
 
 
     /* ----------------------------------------------
-       発車まで
+       到着まで
     ---------------------------------------------- */
 
     let remainingHTML = `
 
-        <div class="remaining">
+        <div class="remaining ${remaining.status}">
 
             <strong>
                 ${remaining.number}
@@ -1007,43 +1099,72 @@ function createTrainHTML(train) {
         train.note || "";
 
 
-    let noteHTML;
+/*
+ * 運行情報に異常がある場合、
+ * 備考欄の後ろに赤字で表示
+ */
+const abnormalOperation =
+    operationInfo.status !== "平常運転"
+    &&
+    operationInfo.status !== "情報取得中"
+    &&
+    operationInfo.message;
 
 
-    if (note) {
-
-        /*
-         * PCでは先頭に全角スペース2個
-         * スマホ・タブレットではスペースなし
-         */
-
-        const isMobile =
-            window.innerWidth <= 800;
+const isMobile =
+    window.innerWidth <= 800;
 
 
-        const noteText =
-            isMobile
-                ? note
-                : `　　${note}`;
+let noteHTML = "";
 
 
-        noteHTML = `
+if (note || abnormalOperation) {
 
-            <div class="note">
-                ${noteText}
-            </div>
+    /*
+     * PCでは先頭に全角スペース2個
+     * スマホ・タブレットではスペースなし
+     */
+    const noteText =
+        isMobile
+            ? note
+            : `　　${note}`;
 
-        `;
 
-    } else {
+    noteHTML = `
 
-        noteHTML = `
+        <div class="note">
 
-            <div class="empty-note"></div>
+            ${note ? noteText : ""}
 
-        `;
+            ${
+                abnormalOperation
+                    ? `
+                        <span
+                            style="
+                                color: red;
+                                font-weight: bold;
+                                margin-left: 8px;
+                            "
+                        >
+                            【運行情報】${operationInfo.message}
+                        </span>
+                    `
+                    : ""
+            }
 
-    }
+        </div>
+
+    `;
+
+} else {
+
+    noteHTML = `
+
+        <div class="empty-note"></div>
+
+    `;
+
+}
 
 
 
@@ -1090,13 +1211,16 @@ function createTrainHTML(train) {
 
             <div>
 
-                <div class="destination">
+                <div
+                    class="destination"
+                    style="display:flex; flex-direction:column; align-items:center; justify-content:center; line-height:1; gap:0;"
+                >
 
-                    <strong>
+                    <strong style="display:block; line-height:1.05;">
                         ${destination}
                     </strong>
 
-                    <span>
+                    <span style="display:block; line-height:1; margin-top:0;">
                         ${destinationEnglish}
                     </span>
 
@@ -1140,106 +1264,55 @@ function createTrainHTML(train) {
 
 function getTodayUpcomingTrains(direction) {
 
-    const now =
-        new Date();
+    const now = new Date();
 
-
-    if (
-
-        now.getHours() < 4
-
-    ) {
-
+    if (now.getHours() < 4) {
         return [];
-
     }
-
-
-    const currentSeconds =
-
-        now.getHours() * 60 * 60
-
-        +
-
-        now.getMinutes() * 60
-
-        +
-
-        now.getSeconds();
-
 
     let trains =
 
         allTrains
 
             .filter(
-
                 train =>
-
                     train.direction === direction
-
             )
 
             .filter(
-
-                train => {
-
-                    const departure =
-                        getStationDeparture(train);
-
-
-                    const seconds =
-                        timeToSeconds(
-                            departure
-                        );
-
-
-                    if (seconds === null) {
-
-                        return false;
-
-                    }
-
-
-                    return (
-
-                        seconds >=
-                        currentSeconds
-
-                    );
-
-                }
-
+                train =>
+                    isTrainStillDisplayed(train)
             );
 
-
     trains.sort(
-
         (a, b) => {
 
             const aTime =
-                timeToSeconds(
-                    getStationDeparture(a)
+                timeToDate(
+                    getStationDeparture(a),
+                    now
                 );
-
 
             const bTime =
-                timeToSeconds(
-                    getStationDeparture(b)
+                timeToDate(
+                    getStationDeparture(b),
+                    now
                 );
 
+            if (!aTime) {
+                return 1;
+            }
+
+            if (!bTime) {
+                return -1;
+            }
 
             return aTime - bTime;
-
         }
-
     );
 
-
     return trains.slice(0, 2);
-
 }
-
 
 
 /* ==================================================
@@ -1374,6 +1447,59 @@ function renderTrains() {
 /* ==================================================
    timetable.jsonを取得
 ================================================== */
+
+async function loadOperationInfo() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/operation?" +
+                Date.now()
+            );
+
+
+        if (!response.ok) {
+            throw new Error(
+                "運行情報の取得に失敗しました"
+            );
+        }
+
+
+        const data =
+            await response.json();
+
+
+        operationInfo = {
+            status:
+                data.status ||
+                "情報取得中",
+
+            message:
+                data.message ||
+                ""
+        };
+
+
+        /*
+         * 運行情報を取得したら、
+         * 時刻表も再表示して備考欄を更新
+         */
+        renderTrains();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "運行情報取得エラー:",
+            error
+        );
+
+    }
+
+}
+
 
 async function loadTimetable() {
 
@@ -1661,6 +1787,22 @@ setInterval(
 setInterval(
 
     loadTimetable,
+
+    60000
+
+);
+
+
+/* ==================================================
+   両毛線の運行情報を1分ごとに更新
+================================================== */
+
+loadOperationInfo();
+
+
+setInterval(
+
+    loadOperationInfo,
 
     60000
 
