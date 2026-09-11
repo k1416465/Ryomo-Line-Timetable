@@ -260,11 +260,27 @@
         }
 
 
+        /* ==========================================
+           外部リンク矢印
+           横向き「→」
+           CSSで描画
+        ========================================== */
+
         .operation-info-arrow {
 
-            font-size: 22px;
+            width: 11px;
+
+            height: 11px;
+
+            border-top: 2px solid currentColor;
+
+            border-right: 2px solid currentColor;
 
             flex-shrink: 0;
+
+            transform:
+                rotate(45deg)
+                translate(-2px, 2px);
         }
 
 
@@ -557,7 +573,17 @@
 
             .operation-info-arrow {
 
-                font-size: 20px;
+                width: 10px;
+
+                height: 10px;
+
+                border-top-width: 2px;
+
+                border-right-width: 2px;
+
+                transform:
+                    rotate(45deg)
+                    translate(-2px, 2px);
             }
 
         }
@@ -868,9 +894,7 @@
 
                 </span>
 
-                <span class="operation-info-arrow">
-                    ↗
-                </span>
+                <span class="operation-info-arrow"></span>
 
             </a>
 
@@ -899,9 +923,7 @@
 
                 </span>
 
-                <span class="operation-info-arrow">
-                    ↗
-                </span>
+                <span class="operation-info-arrow"></span>
 
             </a>
 
