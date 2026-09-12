@@ -48,8 +48,9 @@ type="button"
 >
 
 <img
-    src="{{ url_for('static', filename='icons/settings.png') }}"
-    alt="設定"
+src="{{ url_for('static', filename='icons/settings.png') }}"
+alt="設定"
+
 >
 
 </button>
@@ -100,19 +101,16 @@ onclick="openStation(event, 'tochigi')"
 >
 
 <div class="station-icon">
-
-    <img
-        src="{{ url_for('static', filename='icons/tochigi.png') }}"
-        alt="栃木駅"
-    >
+<img
+    src="{{ url_for('static', filename='icons/tochigi.png') }}"
+    alt="栃木駅"
+>
 
 </div>
-
 
 <div class="station-name">
     栃木駅
 </div>
-
 
 <div class="station-en">
     Tochigi Station
@@ -131,18 +129,16 @@ onclick="openStation(event, 'sano')"
 
 <div class="station-icon">
 
-    <img
-        src="{{ url_for('static', filename='icons/sano.png') }}"
-        alt="佐野駅"
-    >
+<img
+    src="{{ url_for('static', filename='icons/sano.png') }}"
+    alt="佐野駅"
+>
 
 </div>
-
 
 <div class="station-name">
     佐野駅
 </div>
-
 
 <div class="station-en">
     Sano Station
@@ -161,18 +157,16 @@ onclick="openStation(event, 'ashikaga')"
 
 <div class="station-icon">
 
-    <img
-        src="{{ url_for('static', filename='icons/ashikaga.png') }}"
-        alt="足利駅"
-    >
+<img
+    src="{{ url_for('static', filename='icons/ashikaga.png') }}"
+    alt="足利駅"
+>
 
 </div>
-
 
 <div class="station-name">
     足利駅
 </div>
-
 
 <div class="station-en">
     Ashikaga Station
@@ -191,18 +185,16 @@ type="button"
 
 <div class="station-icon">
 
-    <img
-        src="{{ url_for('static', filename='icons/location.png') }}"
-        alt="現在地"
-    >
+<img
+    src="{{ url_for('static', filename='icons/location.png') }}"
+    alt="現在地"
+>
 
 </div>
-
 
 <div class="station-name">
     現在地
 </div>
-
 
 <div class="station-en">
     Current Location
@@ -237,7 +229,6 @@ type="button"
     運行情報
 </div>
 
-
 <div
     class="operation-status"
     id="operation-status"
@@ -245,14 +236,12 @@ type="button"
     平常運転
 </div>
 
-
 <div
     class="operation-text"
     id="operation-text"
 >
     両毛線は平常通り運転しています。
 </div>
-
 
 <div
     class="operation-updated"
@@ -390,9 +379,8 @@ function initializeHome() {
 
 
     /*
-     * デフォルト駅が設定されている場合
-     *
-     * → 設定された形式で駅へ移動
+     * 栃木・佐野・足利が
+     * デフォルト駅として設定されている場合
      */
 
     if (
@@ -411,6 +399,25 @@ function initializeHome() {
 
         openStationPage(
             defaultStation
+        );
+
+        return;
+
+    }
+
+
+
+    /*
+     * 「現在地に最も近い駅」が
+     * デフォルト駅として設定されている場合
+     */
+
+    if (
+        defaultStation === "nearest"
+    ) {
+
+        findNearestStation(
+            true
         );
 
         return;
@@ -1062,15 +1069,21 @@ function openSettings() {
    現在地
 ================================== */
 
-function findNearestStation() {
+function findNearestStation(
+    isDefaultStation = false
+) {
 
     if (
         !navigator.geolocation
     ) {
 
-        alert(
-            "このブラウザでは現在地を取得できません。"
-        );
+        if (!isDefaultStation) {
+
+            alert(
+                "このブラウザでは現在地を取得できません。"
+            );
+
+        }
 
         return;
 
@@ -1145,19 +1158,39 @@ function findNearestStation() {
 
         function(error) {
 
+            console.error(
+                "現在地取得エラー:",
+                error
+            );
+
+
+            /*
+             * 手動で「現在地」を
+             * 押した場合だけメッセージを表示
+             *
+             * デフォルト駅の場合は、
+             * ホーム画面をそのまま表示する
+             */
+
             if (
-                error.code === 1
+                !isDefaultStation
             ) {
 
-                alert(
-                    "現在地の取得が許可されていません。"
-                );
+                if (
+                    error.code === 1
+                ) {
 
-            } else {
+                    alert(
+                        "現在地の取得が許可されていません。"
+                    );
 
-                alert(
-                    "現在地を取得できませんでした。"
-                );
+                } else {
+
+                    alert(
+                        "現在地を取得できませんでした。"
+                    );
+
+                }
 
             }
 
