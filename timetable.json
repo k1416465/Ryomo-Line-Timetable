@@ -2304,7 +2304,7 @@
       "direction": "上り",
       "origin": "小山",
       "destination": "桐生",
-      "note": "栃木で南栗橋行最終電車にお乗り換えできます。",
+      "note": "",
       "stops": {
         "小山": {
           "arrival": null,
@@ -4678,7 +4678,7 @@
       "direction": "下り",
       "origin": "高崎",
       "destination": "小山",
-      "note": "",
+      "note": "栃木で南栗橋行最終電車にお乗り換えできます。",
       "stops": {
         "高崎": {
           "arrival": null,
