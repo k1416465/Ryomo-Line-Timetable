@@ -170,7 +170,7 @@
         .table-board {
             width: 100%;
 
-            overflow-x: auto;
+            overflow-x: hidden;
 
             background: #101010;
 
@@ -192,8 +192,6 @@
 
         .table {
             width: 100%;
-
-            min-width: 760px;
 
             border-collapse: collapse;
 
@@ -697,21 +695,158 @@
 
             .table-board {
                 border-radius: 10px;
+
+                overflow-x: hidden;
             }
 
 
+            /* ==================================
+               スマホでは表を画面幅に合わせる
+            ================================== */
+
             .table {
-                min-width: 700px;
+                width: 100%;
+
+                min-width: 0;
+
+                table-layout: fixed;
+            }
+
+
+            .table thead th {
+                padding:
+                    9px 3px;
+
+                font-size: 11px;
+
+                white-space: normal;
+            }
+
+
+            .table thead th:nth-child(1) {
+                width: 19%;
+            }
+
+
+            .table thead th:nth-child(2) {
+                width: 17%;
+            }
+
+
+            .table thead th:nth-child(3) {
+                width: 27%;
+            }
+
+
+            .table thead th:nth-child(4) {
+                width: 17%;
+            }
+
+
+            .table thead th:nth-child(5) {
+                width: 20%;
+            }
+
+
+            .th-en {
+                margin-top: 2px;
+
+                font-size: 8px;
+
+                white-space: nowrap;
+            }
+
+
+            .train-row td {
+                padding:
+                    9px 2px;
+
+                overflow: hidden;
             }
 
 
             .departure-time {
-                font-size: 21px;
+                font-size: 17px;
+
+                letter-spacing: 0;
+
+                white-space: nowrap;
+            }
+
+
+            .type-jp {
+                font-size: 14px;
+
+                white-space: nowrap;
+            }
+
+
+            .type-en {
+                font-size: 8px;
+
+                white-space: nowrap;
             }
 
 
             .destination-jp {
-                font-size: 17px;
+                font-size: 14px;
+
+                white-space: nowrap;
+            }
+
+
+            .destination-en {
+                font-size: 8px;
+
+                white-space: nowrap;
+
+                overflow: hidden;
+
+                text-overflow: ellipsis;
+            }
+
+
+            .cars-box {
+                min-width: 0;
+
+                width: 42px;
+
+                padding:
+                    5px 3px;
+
+                gap: 1px;
+
+                border-radius: 7px;
+
+                font-size: 13px;
+            }
+
+
+            .cars-number {
+                font-size: 16px;
+            }
+
+
+            .cars-unit {
+                font-size: 10px;
+            }
+
+
+            .note {
+                display: block;
+
+                font-size: 9px;
+
+                line-height: 1.2;
+
+                white-space: normal;
+
+                word-break: break-word;
+            }
+
+
+            .note-empty {
+                font-size: 10px;
             }
 
 
@@ -737,6 +872,72 @@
 
             .direction-button {
                 font-size: 14px;
+            }
+
+
+            .direction-en {
+                font-size: 9px;
+            }
+
+
+            .table thead th {
+                padding:
+                    8px 2px;
+
+                font-size: 10px;
+            }
+
+
+            .th-en {
+                font-size: 7px;
+            }
+
+
+            .departure-time {
+                font-size: 15px;
+            }
+
+
+            .type-jp {
+                font-size: 12px;
+            }
+
+
+            .type-en {
+                font-size: 7px;
+            }
+
+
+            .destination-jp {
+                font-size: 12px;
+            }
+
+
+            .destination-en {
+                font-size: 7px;
+            }
+
+
+            .cars-box {
+                width: 38px;
+
+                padding:
+                    4px 2px;
+            }
+
+
+            .cars-number {
+                font-size: 14px;
+            }
+
+
+            .cars-unit {
+                font-size: 9px;
+            }
+
+
+            .note {
+                font-size: 8px;
             }
 
 
@@ -773,7 +974,7 @@
     <div class="header">
 
         <div class="title-jp">
-            両毛線{{ station_name }} 時刻表
+            両毛線{{ station_name }}時刻表
         </div>
 
         <div class="title-en">
