@@ -94,6 +94,7 @@
 <a
     href="/station/tochigi"
     class="station-card tochigi"
+    onclick="openStation(event, 'tochigi')"
 >
 
     <div class="station-icon">
@@ -124,6 +125,7 @@
 <a
     href="/station/sano"
     class="station-card sano"
+    onclick="openStation(event, 'sano')"
 >
 
     <div class="station-icon">
@@ -154,6 +156,7 @@
 <a
     href="/station/ashikaga"
     class="station-card ashikaga"
+    onclick="openStation(event, 'ashikaga')"
 >
 
     <div class="station-icon">
@@ -394,7 +397,7 @@ function initializeHome() {
     /*
      * デフォルト駅が設定されている場合
      *
-     * → その駅へ自動移動
+     * → 設定された形式でその駅へ移動
      */
 
     if (
@@ -411,9 +414,9 @@ function initializeHome() {
 
     ) {
 
-        window.location.href =
-            "/station/" +
-            defaultStation;
+        openStationPage(
+            defaultStation
+        );
 
         return;
 
@@ -442,6 +445,94 @@ function initializeHome() {
         loadOperationInfo,
         60000
 
+    );
+
+}
+
+
+
+/* ==================================
+   時刻表の形式を取得
+================================== */
+
+function getTimetableFormat() {
+
+    return (
+        localStorage.getItem(
+            "timetableFormat"
+        ) || "board"
+    );
+
+}
+
+
+
+/* ==================================
+   駅ページを開く
+================================== */
+
+function openStationPage(
+    stationId
+) {
+
+    const timetableFormat =
+        getTimetableFormat();
+
+
+    /*
+     * リスト形式
+     */
+
+    if (
+        timetableFormat === "list"
+    ) {
+
+        window.location.href =
+            "/station/" +
+            stationId +
+            "/timetable";
+
+        return;
+
+    }
+
+
+    /*
+     * 電光掲示板形式
+     *
+     * 未設定の場合もこちら
+     */
+
+    window.location.href =
+        "/station/" +
+        stationId;
+
+}
+
+
+
+/* ==================================
+   駅カードクリック
+================================== */
+
+function openStation(
+    event,
+    stationId
+) {
+
+    /*
+     * 通常のリンク移動を止める
+     */
+
+    event.preventDefault();
+
+
+    /*
+     * 選択された形式で駅ページを開く
+     */
+
+    openStationPage(
+        stationId
     );
 
 }
@@ -992,9 +1083,14 @@ function findNearestStation() {
                 nearestStation
             ) {
 
-                window.location.href =
-                    "/station/" +
-                    nearestStation.id;
+                /*
+                 * 現在地から選択した場合も
+                 * 設定された時刻表形式を使用
+                 */
+
+                openStationPage(
+                    nearestStation.id
+                );
 
             }
 

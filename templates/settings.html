@@ -801,6 +801,101 @@
             </label>
 
 
+
+            <label class="settings-option">
+
+                <input
+                    type="radio"
+                    name="displayMode"
+                    value="system"
+                >
+
+                <span class="settings-option-text">
+
+                    <strong>
+                        端末の設定を使う
+                    </strong>
+
+                    <small>
+                        Use Device Settings
+                    </small>
+
+                </span>
+
+            </label>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ==================================
+         時刻表の形式
+    ================================== -->
+
+    <section class="settings-section">
+
+        <div class="settings-section-title">
+            時刻表の形式
+        </div>
+
+        <div class="settings-section-en">
+            Timetable Format
+        </div>
+
+
+        <div class="settings-options">
+
+
+            <label class="settings-option">
+
+                <input
+                    type="radio"
+                    name="timetableFormat"
+                    value="board"
+                >
+
+                <span class="settings-option-text">
+
+                    <strong>
+                        電光掲示板
+                    </strong>
+
+                    <small>
+                        Electric Bulletin Board
+                    </small>
+
+                </span>
+
+            </label>
+
+
+
+            <label class="settings-option">
+
+                <input
+                    type="radio"
+                    name="timetableFormat"
+                    value="list"
+                >
+
+                <span class="settings-option-text">
+
+                    <strong>
+                        リスト
+                    </strong>
+
+                    <small>
+                        List
+                    </small>
+
+                </span>
+
+            </label>
+
+
         </div>
 
     </section>
@@ -988,6 +1083,17 @@
 let allTrains = [];
 
 
+/*
+ * 現在開いている列車方向
+ *
+ * null   → 閉じている
+ * up     → 上りを表示中
+ * down   → 下りを表示中
+ */
+
+let currentTrainDirection = null;
+
+
 
 /* ==================================
    設定読み込み
@@ -1005,7 +1111,13 @@ function loadSettings() {
     const displayMode =
         localStorage.getItem(
             "displayMode"
-        ) || "dark";
+        ) || "system";
+
+
+    const timetableFormat =
+        localStorage.getItem(
+            "timetableFormat"
+        ) || "board";
 
 
 
@@ -1039,6 +1151,22 @@ function loadSettings() {
 
     }
 
+
+
+    /* 時刻表の形式 */
+
+    const timetableRadio =
+        document.querySelector(
+            `input[name="timetableFormat"][value="${timetableFormat}"]`
+        );
+
+
+    if (timetableRadio) {
+
+        timetableRadio.checked = true;
+
+    }
+
 }
 
 
@@ -1059,6 +1187,12 @@ function saveSettings() {
     const mode =
         document.querySelector(
             'input[name="displayMode"]:checked'
+        );
+
+
+    const timetableFormat =
+        document.querySelector(
+            'input[name="timetableFormat"]:checked'
         );
 
 
@@ -1087,6 +1221,18 @@ function saveSettings() {
 
 
 
+    if (!timetableFormat) {
+
+        alert(
+            "時刻表の形式を選択してください。"
+        );
+
+        return;
+
+    }
+
+
+
     localStorage.setItem(
         "defaultStation",
         station.value
@@ -1099,6 +1245,12 @@ function saveSettings() {
     );
 
 
+    localStorage.setItem(
+        "timetableFormat",
+        timetableFormat.value
+    );
+
+
     applyDisplayMode(
         mode.value
     );
@@ -1107,6 +1259,13 @@ function saveSettings() {
     alert(
         "設定を保存しました。"
     );
+
+
+    /* ==================================
+       保存後、自動的にホーム画面へ戻る
+    ================================== */
+
+    window.location.href = "/";
 
 }
 
@@ -1119,6 +1278,28 @@ function saveSettings() {
 function applyDisplayMode(mode) {
 
 
+    /*
+     * ダークモード
+     */
+
+    if (
+        mode === "dark"
+    ) {
+
+        document.body.classList.remove(
+            "light-mode"
+        );
+
+        return;
+
+    }
+
+
+
+    /*
+     * ライトモード
+     */
+
     if (
         mode === "light"
     ) {
@@ -1127,13 +1308,97 @@ function applyDisplayMode(mode) {
             "light-mode"
         );
 
-    } else {
+        return;
 
-        document.body.classList.remove(
-            "light-mode"
+    }
+
+
+
+    /*
+     * 端末の設定を使用
+     */
+
+    if (
+        mode === "system"
+    ) {
+
+        const prefersDark =
+            window.matchMedia(
+                "(prefers-color-scheme: dark)"
+            ).matches;
+
+
+        if (prefersDark) {
+
+            document.body.classList.remove(
+                "light-mode"
+            );
+
+        } else {
+
+            document.body.classList.add(
+                "light-mode"
+            );
+
+        }
+
+    }
+
+}
+
+
+
+/* ==================================
+   端末の設定変更を監視
+================================== */
+
+const systemThemeQuery =
+    window.matchMedia(
+        "(prefers-color-scheme: dark)"
+    );
+
+
+function handleSystemThemeChange() {
+
+
+    const currentMode =
+        localStorage.getItem(
+            "displayMode"
+        ) || "system";
+
+
+    if (
+        currentMode === "system"
+    ) {
+
+        applyDisplayMode(
+            "system"
         );
 
     }
+
+}
+
+
+/*
+ * 現在のブラウザに対応している方法で
+ * 端末のテーマ変更を監視
+ */
+
+if (
+    systemThemeQuery.addEventListener
+) {
+
+    systemThemeQuery.addEventListener(
+        "change",
+        handleSystemThemeChange
+    );
+
+} else {
+
+    systemThemeQuery.addListener(
+        handleSystemThemeChange
+    );
 
 }
 
@@ -1213,6 +1478,7 @@ function getTrainNumberValue(
 function getTrainDirection(
     trainNumber
 ) {
+
 
     const number =
         getTrainNumberValue(
@@ -1297,12 +1563,10 @@ async function loadTrainList() {
 
 
 /* ==================================
-   上り・下り表示
+   列車一覧を閉じる
 ================================== */
 
-function showTrainDirection(
-    direction
-) {
+function closeTrainDirection() {
 
 
     const upButton =
@@ -1316,6 +1580,88 @@ function showTrainDirection(
             "downButton"
         );
 
+
+    const list =
+        document.getElementById(
+            "trainNumberList"
+        );
+
+
+    upButton.classList.remove(
+        "active"
+    );
+
+
+    downButton.classList.remove(
+        "active"
+    );
+
+
+    list.innerHTML = "";
+
+
+    list.classList.remove(
+        "show"
+    );
+
+
+    currentTrainDirection = null;
+
+}
+
+
+
+/* ==================================
+   上り・下り表示
+================================== */
+
+function showTrainDirection(
+    direction
+) {
+
+
+    /*
+     * すでに同じ方向を表示している場合は
+     * もう一度押すと閉じる
+     */
+
+    if (
+        currentTrainDirection ===
+        direction
+    ) {
+
+        closeTrainDirection();
+
+        return;
+
+    }
+
+
+
+    const upButton =
+        document.getElementById(
+            "upButton"
+        );
+
+
+    const downButton =
+        document.getElementById(
+            "downButton"
+        );
+
+
+    /*
+     * 現在の方向を更新
+     */
+
+    currentTrainDirection =
+        direction;
+
+
+
+    /*
+     * ボタンの状態を更新
+     */
 
     if (
         direction === "up"
@@ -1520,7 +1866,7 @@ function showTrainDirection(
 const savedMode =
     localStorage.getItem(
         "displayMode"
-    ) || "dark";
+    ) || "system";
 
 
 applyDisplayMode(

@@ -235,32 +235,41 @@
 
 
 <!-- ==========================================
-     ホームへ戻る
+     下部ボタン
 =========================================== -->
 
-<div class="back-home-area">
+<div class="bottom-buttons">
+
+    <!-- ホームに戻る -->
 
     <a
         href="/"
-        class="back-home-button"
+        class="bottom-button"
         onclick="goHome(event)"
     >
 
-        <span class="back-home-arrow">
-            ←
+        <span class="bottom-button-jp">
+            ホームに戻る
         </span>
 
-        <span class="back-home-text">
+    </a>
 
-            <span class="back-home-jp">
-                ホームへ戻る
-            </span>
 
+    <!-- リスト表示 -->
+
+    <a
+        href="/station/{{ station_id }}/timetable"
+        class="bottom-button"
+    >
+
+        <span class="bottom-button-jp">
+            リスト表示
         </span>
 
     </a>
 
 </div>
+
 
 </div>
 
@@ -362,7 +371,7 @@ const stationConfig = {
 
             name: "桐生・前橋・高崎方面",
 
-            english: "for Kiryū, Maebashi & Takasaki"
+            english: "for Kiryu, Maebashi & Takasaki"
 
         }
 
