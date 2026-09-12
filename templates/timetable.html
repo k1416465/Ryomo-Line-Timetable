@@ -7,8 +7,9 @@
 <meta charset="UTF-8">
 
 <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+
 >
 
 <title>両毛線{{ station_name }}時刻表</title>
@@ -17,6 +18,136 @@
     rel="stylesheet"
     href="{{ url_for('static', filename='style.css') }}"
 >
+
+<style>
+
+/* ==================================
+   電光掲示板 下部ボタン
+================================== */
+
+.bottom-buttons {
+    display: grid !important;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 7px;
+
+    width: min(440px, 100%);
+
+    margin: 12px auto;
+}
+
+
+.bottom-button {
+    display: flex !important;
+
+    justify-content: center;
+
+    align-items: center;
+
+    width: 100% !important;
+
+    min-width: 0;
+
+    min-height: 42px;
+
+    padding: 6px 8px;
+
+    border: 1px solid #999 !important;
+
+    border-radius: 10px !important;
+
+    background: #fff !important;
+
+    color: #111 !important;
+
+    font-size: 14px;
+
+    font-weight: 900;
+
+    line-height: 1.2;
+
+    text-decoration: none !important;
+
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    box-sizing: border-box;
+
+    transition:
+        background 0.15s ease,
+        opacity 0.15s ease,
+        transform 0.15s ease;
+}
+
+
+.bottom-button:hover {
+    background: #f2f2f2 !important;
+}
+
+
+.bottom-button:active {
+    transform: scale(0.97);
+}
+
+
+.bottom-button-jp {
+    display: block !important;
+
+    color: #111 !important;
+
+    text-decoration: none !important;
+}
+
+
+/* ==================================
+   ライトモード
+================================== */
+
+body.light-mode .bottom-button {
+    background: #fff !important;
+
+    color: #111 !important;
+
+    border-color: #999 !important;
+}
+
+
+body.light-mode .bottom-button-jp {
+    color: #111 !important;
+}
+
+
+/* ==================================
+   スマートフォン
+================================== */
+
+@media (max-width: 600px) {
+
+    .bottom-buttons {
+        width: 100%;
+
+        gap: 7px;
+
+        margin-top: 12px;
+    }
+
+
+    .bottom-button {
+        min-height: 42px;
+
+        padding: 6px 8px;
+
+        border-radius: 10px !important;
+
+        font-size: 14px;
+    }
+
+}
+
+</style>
 
 </head>
 
@@ -30,16 +161,15 @@
 
 <div class="station-header">
 
-    <h1>
-        両毛線{{ station_name }}時刻表
-    </h1>
+<h1>
+    両毛線{{ station_name }}時刻表
+</h1>
 
-    <div class="station-en">
-        Ryōmō Line {{ station_english }} Timetable
-    </div>
-
+<div class="station-en">
+    Ryōmō Line {{ station_english }} Timetable
 </div>
 
+</div>
 
 <!-- ==========================================
      1番線
@@ -47,82 +177,81 @@
 
 <div class="platform">
 
-    <div class="platform-header">
+<div class="platform-header">
 
-        <div class="platform-number">
-            1
-        </div>
-
-        <div class="yellow-bar"></div>
-
-        <div class="direction">
-
-            <div class="direction-jp">
-
-                <div class="line-name">
-                    両毛線
-                </div>
-
-                <div id="platform1-direction">
-                    読み込み中
-                </div>
-
-            </div>
-
-
-            <div class="direction-en">
-
-                <div>
-                    Ryōmō Line
-                </div>
-
-                <div id="platform1-direction-en">
-                    Loading...
-                </div>
-
-            </div>
-
-        </div>
-
+    <div class="platform-number">
+        1
     </div>
 
+    <div class="yellow-bar"></div>
 
-    <div class="train-table">
+    <div class="direction">
 
-        <div
-            class="table-head"
-            id="platform1-header"
-        >
+        <div class="direction-jp">
 
-            <div>
-                種別
+            <div class="line-name">
+                両毛線
             </div>
 
-            <div>
-                発車時刻
-            </div>
-
-            <div>
-                行先
-            </div>
-
-            <div>
-                両数
-            </div>
-
-            <div>
-                到着まで
+            <div id="platform1-direction">
+                読み込み中
             </div>
 
         </div>
 
 
-        <div id="platform1-trains"></div>
+        <div class="direction-en">
+
+            <div>
+                Ryōmō Line
+            </div>
+
+            <div id="platform1-direction-en">
+                Loading...
+            </div>
+
+        </div>
 
     </div>
 
 </div>
 
+
+<div class="train-table">
+
+    <div
+        class="table-head"
+        id="platform1-header"
+    >
+
+        <div>
+            種別
+        </div>
+
+        <div>
+            発車時刻
+        </div>
+
+        <div>
+            行先
+        </div>
+
+        <div>
+            両数
+        </div>
+
+        <div>
+            到着まで
+        </div>
+
+    </div>
+
+
+    <div id="platform1-trains"></div>
+
+</div>
+
+</div>
 
 <!-- ==========================================
      2番線
@@ -130,82 +259,81 @@
 
 <div class="platform">
 
-    <div class="platform-header">
+<div class="platform-header">
 
-        <div class="platform-number">
-            2
-        </div>
-
-        <div class="yellow-bar"></div>
-
-        <div class="direction">
-
-            <div class="direction-jp">
-
-                <div class="line-name">
-                    両毛線
-                </div>
-
-                <div id="platform2-direction">
-                    読み込み中
-                </div>
-
-            </div>
-
-
-            <div class="direction-en">
-
-                <div>
-                    Ryōmō Line
-                </div>
-
-                <div id="platform2-direction-en">
-                    Loading...
-                </div>
-
-            </div>
-
-        </div>
-
+    <div class="platform-number">
+        2
     </div>
 
+    <div class="yellow-bar"></div>
 
-    <div class="train-table">
+    <div class="direction">
 
-        <div
-            class="table-head"
-            id="platform2-header"
-        >
+        <div class="direction-jp">
 
-            <div>
-                種別
+            <div class="line-name">
+                両毛線
             </div>
 
-            <div>
-                発車時刻
-            </div>
-
-            <div>
-                行先
-            </div>
-
-            <div>
-                両数
-            </div>
-
-            <div>
-                到着まで
+            <div id="platform2-direction">
+                読み込み中
             </div>
 
         </div>
 
 
-        <div id="platform2-trains"></div>
+        <div class="direction-en">
+
+            <div>
+                Ryōmō Line
+            </div>
+
+            <div id="platform2-direction-en">
+                Loading...
+            </div>
+
+        </div>
 
     </div>
 
 </div>
 
+
+<div class="train-table">
+
+    <div
+        class="table-head"
+        id="platform2-header"
+    >
+
+        <div>
+            種別
+        </div>
+
+        <div>
+            発車時刻
+        </div>
+
+        <div>
+            行先
+        </div>
+
+        <div>
+            両数
+        </div>
+
+        <div>
+            到着まで
+        </div>
+
+    </div>
+
+
+    <div id="platform2-trains"></div>
+
+</div>
+
+</div>
 
 <!-- ==========================================
      日付・時刻・更新
@@ -213,26 +341,25 @@
 
 <div class="footer">
 
-    <div id="current-date">
-        ----年--月--日
-    </div>
-
-    <div id="current-time">
-        --:--:--
-    </div>
-
-    <button onclick="loadTimetable()">
-
-        <span class="refresh-icon">
-            ↻
-        </span>
-
-        更新
-
-    </button>
-
+<div id="current-date">
+    ----年--月--日
 </div>
 
+<div id="current-time">
+    --:--:--
+</div>
+
+<button onclick="loadTimetable()">
+
+    <span class="refresh-icon">
+        ↻
+    </span>
+
+    更新
+
+</button>
+
+</div>
 
 <!-- ==========================================
      下部ボタン
@@ -240,38 +367,37 @@
 
 <div class="bottom-buttons">
 
-    <!-- ホームに戻る -->
+<!-- ホームに戻る -->
 
-　　<a
-    　　href="/?home=1"
-    　　class="bottom-button"
-    　　onclick="goHome(event)"
-　　>
-        <span class="bottom-button-jp">
-            ホームに戻る
-        </span>
+<a
+    href="/?home=1"
+    class="bottom-button"
+    onclick="goHome(event)"
+>
 
-    </a>
+    <span class="bottom-button-jp">
+        ホームに戻る
+    </span>
+
+</a>
 
 
-    <!-- リスト表示 -->
+<!-- リスト表示 -->
 
-    <a
-        href="/station/{{ station_id }}/timetable"
-        class="bottom-button"
-    >
+<a
+    href="/station/{{ station_id }}/timetable"
+    class="bottom-button"
+>
 
-        <span class="bottom-button-jp">
-            リスト表示
-        </span>
+    <span class="bottom-button-jp">
+        リスト表示
+    </span>
 
-    </a>
-
-</div>
-
+</a>
 
 </div>
 
+</div>
 
 <script>
 
@@ -390,6 +516,7 @@ if (
     );
 
 }
+
 
 /* ==================================================
    現在の駅
@@ -2214,6 +2341,7 @@ function goHome(event) {
         "/?home=1";
 
 }
+
 
 /* ==================================================
    列車詳細ページを開く
