@@ -7,8 +7,9 @@
 <meta charset="UTF-8">
 
 <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+
 >
 
 <title>両毛線 時刻表</title>
@@ -36,20 +37,20 @@
     Ryomo Line Timetable
 </div>
 
-
 <!-- 設定ボタン -->
 
 <button
-    class="settings-button"
-    onclick="openSettings()"
-    aria-label="設定"
-    type="button"
+class="settings-button"
+onclick="openSettings()"
+aria-label="設定"
+type="button"
+
 >
 
-    <img
-        src="{{ url_for('static', filename='icons/settings.png') }}"
-        alt="設定"
-    >
+<img
+    src="{{ url_for('static', filename='icons/settings.png') }}"
+    alt="設定"
+>
 
 </button>
 
@@ -92,122 +93,120 @@
 <!-- 栃木駅 -->
 
 <a
-    href="/station/tochigi"
-    class="station-card tochigi"
-    onclick="openStation(event, 'tochigi')"
+href="/station/tochigi"
+class="station-card tochigi"
+onclick="openStation(event, 'tochigi')"
+
 >
 
-    <div class="station-icon">
+<div class="station-icon">
 
-        <img
-            src="{{ url_for('static', filename='icons/tochigi.png') }}"
-            alt="栃木駅"
-        >
+    <img
+        src="{{ url_for('static', filename='icons/tochigi.png') }}"
+        alt="栃木駅"
+    >
 
-    </div>
-
-
-    <div class="station-name">
-        栃木駅
-    </div>
+</div>
 
 
-    <div class="station-en">
-        Tochigi Station
-    </div>
+<div class="station-name">
+    栃木駅
+</div>
+
+
+<div class="station-en">
+    Tochigi Station
+</div>
 
 </a>
-
-
 
 <!-- 佐野駅 -->
 
 <a
-    href="/station/sano"
-    class="station-card sano"
-    onclick="openStation(event, 'sano')"
+href="/station/sano"
+class="station-card sano"
+onclick="openStation(event, 'sano')"
+
 >
 
-    <div class="station-icon">
+<div class="station-icon">
 
-        <img
-            src="{{ url_for('static', filename='icons/sano.png') }}"
-            alt="佐野駅"
-        >
+    <img
+        src="{{ url_for('static', filename='icons/sano.png') }}"
+        alt="佐野駅"
+    >
 
-    </div>
-
-
-    <div class="station-name">
-        佐野駅
-    </div>
+</div>
 
 
-    <div class="station-en">
-        Sano Station
-    </div>
+<div class="station-name">
+    佐野駅
+</div>
+
+
+<div class="station-en">
+    Sano Station
+</div>
 
 </a>
-
-
 
 <!-- 足利駅 -->
 
 <a
-    href="/station/ashikaga"
-    class="station-card ashikaga"
-    onclick="openStation(event, 'ashikaga')"
+href="/station/ashikaga"
+class="station-card ashikaga"
+onclick="openStation(event, 'ashikaga')"
+
 >
 
-    <div class="station-icon">
+<div class="station-icon">
 
-        <img
-            src="{{ url_for('static', filename='icons/ashikaga.png') }}"
-            alt="足利駅"
-        >
+    <img
+        src="{{ url_for('static', filename='icons/ashikaga.png') }}"
+        alt="足利駅"
+    >
 
-    </div>
-
-
-    <div class="station-name">
-        足利駅
-    </div>
+</div>
 
 
-    <div class="station-en">
-        Ashikaga Station
-    </div>
+<div class="station-name">
+    足利駅
+</div>
+
+
+<div class="station-en">
+    Ashikaga Station
+</div>
 
 </a>
-
-
 
 <!-- 現在地 -->
 
 <button
-    class="station-card current-location"
-    onclick="findNearestStation()"
-    type="button"
+class="station-card current-location"
+onclick="findNearestStation()"
+type="button"
+
 >
 
-    <div class="station-icon">
+<div class="station-icon">
 
-        <img
-            src="{{ url_for('static', filename='icons/location.png') }}"
-            alt="現在地"
-        >
+    <img
+        src="{{ url_for('static', filename='icons/location.png') }}"
+        alt="現在地"
+    >
 
-    </div>
-
-
-    <div class="station-name">
-        現在地
-    </div>
+</div>
 
 
-    <div class="station-en">
-        Current Location
-    </div>
+<div class="station-name">
+    現在地
+</div>
+
+
+<div class="station-en">
+    Current Location
+</div>
 
 </button>
 
@@ -232,38 +231,35 @@
     ○
 </div>
 
-
 <div class="operation-content">
 
-
-    <div class="operation-title">
-        運行情報
-    </div>
-
-
-    <div
-        class="operation-status"
-        id="operation-status"
-    >
-        平常運転
-    </div>
+<div class="operation-title">
+    運行情報
+</div>
 
 
-    <div
-        class="operation-text"
-        id="operation-text"
-    >
-        両毛線は平常通り運転しています。
-    </div>
+<div
+    class="operation-status"
+    id="operation-status"
+>
+    平常運転
+</div>
 
 
-    <div
-        class="operation-updated"
-        id="operation-updated"
-    >
-        情報取得中
-    </div>
+<div
+    class="operation-text"
+    id="operation-text"
+>
+    両毛線は平常通り運転しています。
+</div>
 
+
+<div
+    class="operation-updated"
+    id="operation-updated"
+>
+    情報取得中
+</div>
 
 </div>
 
@@ -290,70 +286,85 @@ function initializeHome() {
 
 
     /* ==================================
-       時刻表ページから戻ってきた場合
+       強制的にホームを表示する場合
     ================================== */
 
-    const returnToHome =
-        sessionStorage.getItem(
-            "returnToHome"
+    const urlParams =
+        new URLSearchParams(
+            window.location.search
         );
+
+
+    const forceHome =
+        urlParams.get("home") === "1";
 
 
     /*
-     * 時刻表ページの
-     * 「ホームへ戻る」ボタンから来た場合
-     *
-     * デフォルト駅への自動移動を行わず、
-     * ホーム画面を表示する
+     * ?home=1 の場合は
+     * デフォルト駅への自動移動を行わない
      */
 
-    if (
-        returnToHome === "true"
-    ) {
-
+    if (forceHome) {
 
         /*
-         * 一度使用したら削除
+         * URLをきれいに戻す
+         *
+         * /?home=1
+         * ↓
+         * /
          */
 
-        sessionStorage.removeItem(
-            "returnToHome"
+        window.history.replaceState(
+            null,
+            "",
+            "/"
         );
-
-
-        /*
-         * ホーム画面の時計を開始
-         */
-
-        updateClock();
-
-        setInterval(
-            updateClock,
-            1000
-        );
-
-
-        /*
-         * 運行情報を取得
-         */
-
-        loadOperationInfo();
-
-        setInterval(
-            loadOperationInfo,
-            60000
-        );
-
-
-        return;
 
     }
 
 
 
     /* ==================================
+       時計開始
+    ================================== */
+
+    updateClock();
+
+    setInterval(
+        updateClock,
+        1000
+    );
+
+
+
+    /* ==================================
+       運行情報
+    ================================== */
+
+    loadOperationInfo();
+
+    setInterval(
+        loadOperationInfo,
+        60000
+    );
+
+
+
+    /* ==================================
        デフォルト駅
     ================================== */
+
+    /*
+     * ?home=1 の場合は
+     * デフォルト駅への移動をしない
+     */
+
+    if (forceHome) {
+
+        return;
+
+    }
+
 
     const defaultStation =
         localStorage.getItem(
@@ -363,7 +374,7 @@ function initializeHome() {
 
 
     /*
-     * 「選択しない」の場合
+     * 「選択しない」
      *
      * → ホーム画面をそのまま表示
      */
@@ -371,22 +382,6 @@ function initializeHome() {
     if (
         defaultStation === "none"
     ) {
-
-        updateClock();
-
-        setInterval(
-            updateClock,
-            1000
-        );
-
-
-        loadOperationInfo();
-
-        setInterval(
-            loadOperationInfo,
-            60000
-        );
-
 
         return;
 
@@ -397,7 +392,7 @@ function initializeHome() {
     /*
      * デフォルト駅が設定されている場合
      *
-     * → 設定された形式でその駅へ移動
+     * → 設定された形式で駅へ移動
      */
 
     if (
@@ -422,31 +417,6 @@ function initializeHome() {
 
     }
 
-
-
-    /*
-     * 万が一、
-     * 不正な値が保存されていた場合
-     *
-     * → ホーム画面を表示
-     */
-
-    updateClock();
-
-    setInterval(
-        updateClock,
-        1000
-    );
-
-
-    loadOperationInfo();
-
-    setInterval(
-        loadOperationInfo,
-        60000
-
-    );
-
 }
 
 
@@ -458,9 +428,11 @@ function initializeHome() {
 function getTimetableFormat() {
 
     return (
+
         localStorage.getItem(
             "timetableFormat"
         ) || "board"
+
     );
 
 }
@@ -479,6 +451,7 @@ function openStationPage(
         getTimetableFormat();
 
 
+
     /*
      * リスト形式
      */
@@ -488,8 +461,10 @@ function openStationPage(
     ) {
 
         window.location.href =
-            "/station/" +
-            stationId +
+            "/station/"
+            +
+            stationId
+            +
             "/timetable";
 
         return;
@@ -497,14 +472,14 @@ function openStationPage(
     }
 
 
+
     /*
      * 電光掲示板形式
-     *
-     * 未設定の場合もこちら
      */
 
     window.location.href =
-        "/station/" +
+        "/station/"
+        +
         stationId;
 
 }
@@ -520,16 +495,8 @@ function openStation(
     stationId
 ) {
 
-    /*
-     * 通常のリンク移動を止める
-     */
-
     event.preventDefault();
 
-
-    /*
-     * 選択された形式で駅ページを開く
-     */
 
     openStationPage(
         stationId
@@ -548,24 +515,114 @@ function applySavedDisplayMode() {
     const displayMode =
         localStorage.getItem(
             "displayMode"
-        ) || "dark";
+        ) || "system";
 
+
+    let useLightMode =
+        false;
+
+
+
+    /*
+     * ライトモード
+     */
 
     if (
         displayMode === "light"
     ) {
 
-        document.body.classList.add(
-            "light-mode"
-        );
-
-    } else {
-
-        document.body.classList.remove(
-            "light-mode"
-        );
+        useLightMode =
+            true;
 
     }
+
+
+
+    /*
+     * 端末設定
+     */
+
+    else if (
+        displayMode === "system"
+    ) {
+
+        useLightMode =
+            !window.matchMedia(
+                "(prefers-color-scheme: dark)"
+            ).matches;
+
+    }
+
+
+
+    /*
+     * ダーク / ライトを適用
+     */
+
+    document.body.classList.toggle(
+        "light-mode",
+        useLightMode
+    );
+
+}
+
+
+
+/* ==================================
+   端末テーマ変更監視
+================================== */
+
+const systemThemeQuery =
+    window.matchMedia(
+        "(prefers-color-scheme: dark)"
+    );
+
+
+function handleSystemThemeChange() {
+
+    const currentMode =
+        localStorage.getItem(
+            "displayMode"
+        ) || "system";
+
+
+    if (
+        currentMode === "system"
+    ) {
+
+        applySavedDisplayMode();
+
+    }
+
+}
+
+
+
+/*
+ * 新しいブラウザ
+ */
+
+if (
+    systemThemeQuery.addEventListener
+) {
+
+    systemThemeQuery.addEventListener(
+        "change",
+        handleSystemThemeChange
+    );
+
+}
+
+
+/*
+ * 古いブラウザ
+ */
+
+else {
+
+    systemThemeQuery.addListener(
+        handleSystemThemeChange
+    );
 
 }
 
@@ -608,7 +665,8 @@ const stations = [
 
 function updateClock() {
 
-    const now = new Date();
+    const now =
+        new Date();
 
 
     const year =
@@ -758,9 +816,7 @@ async function loadOperationInfo() {
             "operation-info";
 
 
-        /* ==================================
-           平常運転
-        ================================== */
+        /* 平常運転 */
 
         if (
             data.status === "平常運転"
@@ -786,9 +842,7 @@ async function loadOperationInfo() {
         }
 
 
-        /* ==================================
-           遅延
-        ================================== */
+        /* 遅延 */
 
         else if (
             data.status === "遅延"
@@ -814,9 +868,7 @@ async function loadOperationInfo() {
         }
 
 
-        /* ==================================
-           運転見合わせ・運休
-        ================================== */
+        /* 運転見合わせ・運休 */
 
         else if (
 
@@ -848,9 +900,7 @@ async function loadOperationInfo() {
         }
 
 
-        /* ==================================
-           その他
-        ================================== */
+        /* その他 */
 
         else {
 
@@ -875,9 +925,7 @@ async function loadOperationInfo() {
         }
 
 
-        /* ==================================
-           更新時刻
-        ================================== */
+        /* 更新時刻 */
 
         if (
             data.updated
@@ -885,7 +933,10 @@ async function loadOperationInfo() {
 
             operationUpdated.textContent =
                 "更新：" +
-                data.updated.replace(/\s*更新\s*$/, "");
+                data.updated.replace(
+                    /\s*更新\s*$/,
+                    ""
+                );
 
         } else {
 
@@ -1082,11 +1133,6 @@ function findNearestStation() {
             if (
                 nearestStation
             ) {
-
-                /*
-                 * 現在地から選択した場合も
-                 * 設定された時刻表形式を使用
-                 */
 
                 openStationPage(
                     nearestStation.id

@@ -242,12 +242,11 @@
 
     <!-- ホームに戻る -->
 
-    <a
-        href="/"
-        class="bottom-button"
-        onclick="goHome(event)"
-    >
-
+　　<a
+    　　href="/?home=1"
+    　　class="bottom-button"
+    　　onclick="goHome(event)"
+　　>
         <span class="bottom-button-jp">
             ホームに戻る
         </span>
@@ -280,14 +279,117 @@
    保存されている表示モードを適用
 ================================================== */
 
-if (
-    localStorage.getItem("displayMode") === "light"
-) {
+function applyDisplayMode() {
 
-    document.body.classList.add("light-mode");
+    const displayMode =
+        localStorage.getItem("displayMode") || "system";
+
+
+    let useLightMode = false;
+
+
+    /*
+     * ダーク
+     */
+
+    if (
+        displayMode === "dark"
+    ) {
+
+        useLightMode = false;
+
+    }
+
+
+    /*
+     * ライト
+     */
+
+    else if (
+        displayMode === "light"
+    ) {
+
+        useLightMode = true;
+
+    }
+
+
+    /*
+     * 端末の設定
+     */
+
+    else if (
+        displayMode === "system"
+    ) {
+
+        useLightMode =
+            !window.matchMedia(
+                "(prefers-color-scheme: dark)"
+            ).matches;
+
+    }
+
+
+    document.body.classList.toggle(
+        "light-mode",
+        useLightMode
+    );
 
 }
 
+
+/* ==================================================
+   初回表示
+================================================== */
+
+applyDisplayMode();
+
+
+/* ==================================================
+   端末のダーク・ライト設定変更を監視
+================================================== */
+
+const systemThemeQuery =
+    window.matchMedia(
+        "(prefers-color-scheme: dark)"
+    );
+
+
+function handleSystemThemeChange() {
+
+    const displayMode =
+        localStorage.getItem(
+            "displayMode"
+        ) || "system";
+
+
+    if (
+        displayMode === "system"
+    ) {
+
+        applyDisplayMode();
+
+    }
+
+}
+
+
+if (
+    systemThemeQuery.addEventListener
+) {
+
+    systemThemeQuery.addEventListener(
+        "change",
+        handleSystemThemeChange
+    );
+
+} else {
+
+    systemThemeQuery.addListener(
+        handleSystemThemeChange
+    );
+
+}
 
 /* ==================================================
    現在の駅
@@ -2102,17 +2204,16 @@ function goHome(event) {
     event.preventDefault();
 
 
-    sessionStorage.setItem(
-        "returnToHome",
-        "true"
-    );
-
+    /*
+     * ?home=1 を付けることで、
+     * デフォルト駅が設定されていても
+     * ホーム画面を強制的に表示する
+     */
 
     window.location.href =
-        "/";
+        "/?home=1";
 
 }
-
 
 /* ==================================================
    列車詳細ページを開く

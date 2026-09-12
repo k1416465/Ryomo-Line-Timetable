@@ -7,8 +7,9 @@
 <meta charset="UTF-8">
 
 <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+
 >
 
 <title>
@@ -1006,16 +1007,15 @@
 
 <div class="header">
 
-    <div class="title-jp">
-        両毛線{{ station_name }}時刻表
-    </div>
-
-    <div class="title-en">
-        Ryōmō Line {{ station_english }} Timetable
-    </div>
-
+<div class="title-jp">
+    両毛線{{ station_name }}時刻表
 </div>
 
+<div class="title-en">
+    Ryōmō Line {{ station_english }} Timetable
+</div>
+
+</div>
 
 <!-- ==================================
      上り・下り
@@ -1023,73 +1023,72 @@
 
 <div class="direction-buttons">
 
-    <button
-        id="up-button"
-        class="direction-button active"
-        onclick="setDirection('上り')"
-    >
+<button
+    id="up-button"
+    class="direction-button active"
+    onclick="setDirection('上り')"
+>
+
+    {% if station_id == "tochigi" %}
+        上り 佐野・足利・高崎方面
+    {% elif station_id == "sano" %}
+        上り 足利・桐生・高崎方面
+    {% elif station_id == "ashikaga" %}
+        上り 桐生・前橋・高崎方面
+    {% else %}
+        上り
+    {% endif %}
+
+    <span class="direction-en">
 
         {% if station_id == "tochigi" %}
-            上り 佐野・足利・高崎方面
+            For Sano, Ashikaga & Takasaki
         {% elif station_id == "sano" %}
-            上り 足利・桐生・高崎方面
+            For Ashikaga, Kiryu & Takasaki
         {% elif station_id == "ashikaga" %}
-            上り 桐生・前橋・高崎方面
+            For Kiryu, Maebashi & Takasaki
         {% else %}
-            上り
+            For Takasaki
         {% endif %}
 
-        <span class="direction-en">
+    </span>
 
-            {% if station_id == "tochigi" %}
-                For Sano, Ashikaga & Takasaki
-            {% elif station_id == "sano" %}
-                For Ashikaga, Kiryu & Takasaki
-            {% elif station_id == "ashikaga" %}
-                For Kiryu, Maebashi & Takasaki
-            {% else %}
-                For Takasaki
-            {% endif %}
-
-        </span>
-
-    </button>
+</button>
 
 
-    <button
-        id="down-button"
-        class="direction-button"
-        onclick="setDirection('下り')"
-    >
+<button
+    id="down-button"
+    class="direction-button"
+    onclick="setDirection('下り')"
+>
+
+    {% if station_id == "tochigi" %}
+        下り 小山方面
+    {% elif station_id == "sano" %}
+        下り 栃木・小山方面
+    {% elif station_id == "ashikaga" %}
+        下り 佐野・栃木・小山方面
+    {% else %}
+        下り
+    {% endif %}
+
+    <span class="direction-en">
 
         {% if station_id == "tochigi" %}
-            下り 小山方面
+            For Oyama
         {% elif station_id == "sano" %}
-            下り 栃木・小山方面
+            For Tochigi & Oyama
         {% elif station_id == "ashikaga" %}
-            下り 佐野・栃木・小山方面
+            For Sano, Tochigi & Oyama
         {% else %}
-            下り
+            For Oyama
         {% endif %}
 
-        <span class="direction-en">
+    </span>
 
-            {% if station_id == "tochigi" %}
-                For Oyama
-            {% elif station_id == "sano" %}
-                For Tochigi & Oyama
-            {% elif station_id == "ashikaga" %}
-                For Sano, Tochigi & Oyama
-            {% else %}
-                For Oyama
-            {% endif %}
-
-        </span>
-
-    </button>
+</button>
 
 </div>
-
 
 <!-- ==================================
      時刻表
@@ -1097,95 +1096,94 @@
 
 <div class="table-board">
 
-    <table class="table">
+<table class="table">
 
-        <thead>
+    <thead>
 
-            <tr>
+        <tr>
 
-                <th>
+            <th>
 
-                    発車時刻
+                発車時刻
 
-                    <span class="th-en">
-                        Departure
-                    </span>
+                <span class="th-en">
+                    Departure
+                </span>
 
-                </th>
-
-
-                <th>
-
-                    種別
-
-                    <span class="th-en">
-                        Type
-                    </span>
-
-                </th>
+            </th>
 
 
-                <th>
+            <th>
 
-                    行先
+                種別
 
-                    <span class="th-en">
-                        Destination
-                    </span>
+                <span class="th-en">
+                    Type
+                </span>
 
-                </th>
-
-
-                <th>
-
-                    両数
-
-                    <span class="th-en">
-                        Cars
-                    </span>
-
-                </th>
+            </th>
 
 
-                <th>
+            <th>
 
-                    備考
+                行先
 
-                    <span class="th-en">
-                        Note
-                    </span>
+                <span class="th-en">
+                    Destination
+                </span>
 
-                </th>
-
-            </tr>
-
-        </thead>
+            </th>
 
 
-        <tbody id="train-list">
+            <th>
 
-        </tbody>
+                両数
 
-    </table>
+                <span class="th-en">
+                    Cars
+                </span>
+
+            </th>
 
 
-    <div
-        id="no-trains"
-        class="no-trains"
-    >
+            <th>
 
-        <div class="no-trains-jp">
-            列車がありません
-        </div>
+                備考
 
-        <div class="no-trains-en">
-            No trains available.
-        </div>
+                <span class="th-en">
+                    Note
+                </span>
 
+            </th>
+
+        </tr>
+
+    </thead>
+
+
+    <tbody id="train-list">
+
+    </tbody>
+
+</table>
+
+
+<div
+    id="no-trains"
+    class="no-trains"
+>
+
+    <div class="no-trains-jp">
+        列車がありません
+    </div>
+
+    <div class="no-trains-en">
+        No trains available.
     </div>
 
 </div>
 
+</div>
 
 <!-- ==================================
      下部ボタン
@@ -1193,20 +1191,20 @@
 
 <div class="bottom-buttons">
 
-    <button
-        class="bottom-button"
-        onclick="goHome()"
-    >
-        ホームに戻る
-    </button>
+<button
+    class="bottom-button"
+    onclick="goHome()"
+>
+    ホームに戻る
+</button>
 
 
-    <button
-        class="bottom-button"
-        onclick="goStationBoard()"
-    >
-        電光掲示板表示
-    </button>
+<button
+    class="bottom-button"
+    onclick="goStationBoard()"
+>
+    電光掲示板表示
+</button>
 
 </div>
 
@@ -1290,24 +1288,111 @@
         const displayMode =
             localStorage.getItem(
                 "displayMode"
-            ) || "dark";
+            ) || "system";
 
+
+        let useLightMode =
+            false;
+
+
+        /*
+         * ダークモード
+         */
 
         if (
+            displayMode === "dark"
+        ) {
+
+            useLightMode =
+                false;
+
+        }
+
+
+        /*
+         * ライトモード
+         */
+
+        else if (
             displayMode === "light"
         ) {
 
-            document.body.classList.add(
-                "light-mode"
-            );
-
-        } else {
-
-            document.body.classList.remove(
-                "light-mode"
-            );
+            useLightMode =
+                true;
 
         }
+
+
+        /*
+         * 端末の設定を使う
+         */
+
+        else if (
+            displayMode === "system"
+        ) {
+
+            useLightMode =
+                !window.matchMedia(
+                    "(prefers-color-scheme: dark)"
+                ).matches;
+
+        }
+
+
+        document.body.classList.toggle(
+            "light-mode",
+            useLightMode
+        );
+
+    }
+
+
+    /* ==================================
+       端末テーマ変更監視
+    ================================== */
+
+    const systemThemeQuery =
+        window.matchMedia(
+            "(prefers-color-scheme: dark)"
+        );
+
+
+    function handleSystemThemeChange() {
+
+        const displayMode =
+            localStorage.getItem(
+                "displayMode"
+            ) || "system";
+
+
+        if (
+            displayMode === "system"
+        ) {
+
+            applyDisplayMode();
+
+        }
+
+    }
+
+
+    if (
+        systemThemeQuery.addEventListener
+    ) {
+
+        systemThemeQuery.addEventListener(
+            "change",
+            handleSystemThemeChange
+        );
+
+    }
+
+
+    else {
+
+        systemThemeQuery.addListener(
+            handleSystemThemeChange
+        );
 
     }
 
@@ -2269,7 +2354,7 @@
     function goHome() {
 
         window.location.href =
-            "/";
+            "/?home=1";
 
     }
 
