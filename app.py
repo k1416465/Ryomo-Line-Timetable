@@ -16,7 +16,13 @@ JSON_FILE = Path(__file__).with_name("timetable.json")
 # ==================================================
 
 def load_timetable():
-    with open(JSON_FILE, "r", encoding="utf-8") as f:
+
+    with open(
+        JSON_FILE,
+        "r",
+        encoding="utf-8"
+    ) as f:
+
         return json.load(f)
 
 
@@ -53,11 +59,13 @@ def normalize_train(item):
 
     cars = train.get("cars", "")
 
+
     # ==================================================
     # 崩れたデータの両数対応表
     # ==================================================
 
     car_mapping = {
+
         "421M": 6,
         "423M": 4,
         "425M": 6,
@@ -84,7 +92,9 @@ def normalize_train(item):
         "471M": 4,
         "475M": 4,
         "479M": 6
+
     }
+
 
     # ==================================================
     # 崩れたデータを修正
@@ -94,11 +104,20 @@ def normalize_train(item):
     # ==================================================
 
     if (
+
         train_number == "普通"
+
         and
+
         isinstance(cars, str)
+
         and
-        re.fullmatch(r"\d+M", cars.strip())
+
+        re.fullmatch(
+            r"\d+M",
+            cars.strip()
+        )
+
     ):
 
         # 本当の列車番号
@@ -106,9 +125,12 @@ def normalize_train(item):
 
         train["train_number"] = real_train_number
 
+
         # 種別が空なら普通
         if not train_type:
+
             train["type"] = "普通"
+
 
         # 列車番号から両数を取得
         if real_train_number in car_mapping:
@@ -121,13 +143,16 @@ def normalize_train(item):
 
             train["cars"] = None
 
+
     else:
 
         # 正常なデータ
         train["train_number"] = train_number
 
         if not train_type:
+
             train["type"] = "普通"
+
 
     return train
 
@@ -137,28 +162,52 @@ def normalize_train(item):
 # ==================================================
 
 STATION_ENGLISH = {
+
     "高崎": "Takasaki",
+
     "高崎問屋町": "Takasakitonyamachi",
+
     "井野": "Ino",
+
     "新前橋": "Shin-Maebashi",
+
     "前橋": "Maebashi",
+
     "前橋大島": "Maebashiōshima",
+
     "駒形": "Komagata",
+
     "伊勢崎": "Isesaki",
+
     "国定": "Kunisada",
+
     "岩宿": "Iwajuku",
+
     "桐生": "Kiryū",
+
     "小俣": "Omata",
+
     "山前": "Yamamae",
+
     "足利": "Ashikaga",
-    "あしかがフラワーパーク": "Ashikaga Flower Park",
+
+    "あしかがフラワーパーク":
+        "Ashikaga Flower Park",
+
     "富田": "Tomita",
+
     "佐野": "Sano",
+
     "岩舟": "Iwafune",
+
     "大平下": "Ōhirashita",
+
     "栃木": "Tochigi",
+
     "思川": "Omoigawa",
+
     "小山": "Oyama"
+
 }
 
 
@@ -171,7 +220,10 @@ def get_train_number(item):
     train = normalize_train(item)
 
     return str(
-        train.get("train_number", "") or ""
+        train.get(
+            "train_number",
+            ""
+        ) or ""
     ).strip()
 
 
@@ -198,11 +250,16 @@ def api_timetable():
 
     normalized_trains = []
 
-    for item in data.get("trains", []):
+
+    for item in data.get(
+        "trains",
+        []
+    ):
 
         normalized_trains.append(
             normalize_train(item)
         )
+
 
     data["trains"] = normalized_trains
 
@@ -219,31 +276,100 @@ def station(station):
     station_map = {
 
         "tochigi": {
+
             "name": "栃木駅",
+
             "english": "Tochigi Station"
+
         },
 
         "sano": {
+
             "name": "佐野駅",
+
             "english": "Sano Station"
+
         },
 
         "ashikaga": {
+
             "name": "足利駅",
+
             "english": "Ashikaga Station"
+
         }
 
     }
+
 
     if station not in station_map:
 
         return "駅が見つかりません", 404
 
+
     station_info = station_map[station]
+
 
     return render_template(
 
         "timetable.html",
+
+        station_id=station,
+
+        station_name=station_info["name"],
+
+        station_english=station_info["english"]
+
+    )
+
+
+# ==================================================
+# リスト形式の駅時刻表
+# ==================================================
+
+@app.route("/station/<station>/timetable")
+def station_timetable(station):
+
+    station_map = {
+
+        "tochigi": {
+
+            "name": "栃木駅",
+
+            "english": "Tochigi Station"
+
+        },
+
+        "sano": {
+
+            "name": "佐野駅",
+
+            "english": "Sano Station"
+
+        },
+
+        "ashikaga": {
+
+            "name": "足利駅",
+
+            "english": "Ashikaga Station"
+
+        }
+
+    }
+
+
+    if station not in station_map:
+
+        return "駅が見つかりません", 404
+
+
+    station_info = station_map[station]
+
+
+    return render_template(
+
+        "station_timetable.html",
 
         station_id=station,
 
@@ -265,14 +391,18 @@ def train_detail(train_number):
         train_number
     ).strip()
 
+
     data = load_timetable()
+
 
     trains = data.get(
         "trains",
         []
     )
 
+
     train = None
+
 
     # ==================================================
     # 列車を検索
@@ -283,17 +413,21 @@ def train_detail(train_number):
         normalized = normalize_train(item)
 
         current_number = str(
+
             normalized.get(
                 "train_number",
                 ""
             ) or ""
+
         ).strip()
+
 
         if current_number == train_number:
 
             train = normalized
 
             break
+
 
     # ==================================================
     # 列車が見つからない場合
@@ -302,8 +436,11 @@ def train_detail(train_number):
     if train is None:
 
         print(
+
             "列車が見つかりません:",
+
             train_number
+
         )
 
         return "列車が見つかりません", 404
@@ -315,29 +452,55 @@ def train_detail(train_number):
 
     stops = []
 
+
     for station_name, station_data in (
-        train.get("stops", {}) or {}
+
+        train.get(
+            "stops",
+            {}
+        ) or {}
+
     ).items():
 
         station_data = station_data or {}
 
+
         arrival = (
-            station_data.get("arrival")
-            or ""
+
+            station_data.get(
+                "arrival"
+            )
+
+            or
+
+            ""
+
         )
 
+
         departure = (
-            station_data.get("departure")
-            or ""
+
+            station_data.get(
+                "departure"
+            )
+
+            or
+
+            ""
+
         )
+
 
         stops.append({
 
             "name": station_name,
 
             "english": STATION_ENGLISH.get(
+
                 station_name,
+
                 station_name
+
             ),
 
             "arrival": arrival,
@@ -352,10 +515,15 @@ def train_detail(train_number):
     # ==================================================
 
     type_name = (
+
         train.get("type")
+
         or
+
         "普通"
+
     )
+
 
     type_english_map = {
 
@@ -366,6 +534,7 @@ def train_detail(train_number):
         "特急": "Limited Express"
 
     }
+
 
     type_english = type_english_map.get(
 
@@ -383,10 +552,13 @@ def train_detail(train_number):
     destination = (
 
         train.get("destination")
+
         or
+
         ""
 
     )
+
 
     destination_english_map = {
 
@@ -408,11 +580,17 @@ def train_detail(train_number):
 
     }
 
+
     destination_english = (
+
         destination_english_map.get(
+
             destination,
+
             destination
+
         )
+
     )
 
 
@@ -515,25 +693,32 @@ def settings():
 def api_operation():
 
     url = (
+
         "https://transit.yahoo.co.jp/"
         "diainfo/168/0"
+
     )
+
 
     headers = {
 
         "User-Agent": (
+
             "Mozilla/5.0 "
             "(Windows NT 10.0; Win64; x64) "
             "AppleWebKit/537.36 "
             "(KHTML, like Gecko) "
             "Chrome/140.0 Safari/537.36"
+
         ),
 
         "Accept": (
+
             "text/html,application/xhtml+xml,"
             "application/xml;q=0.9,"
             "image/avif,image/webp,"
             "*/*;q=0.8"
+
         ),
 
         "Accept-Language":
@@ -556,14 +741,20 @@ def api_operation():
 
 
         print(
+
             "Yahoo!路線情報 HTTP status:",
+
             response.status_code
+
         )
 
 
         print(
+
             "Yahoo! response length:",
+
             len(response.text)
+
         )
 
 
@@ -589,7 +780,9 @@ def api_operation():
 
 
         print(
+
             "Yahoo!路線情報ページ取得成功"
+
         )
 
 
@@ -622,6 +815,7 @@ def api_operation():
         for pattern in update_patterns:
 
             match = pattern.search(text)
+
 
             if match:
 
@@ -692,6 +886,7 @@ def api_operation():
         ):
 
             status = "平常運転"
+
 
             message = (
 
