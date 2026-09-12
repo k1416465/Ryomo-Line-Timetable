@@ -858,9 +858,6 @@ body {
     電光掲示板
 ================================================== */
 
-
-/* ===== 掲示板全体 ===== */
-
 .board {
     width: min(540px, 100%);
     margin: 0 auto;
@@ -1194,6 +1191,12 @@ body {
     align-items: baseline;
 
     justify-content: center;
+
+    min-width: 0;
+
+    width: 100%;
+
+    overflow: hidden;
 }
 
 .remaining span {
@@ -1208,6 +1211,22 @@ body {
     align-self: auto;
 
     margin-bottom: 0;
+}
+
+
+/* ==================================
+    発車済・停車中
+================================== */
+
+.remaining.departed strong,
+.remaining.stopped strong {
+    font-size: 16px;
+
+    font-weight: 900;
+
+    white-space: nowrap;
+
+    letter-spacing: -0.5px;
 }
 
 
@@ -1263,7 +1282,9 @@ body {
 }
 
 
-/* ===== 下部ボタン ===== */
+/* ==================================================
+    下部日時・更新
+================================================== */
 
 .footer {
     display: grid;
@@ -1330,19 +1351,21 @@ body {
 
 
 /* ==================================================
-    ホームへ戻る
+    下部2ボタン
 ================================================== */
 
 .back-home-area {
-    display: flex;
+    display: grid;
 
-    justify-content: center;
-    align-items: center;
+    grid-template-columns: 1fr 1fr;
 
-    margin-top: 18px;
-    margin-bottom: 20px;
+    gap: 8px;
 
     width: 100%;
+
+    margin-top: 16px;
+
+    margin-bottom: 20px;
 }
 
 .back-home-button {
@@ -1353,15 +1376,18 @@ body {
 
     width: 100%;
 
-    /* 英語表記を消した分だけ高さを調整 */
+    min-width: 0;
+
     min-height: 48px;
 
-    padding: 7px 20px;
+    padding: 7px 10px;
 
     border: 1px solid #fff;
-    border-radius: 8px;
+
+    border-radius: 12px;
 
     background: #101010;
+
     color: #fff;
 
     text-decoration: none;
@@ -1392,20 +1418,73 @@ body {
 
     align-items: center;
 
+    justify-content: center;
+
     line-height: 1;
+
+    min-width: 0;
 }
 
 .back-home-jp {
-    font-size: 18px;
+    font-size: 17px;
 
     font-weight: 900;
+
+    white-space: nowrap;
 }
-
-
-/* ===== 英語表記を非表示 ===== */
 
 .back-home-en {
     display: none !important;
+}
+
+
+/* ==================================================
+    時刻表に戻るボタン
+================================================== */
+
+.back-timetable-button {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+
+    min-width: 0;
+
+    min-height: 48px;
+
+    padding: 7px 10px;
+
+    border: 1px solid #fff;
+
+    border-radius: 12px;
+
+    background: #101010;
+
+    color: #fff;
+
+    text-decoration: none;
+
+    font-size: 17px;
+
+    font-weight: 900;
+
+    white-space: nowrap;
+
+    transition:
+        background 0.15s ease,
+        transform 0.15s ease;
+}
+
+.back-timetable-button:hover {
+    background: #202020;
+
+    transform: translateY(-2px);
+}
+
+.back-timetable-button:active {
+    transform: scale(0.98);
 }
 
 
@@ -1591,16 +1670,28 @@ body {
         transform: none;
     }
 
-    .remaining strong {
-        font-size: clamp(24px, 7vw, 31px);
-    }
-
     .remaining {
         display: flex;
 
         align-items: baseline;
 
         justify-content: center;
+
+        width: 100%;
+
+        min-width: 0;
+
+        overflow: hidden;
+
+        white-space: nowrap;
+    }
+
+    .remaining strong {
+        font-size: clamp(22px, 6.5vw, 29px);
+
+        white-space: nowrap;
+
+        line-height: 1;
     }
 
     .remaining span {
@@ -1611,7 +1702,26 @@ body {
         line-height: 1;
 
         margin-bottom: 0;
+
+        white-space: nowrap;
     }
+
+
+    /* ===== 発車済・停車中 ===== */
+
+    .remaining.departed strong,
+    .remaining.stopped strong {
+        font-size: clamp(11px, 3.4vw, 16px);
+
+        letter-spacing: -0.7px;
+
+        white-space: nowrap;
+
+        line-height: 1;
+
+        flex-shrink: 1;
+    }
+
 
     .note,
     .empty-note {
@@ -1628,6 +1738,9 @@ body {
 
         background: #080909;
     }
+
+
+    /* ===== 日時・更新 ===== */
 
     .footer {
         gap: 4px;
@@ -1649,35 +1762,34 @@ body {
     }
 
 
-    /* ===== ホームへ戻る ===== */
+    /* ===== 下部2ボタン ===== */
 
     .back-home-area {
-        margin-top: 15px;
+        display: grid;
 
-        margin-bottom: 15px;
+        grid-template-columns: 1fr 1fr;
+
+        gap: 7px;
+
+        margin-top: 13px;
+
+        margin-bottom: 13px;
+
+        width: 100%;
     }
 
-    .back-home-button {
-        /* 英語表記を消した分だけ高さを調整 */
-        min-height: 46px;
+    .back-home-button,
+    .back-timetable-button {
+        min-height: 44px;
 
-        padding: 6px 15px;
+        padding: 6px 7px;
+
+        border-radius: 11px;
     }
 
-    .back-home-arrow {
-        display: none;
-    }
-
-    .back-home-text {
-        line-height: 1;
-    }
-
-    .back-home-jp {
-        font-size: 16px;
-    }
-
-    .back-home-en {
-        display: none !important;
+    .back-home-jp,
+    .back-timetable-button {
+        font-size: clamp(13px, 4vw, 17px);
     }
 
 }
@@ -1739,35 +1851,46 @@ body {
     }
 
 
-    /* ===== ホームへ戻る ===== */
+    /* ===== 発車済・停車中 ===== */
+
+    .remaining.departed strong,
+    .remaining.stopped strong {
+        font-size: 10px;
+
+        letter-spacing: -0.8px;
+
+        white-space: nowrap;
+    }
+
+    .remaining span {
+        font-size: 8px;
+    }
+
+
+    /* ===== 下部2ボタン ===== */
 
     .back-home-area {
-        margin-top: 12px;
+        grid-template-columns: 1fr 1fr;
 
-        margin-bottom: 10px;
+        gap: 5px;
+
+        margin-top: 10px;
+
+        margin-bottom: 9px;
     }
 
-    .back-home-button {
-        /* 英語表記を消した分だけ高さを調整 */
-        min-height: 42px;
+    .back-home-button,
+    .back-timetable-button {
+        min-height: 40px;
 
-        padding: 6px 10px;
+        padding: 5px 4px;
+
+        border-radius: 10px;
     }
 
-    .back-home-arrow {
-        display: none;
-    }
-
-    .back-home-text {
-        line-height: 1;
-    }
-
-    .back-home-jp {
-        font-size: 14px;
-    }
-
-    .back-home-en {
-        display: none !important;
+    .back-home-jp,
+    .back-timetable-button {
+        font-size: 12px;
     }
 
 }
@@ -2114,13 +2237,11 @@ body {
         padding: 8px 0 25px;
     }
 
-
     .settings-header {
         padding: 25px 5px 22px;
 
         margin-bottom: 18px;
     }
-
 
     .settings-header-icon {
         font-size: 35px;
@@ -2128,18 +2249,15 @@ body {
         margin-bottom: 10px;
     }
 
-
     .settings-header h1 {
         font-size: 30px;
     }
-
 
     .settings-header-en {
         font-size: 12px;
 
         margin-top: 6px;
     }
-
 
     .settings-section {
         margin-bottom: 15px;
@@ -2149,23 +2267,19 @@ body {
         border-radius: 10px;
     }
 
-
     .settings-section-title {
         font-size: 19px;
     }
 
-
     .settings-section-en {
         font-size: 10px;
     }
-
 
     .settings-options {
         margin-top: 14px;
 
         gap: 8px;
     }
-
 
     .settings-option {
         min-height: 58px;
@@ -2175,18 +2289,15 @@ body {
         gap: 12px;
     }
 
-
     .settings-option input {
         width: 18px;
 
         height: 18px;
     }
 
-
     .settings-option-text strong {
         font-size: 16px;
     }
-
 
     .settings-option-text small {
         font-size: 9px;
@@ -2194,23 +2305,19 @@ body {
         margin-top: 4px;
     }
 
-
     .settings-save-button {
         min-height: 52px;
 
         font-size: 16px;
     }
 
-
     .settings-back-button {
         min-height: 52px;
     }
 
-
     .settings-back-button span {
         font-size: 15px;
     }
-
 
     .settings-back-button small {
         font-size: 8px;
@@ -2229,16 +2336,13 @@ body {
     color: #111111;
 }
 
-
 .settings-page.light-mode .settings-header {
     border-color: #bbbbbb;
 }
 
-
 .settings-page.light-mode .settings-header-en {
     color: #666666;
 }
-
 
 .settings-page.light-mode .settings-section {
     background: #ffffff;
@@ -2246,11 +2350,9 @@ body {
     border-color: #cccccc;
 }
 
-
 .settings-page.light-mode .settings-section-en {
     color: #666666;
 }
-
 
 .settings-page.light-mode .settings-option {
     background: #f5f5f5;
@@ -2258,13 +2360,11 @@ body {
     border-color: #cccccc;
 }
 
-
 .settings-page.light-mode .settings-option:hover {
     background: #e9e9e9;
 
     border-color: #999999;
 }
-
 
 .settings-page.light-mode .settings-option:has(input:checked) {
     background: #e2e2e2;
@@ -2272,11 +2372,9 @@ body {
     border-color: #333333;
 }
 
-
 .settings-page.light-mode .settings-option-text small {
     color: #666666;
 }
-
 
 .settings-page.light-mode .settings-back-button {
     background: #ffffff;
@@ -2285,7 +2383,6 @@ body {
 
     border-color: #cccccc;
 }
-
 
 .settings-page.light-mode .settings-back-button small {
     color: #666666;
@@ -2299,6 +2396,19 @@ body {
 body.light-mode {
     background: #f4f4f4;
     color: #111111;
+}
+
+
+/* ★ ライトモードでページ全体を最後まで明るくする ★ */
+
+html:has(body.light-mode) {
+    background: #f4f4f4;
+}
+
+body.light-mode,
+body.light-mode::before,
+body.light-mode::after {
+    background-color: #f4f4f4;
 }
 
 
@@ -2404,9 +2514,6 @@ body.light-mode .footer-time svg {
     時刻表ページ ライトモード
 ================================================== */
 
-
-/* ===== 駅名部分 ===== */
-
 body.light-mode .board {
     color: #111111;
 }
@@ -2423,10 +2530,7 @@ body.light-mode .station-header .station-en {
 }
 
 
-/* ==================================================
-    番線部分
-    ★ 白背景・黒文字
-================================================== */
+/* ===== 番線 ===== */
 
 body.light-mode .platform {
     background: #ffffff !important;
@@ -2434,13 +2538,11 @@ body.light-mode .platform {
     color: #111111;
 }
 
-
 body.light-mode .platform-header {
     background: #ffffff !important;
     border-color: #999999;
     color: #111111;
 }
-
 
 body.light-mode .platform-number,
 body.light-mode .direction,
@@ -2450,32 +2552,22 @@ body.light-mode .line-name {
     color: #111111;
 }
 
-
 body.light-mode .yellow-bar {
     background: #ffe600;
 }
 
 
-/* ==================================================
-    電光掲示板
-    ★ 白背景・黒文字
-================================================== */
+/* ===== 電光掲示板 ===== */
 
 body.light-mode .train-table {
     background: #ffffff !important;
     color: #111111 !important;
 }
 
-
-/* ===== 表の見出し ===== */
-
 body.light-mode .train-table .table-head {
     background: #ffffff !important;
     color: #111111 !important;
 }
-
-
-/* ===== 列車部分 ===== */
 
 body.light-mode .train-table .train-row {
     background: #ffffff !important;
@@ -2483,7 +2575,7 @@ body.light-mode .train-table .train-row {
 }
 
 
-/* ===== 列車の文字 ===== */
+/* ===== 列車文字 ===== */
 
 body.light-mode .train-table .departure-time,
 body.light-mode .train-table .destination,
@@ -2495,10 +2587,7 @@ body.light-mode .train-table .remaining {
 }
 
 
-/* ==================================================
-    普通 Local
-    ★ 黒背景・白文字
-================================================== */
+/* ===== 普通 Local ===== */
 
 body.light-mode .train-table .local-box {
     background: #000000 !important;
@@ -2506,22 +2595,17 @@ body.light-mode .train-table .local-box {
     border-color: #000000 !important;
 }
 
-
 body.light-mode .train-table .local-box strong,
 body.light-mode .train-table .local-box span {
     color: #ffffff !important;
 }
 
 
-/* ==================================================
-    両数
-    ★ 背景色はそのまま・文字だけ黒
-================================================== */
+/* ===== 両数 ===== */
 
 body.light-mode .train-table .car-badge {
     color: #000000 !important;
 }
-
 
 body.light-mode .train-table .car-badge strong,
 body.light-mode .train-table .car-badge span {
@@ -2529,24 +2613,21 @@ body.light-mode .train-table .car-badge span {
 }
 
 
-/* ===== 4両：緑 ===== */
+/* ===== 4両 ===== */
 
 body.light-mode .train-table .cars-green {
     background: #00b83f !important;
 }
 
 
-/* ===== 6両：オレンジ ===== */
+/* ===== 6両 ===== */
 
 body.light-mode .train-table .cars-orange {
     background: #f28c00 !important;
 }
 
 
-/* ==================================================
-    備考欄
-    ★ 白背景・黒文字
-================================================== */
+/* ===== 備考 ===== */
 
 body.light-mode .train-table .note,
 body.light-mode .train-table .empty-note {
@@ -2557,10 +2638,7 @@ body.light-mode .train-table .empty-note {
 }
 
 
-/* ==================================================
-    列車終了表示
-    ★ 白背景・黒文字
-================================================== */
+/* ===== 列車終了 ===== */
 
 body.light-mode .train-table .service-finished {
     background: #ffffff !important;
@@ -2568,19 +2646,11 @@ body.light-mode .train-table .service-finished {
 }
 
 
-/* ==================================================
-    電光掲示板全体
-================================================== */
+/* ===== 時刻表ページ下部 ===== */
 
-body.light-mode .train-table {
-    background-color: #ffffff !important;
+body.light-mode .footer {
+    background: #f4f4f4 !important;
 }
-
-
-/* ==================================================
-    下部ボタン
-    ここは変更しない
-================================================== */
 
 body.light-mode .footer > div,
 body.light-mode .footer button {
@@ -2596,12 +2666,14 @@ body.light-mode .refresh-icon {
 }
 
 
-/* ==================================================
-    ホームへ戻る
-    ここは変更しない
-================================================== */
+/* ===== 下部2ボタン ===== */
 
-body.light-mode .back-home-button {
+body.light-mode .back-home-area {
+    background: #f4f4f4 !important;
+}
+
+body.light-mode .back-home-button,
+body.light-mode .back-timetable-button {
     background: #ffffff !important;
 
     color: #111111 !important;
@@ -2609,12 +2681,9 @@ body.light-mode .back-home-button {
     border-color: #999999;
 }
 
-body.light-mode .back-home-button:hover {
+body.light-mode .back-home-button:hover,
+body.light-mode .back-timetable-button:hover {
     background: #eeeeee !important;
-}
-
-body.light-mode .back-home-en {
-    display: none !important;
 }
 
 
@@ -2625,15 +2694,14 @@ body.light-mode .back-home-en {
 
 @media (max-width: 800px) {
 
-    /* ===== 駅名部分 ===== */
-
-    body.light-mode .station-header {
-        background: #ffffff;
-        color: #111111;
+    body.light-mode {
+        background-color: #f4f4f4 !important;
     }
 
-
-    /* ===== 1番線 ○○方面 ===== */
+    body.light-mode .station-header {
+        background: #ffffff !important;
+        color: #111111;
+    }
 
     body.light-mode .platform {
         background: #ffffff !important;
@@ -2643,6 +2711,7 @@ body.light-mode .back-home-en {
     body.light-mode .platform-header {
         background: #ffffff !important;
         color: #111111;
+
         border-color: #999999;
     }
 
@@ -2654,32 +2723,20 @@ body.light-mode .back-home-en {
         color: #111111;
     }
 
-
-    /* ===== 電光掲示板 ===== */
-
     body.light-mode .train-table {
         background: #ffffff !important;
         color: #111111 !important;
     }
-
-
-    /* ===== 見出し ===== */
 
     body.light-mode .train-table .table-head {
         background: #ffffff !important;
         color: #111111 !important;
     }
 
-
-    /* ===== 列車 ===== */
-
     body.light-mode .train-table .train-row {
         background: #ffffff !important;
         color: #111111 !important;
     }
-
-
-    /* ===== 列車の文字 ===== */
 
     body.light-mode .train-table .departure-time,
     body.light-mode .train-table .destination,
@@ -2690,23 +2747,16 @@ body.light-mode .back-home-en {
         color: #111111 !important;
     }
 
-
-    /* ===== 普通 Local ===== */
-
     body.light-mode .train-table .local-box {
         background: #000000 !important;
         color: #ffffff !important;
         border-color: #000000 !important;
     }
 
-
     body.light-mode .train-table .local-box strong,
     body.light-mode .train-table .local-box span {
         color: #ffffff !important;
     }
-
-
-    /* ===== 両数：背景色はそのまま、文字だけ黒 ===== */
 
     body.light-mode .train-table .car-badge {
         color: #000000 !important;
@@ -2717,47 +2767,33 @@ body.light-mode .back-home-en {
         color: #000000 !important;
     }
 
-
-    /* ===== 備考 ===== */
-
     body.light-mode .train-table .note,
     body.light-mode .train-table .empty-note {
         background: #ffffff !important;
         color: #111111 !important;
     }
 
-
-    /* ===== 列車終了 ===== */
-
     body.light-mode .train-table .service-finished {
         background: #ffffff !important;
         color: #111111 !important;
     }
 
-
-    /* ===== 下部ボタン ===== */
-
     body.light-mode .footer > div,
     body.light-mode .footer button {
         background: #ffffff !important;
+
         color: #111111 !important;
+
         border-color: #999999;
     }
 
-
-    /* ===== ホームへ戻る ===== */
-
-    body.light-mode .back-home-button {
+    body.light-mode .back-home-button,
+    body.light-mode .back-timetable-button {
         background: #ffffff !important;
+
         color: #111111 !important;
+
         border-color: #999999;
-
-        /* 英語を消した分だけ縦幅を調整 */
-        min-height: 46px;
-    }
-
-    body.light-mode .back-home-en {
-        display: none !important;
     }
 
 }
@@ -2785,25 +2821,19 @@ body.light-mode .back-home-en {
         color: #111111;
     }
 
-
-    /* ===== 電光掲示板 ===== */
-
     body.light-mode .train-table {
         background: #ffffff !important;
     }
-
 
     body.light-mode .train-table .table-head {
         background: #ffffff !important;
         color: #111111 !important;
     }
 
-
     body.light-mode .train-table .train-row {
         background: #ffffff !important;
         color: #111111 !important;
     }
-
 
     body.light-mode .train-table .departure-time,
     body.light-mode .train-table .destination,
@@ -2814,32 +2844,22 @@ body.light-mode .back-home-en {
         color: #111111 !important;
     }
 
-
-    /* ===== 普通 Local ===== */
-
     body.light-mode .train-table .local-box {
         background: #000000 !important;
         color: #ffffff !important;
         border-color: #000000 !important;
     }
 
-
     body.light-mode .train-table .local-box strong,
     body.light-mode .train-table .local-box span {
         color: #ffffff !important;
     }
-
-
-    /* ===== 両数 ===== */
 
     body.light-mode .train-table .car-badge,
     body.light-mode .train-table .car-badge strong,
     body.light-mode .train-table .car-badge span {
         color: #000000 !important;
     }
-
-
-    /* ===== 備考・列車終了 ===== */
 
     body.light-mode .train-table .note,
     body.light-mode .train-table .empty-note,
@@ -2848,16 +2868,146 @@ body.light-mode .back-home-en {
         color: #111111 !important;
     }
 
+    body.light-mode .back-home-button,
+    body.light-mode .back-timetable-button {
+        min-height: 40px;
 
-    /* ===== ホームへ戻る ===== */
+        padding: 5px 4px;
 
-    body.light-mode .back-home-button {
-        min-height: 42px;
-        padding: 6px 10px;
+        background: #ffffff !important;
+
+        color: #111111 !important;
     }
 
-    body.light-mode .back-home-en {
-        display: none !important;
+}
+
+/* ==================================================
+   戻るボタン
+   ダークモード・ライトモード共通
+================================================== */
+
+.bottom-buttons {
+    display: grid !important;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 7px;
+
+    width: min(440px, 100%);
+
+    margin: 12px auto;
+}
+
+.bottom-button {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
+
+    padding: 6px 8px;
+
+    border: 1px solid #999999 !important;
+    border-radius: 10px;
+
+    background: #ffffff !important;
+    color: #111111 !important;
+
+    text-decoration: none !important;
+
+    font-size: 14px;
+    font-weight: 900;
+    line-height: 1.2;
+
+    text-align: center;
+
+    white-space: nowrap;
+
+    box-sizing: border-box;
+
+    transition:
+        background 0.15s ease,
+        transform 0.15s ease;
+}
+
+.bottom-button:hover {
+    background: #eeeeee !important;
+    color: #111111 !important;
+}
+
+.bottom-button:active {
+    transform: scale(0.98);
+}
+
+.bottom-button-jp {
+    display: block;
+
+    color: #111111 !important;
+    text-decoration: none !important;
+
+    white-space: nowrap;
+}
+
+
+/* ==================================================
+   スマートフォン
+================================================== */
+
+@media (max-width: 800px) {
+
+    .bottom-buttons {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+
+        gap: 6px;
+
+        width: min(400px, 100%);
+
+        margin-top: 12px;
+        margin-bottom: 12px;
+    }
+
+    .bottom-button {
+        min-height: 38px;
+
+        padding: 5px 5px;
+
+        border-radius: 9px;
+
+        font-size: 13px;
+
+        white-space: nowrap;
+    }
+
+}
+
+
+/* ==================================================
+   小さいスマートフォン
+================================================== */
+
+@media (max-width: 380px) {
+
+    .bottom-buttons {
+        gap: 5px;
+
+        width: 100%;
+
+        margin-top: 10px;
+        margin-bottom: 9px;
+    }
+
+    .bottom-button {
+        min-height: 35px;
+
+        padding: 4px 3px;
+
+        border-radius: 8px;
+
+        font-size: 12px;
+
+        white-space: nowrap;
     }
 
 }
