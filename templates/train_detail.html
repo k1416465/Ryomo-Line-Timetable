@@ -620,6 +620,7 @@
         .departure {
 
             font-size: 18px;
+
         }
 
 
@@ -645,6 +646,19 @@
     }
 
 </style>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKW0P57706"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag("js", new Date());
+    gtag("config", "G-CKW0P57706");
+</script>
 
 </head>
 
@@ -957,6 +971,7 @@ if (
 } else {
 
     systemThemeQuery.addListener(
+        "change",
         handleSystemThemeChange
     );
 
