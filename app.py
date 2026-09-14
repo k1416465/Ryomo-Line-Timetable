@@ -1,18 +1,76 @@
-from flask import Flask, jsonify, render_template
+from flask import (
+    Flask,
+    jsonify,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    session
+)
+
 import json
 import requests
 from bs4 import BeautifulSoup
 from pathlib import Path
 import re
-from urllib.parse import unquote
+from datetime import datetime
+import os
+import secrets
+
 
 app = Flask(__name__)
 
-JSON_FILE = Path(__file__).with_name("timetable.json")
+
+# ==================================================
+# Flask セッション設定
+# ==================================================
+
+# 本番公開時は環境変数 FLASK_SECRET_KEY を設定してください。
+app.secret_key = os.environ.get(
+    "FLASK_SECRET_KEY",
+    "ryomo-line-timetable-secret-key"
+)
 
 
 # ==================================================
-# 時刻表読み込み
+# ファイル設定
+# ==================================================
+
+JSON_FILE = Path(__file__).with_name(
+    "timetable.json"
+)
+
+NOTIFICATIONS_FILE = Path(__file__).with_name(
+    "notifications.json"
+)
+
+
+# ==================================================
+# 管理画面設定
+# ==================================================
+
+# 本番公開時は環境変数 ADMIN_PASSWORD を設定してください。
+#
+# ローカル開発時の初期パスワード:
+# admin1234
+#
+# Windows コマンドプロンプト:
+#
+# set ADMIN_PASSWORD=好きなパスワード
+#
+# PowerShell:
+#
+# $env:ADMIN_PASSWORD="好きなパスワード"
+#
+
+ADMIN_PASSWORD = os.environ.get(
+    "ADMIN_PASSWORD",
+    "admin1234"
+)
+
+
+# ==================================================
+# 時刻表データ読み込み
 # ==================================================
 
 def load_timetable():
@@ -27,208 +85,447 @@ def load_timetable():
 
 
 # ==================================================
-# 列車データを自動補正
+# お知らせデータ読み込み
 # ==================================================
 
-def normalize_train(item):
-    """
-    timetable.json のデータを自動的に正しい形へ補正する。
+def load_notifications():
 
-    正常なデータ：
-        train_number = 484M
-        type = 普通
-        cars = 4
+    # ファイルが存在しない場合
+    if not NOTIFICATIONS_FILE.exists():
 
-    崩れたデータ：
-        train_number = 普通
-        type = ""
-        cars = 421M
-
-    のような場合でも正しく処理する。
-    """
-
-    train = dict(item)
-
-    train_number = str(
-        train.get("train_number", "") or ""
-    ).strip()
-
-    train_type = str(
-        train.get("type", "") or ""
-    ).strip()
-
-    cars = train.get("cars", "")
+        return []
 
 
-    # ==================================================
-    # 崩れたデータの両数対応表
-    # ==================================================
+    try:
 
-    car_mapping = {
+        with open(
+            NOTIFICATIONS_FILE,
+            "r",
+            encoding="utf-8"
+        ) as f:
 
-        "421M": 6,
-        "423M": 4,
-        "425M": 6,
-        "427M": 4,
-        "429M": 4,
-        "431M": 4,
-        "433M": 6,
-        "437M": 4,
-        "439M": 4,
-        "441M": 6,
-        "443M": 4,
-        "445M": 4,
-        "447M": 4,
-        "449M": 4,
-        "451M": 4,
-        "453M": 6,
-        "455M": 6,
-        "459M": 4,
-        "461M": 6,
-        "463M": 6,
-        "465M": 4,
-        "467M": 6,
-        "469M": 6,
-        "471M": 4,
-        "475M": 4,
-        "479M": 6
+            data = json.load(f)
+
+
+        # ------------------------------------------
+        # 旧形式
+        #
+        # [
+        #   {...},
+        #   {...}
+        # ]
+        # ------------------------------------------
+
+        if isinstance(
+            data,
+            list
+        ):
+
+            return data
+
+
+        # ------------------------------------------
+        # 現在の形式
+        #
+        # {
+        #     "notifications": [...]
+        # }
+        # ------------------------------------------
+
+        if isinstance(
+            data,
+            dict
+        ):
+
+            notifications = data.get(
+                "notifications",
+                []
+            )
+
+            if isinstance(
+                notifications,
+                list
+            ):
+
+                return notifications
+
+
+        return []
+
+
+    except (
+        json.JSONDecodeError,
+        OSError
+    ):
+
+        return []
+
+
+# ==================================================
+# お知らせデータ保存
+# ==================================================
+
+def save_notifications(
+    notifications
+):
+
+    data = {
+
+        "notifications":
+            notifications
 
     }
 
 
-    # ==================================================
-    # 崩れたデータを修正
-    #
-    # train_number = 普通
-    # cars = 421M
-    # ==================================================
+    with open(
+        NOTIFICATIONS_FILE,
+        "w",
+        encoding="utf-8"
+    ) as f:
 
-    if (
+        json.dump(
 
-        train_number == "普通"
+            data,
 
-        and
+            f,
 
-        isinstance(cars, str)
+            ensure_ascii=False,
 
-        and
-
-        re.fullmatch(
-            r"\d+M",
-            cars.strip()
+            indent=2
         )
 
-    ):
 
-        # 本当の列車番号
-        real_train_number = cars.strip()
+# ==================================================
+# お知らせID生成
+# ==================================================
 
-        train["train_number"] = real_train_number
+def get_next_notification_id(
+    notifications
+):
 
-
-        # 種別が空なら普通
-        if not train_type:
-
-            train["type"] = "普通"
+    max_id = 0
 
 
-        # 列車番号から両数を取得
-        if real_train_number in car_mapping:
+    for notification in notifications:
 
-            train["cars"] = car_mapping[
-                real_train_number
-            ]
+        if not isinstance(
+            notification,
+            dict
+        ):
 
-        else:
-
-            train["cars"] = None
+            continue
 
 
-    else:
+        try:
 
-        # 正常なデータ
-        train["train_number"] = train_number
+            notification_id = int(
+                notification.get(
+                    "id",
+                    0
+                )
+            )
 
-        if not train_type:
 
-            train["type"] = "普通"
+            if notification_id > max_id:
+
+                max_id = notification_id
 
 
-    return train
+        except (
+            TypeError,
+            ValueError
+        ):
+
+            continue
+
+
+    return max_id + 1
 
 
 # ==================================================
-# 駅の英語表記
+# お知らせ並び替え
 # ==================================================
 
-STATION_ENGLISH = {
+def sort_notifications(
+    notifications
+):
 
-    "高崎": "Takasaki",
+    def sort_key(item):
 
-    "高崎問屋町": "Takasakitonyamachi",
+        if not isinstance(
+            item,
+            dict
+        ):
 
-    "井野": "Ino",
+            return 0
 
-    "新前橋": "Shin-Maebashi",
 
-    "前橋": "Maebashi",
+        try:
 
-    "前橋大島": "Maebashiōshima",
+            return int(
+                item.get(
+                    "id",
+                    0
+                )
+            )
 
-    "駒形": "Komagata",
+        except (
+            TypeError,
+            ValueError
+        ):
 
-    "伊勢崎": "Isesaki",
+            return 0
 
-    "国定": "Kunisada",
 
-    "岩宿": "Iwajuku",
+    return sorted(
+        notifications,
+        key=sort_key,
+        reverse=True
+    )
 
-    "桐生": "Kiryū",
 
-    "小俣": "Omata",
+# ==================================================
+# 管理者ログイン確認
+# ==================================================
 
-    "山前": "Yamamae",
+def is_admin_logged_in():
 
-    "足利": "Ashikaga",
+    return bool(
+        session.get(
+            "admin_logged_in",
+            False
+        )
+    )
 
-    "あしかがフラワーパーク":
-        "Ashikaga Flower Park",
 
-    "富田": "Tomita",
+# ==================================================
+# 下り列車の両数
+# ==================================================
 
-    "佐野": "Sano",
+down_cars = {
 
-    "岩舟": "Iwafune",
-
-    "大平下": "Ōhirashita",
-
-    "栃木": "Tochigi",
-
-    "思川": "Omoigawa",
-
-    "小山": "Oyama"
-
+    "421M": 6,
+    "423M": 4,
+    "425M": 6,
+    "427M": 4,
+    "429M": 4,
+    "431M": 4,
+    "433M": 6,
+    "437M": 4,
+    "439M": 4,
+    "441M": 6,
+    "443M": 4,
+    "445M": 4,
+    "447M": 4,
+    "449M": 4,
+    "451M": 4,
+    "453M": 4,
+    "455M": 6,
+    "459M": 6,
+    "461M": 4,
+    "463M": 6,
+    "465M": 6,
+    "467M": 4,
+    "469M": 4,
+    "471M": 6,
+    "475M": 4,
+    "479M": 6
 }
 
 
 # ==================================================
-# 列車番号取得
+# 列車番号を正常化
 # ==================================================
 
-def get_train_number(item):
+def get_train_number(train):
 
-    train = normalize_train(item)
+    if not isinstance(
+        train,
+        dict
+    ):
 
-    return str(
+        return ""
+
+
+    train_number = str(
         train.get(
             "train_number",
             ""
-        ) or ""
+        )
     ).strip()
 
 
+    cars = str(
+        train.get(
+            "cars",
+            ""
+        )
+    ).strip()
+
+
+    # 正常な列車番号
+    if re.fullmatch(
+        r"\d+M",
+        train_number
+    ):
+
+        return train_number
+
+
+    # cars に列車番号が入っている場合
+    if re.fullmatch(
+        r"\d+M",
+        cars
+    ):
+
+        return cars
+
+
+    return train_number
+
+
 # ==================================================
-# トップページ
+# 列車データを正常化
+# ==================================================
+
+def normalize_train(train):
+
+    if not isinstance(
+        train,
+        dict
+    ):
+
+        return train
+
+
+    normalized = dict(
+        train
+    )
+
+
+    # ----------------------------------------------
+    # 列車番号
+    # ----------------------------------------------
+
+    train_number = get_train_number(
+        train
+    )
+
+
+    if train_number:
+
+        normalized[
+            "train_number"
+        ] = train_number
+
+
+    # ----------------------------------------------
+    # 種別
+    # ----------------------------------------------
+
+    if not normalized.get(
+        "type"
+    ):
+
+        normalized[
+            "type"
+        ] = "普通"
+
+
+    # ----------------------------------------------
+    # 両数
+    # ----------------------------------------------
+
+    cars = normalized.get(
+        "cars",
+        ""
+    )
+
+
+    if isinstance(
+        cars,
+        str
+    ):
+
+        cars_text = cars.strip()
+
+
+        if re.fullmatch(
+            r"\d+M",
+            cars_text
+        ):
+
+            if train_number in down_cars:
+
+                normalized[
+                    "cars"
+                ] = down_cars[
+                    train_number
+                ]
+
+            else:
+
+                normalized[
+                    "cars"
+                ] = ""
+
+
+    # 下り列車の両数
+    if (
+
+        normalized.get(
+            "direction"
+        ) == "下り"
+
+        and
+
+        train_number in down_cars
+
+    ):
+
+        current_cars = normalized.get(
+            "cars"
+        )
+
+
+        if (
+
+            current_cars is None
+
+            or
+
+            current_cars == ""
+
+            or
+
+            (
+                isinstance(
+                    current_cars,
+                    str
+                )
+
+                and
+
+                re.fullmatch(
+                    r"\d+M",
+                    current_cars.strip()
+                )
+            )
+
+        ):
+
+            normalized[
+                "cars"
+            ] = down_cars[
+                train_number
+            ]
+
+
+    return normalized
+
+
+# ==================================================
+# ホーム
 # ==================================================
 
 @app.route("/")
@@ -240,157 +537,11 @@ def index():
 
 
 # ==================================================
-# 時刻表API
+# 時刻表 API
 # ==================================================
 
 @app.route("/api/timetable")
 def api_timetable():
-
-    data = load_timetable()
-
-    normalized_trains = []
-
-
-    for item in data.get(
-        "trains",
-        []
-    ):
-
-        normalized_trains.append(
-            normalize_train(item)
-        )
-
-
-    data["trains"] = normalized_trains
-
-    return jsonify(data)
-
-
-# ==================================================
-# 駅時刻表
-# ==================================================
-
-@app.route("/station/<station>")
-def station(station):
-
-    station_map = {
-
-        "tochigi": {
-
-            "name": "栃木駅",
-
-            "english": "Tochigi Station"
-
-        },
-
-        "sano": {
-
-            "name": "佐野駅",
-
-            "english": "Sano Station"
-
-        },
-
-        "ashikaga": {
-
-            "name": "足利駅",
-
-            "english": "Ashikaga Station"
-
-        }
-
-    }
-
-
-    if station not in station_map:
-
-        return "駅が見つかりません", 404
-
-
-    station_info = station_map[station]
-
-
-    return render_template(
-
-        "timetable.html",
-
-        station_id=station,
-
-        station_name=station_info["name"],
-
-        station_english=station_info["english"]
-
-    )
-
-
-# ==================================================
-# リスト形式の駅時刻表
-# ==================================================
-
-@app.route("/station/<station>/timetable")
-def station_timetable(station):
-
-    station_map = {
-
-        "tochigi": {
-
-            "name": "栃木駅",
-
-            "english": "Tochigi Station"
-
-        },
-
-        "sano": {
-
-            "name": "佐野駅",
-
-            "english": "Sano Station"
-
-        },
-
-        "ashikaga": {
-
-            "name": "足利駅",
-
-            "english": "Ashikaga Station"
-
-        }
-
-    }
-
-
-    if station not in station_map:
-
-        return "駅が見つかりません", 404
-
-
-    station_info = station_map[station]
-
-
-    return render_template(
-
-        "station_timetable.html",
-
-        station_id=station,
-
-        station_name=station_info["name"],
-
-        station_english=station_info["english"]
-
-    )
-
-
-# ==================================================
-# 列車詳細
-# ==================================================
-
-@app.route("/train/<path:train_number>")
-def train_detail(train_number):
-
-    train_number = unquote(
-        train_number
-    ).strip()
-
 
     data = load_timetable()
 
@@ -401,25 +552,271 @@ def train_detail(train_number):
     )
 
 
+    normalized_trains = []
+
+
+    for train in trains:
+
+        normalized_trains.append(
+            normalize_train(
+                train
+            )
+        )
+
+
+    result = dict(
+        data
+    )
+
+
+    result[
+        "trains"
+    ] = normalized_trains
+
+
+    return jsonify(
+        result
+    )
+
+
+# ==================================================
+# 駅ページ
+# ==================================================
+
+@app.route(
+    "/station/<station>"
+)
+def station(station):
+
+    station_map = {
+
+        "tochigi": {
+            "name": "栃木駅",
+            "english": "Tochigi Station"
+        },
+
+        "sano": {
+            "name": "佐野駅",
+            "english": "Sano Station"
+        },
+
+        "ashikaga": {
+            "name": "足利駅",
+            "english": "Ashikaga Station"
+        },
+
+        "oyama": {
+            "name": "小山駅",
+            "english": "Oyama Station"
+        },
+
+        "omoigawa": {
+            "name": "思川駅",
+            "english": "Omoigawa Station"
+        },
+
+        "ohirashita": {
+            "name": "大平下駅",
+            "english": "Ōhirashita Station"
+        },
+
+        "iwafune": {
+            "name": "岩舟駅",
+            "english": "Iwafune Station"
+        },
+
+        "tomita": {
+            "name": "富田駅",
+            "english": "Tomita Station"
+        },
+
+        "ashikaga_flower_park": {
+            "name":
+                "あしかがフラワーパーク駅",
+            "english":
+                "Ashikaga Flower Park Station"
+        },
+
+        "yamamae": {
+            "name": "山前駅",
+            "english": "Yamamae Station"
+        },
+
+        "omata": {
+            "name": "小俣駅",
+            "english": "Omata Station"
+        }
+
+    }
+
+
+    if station not in station_map:
+
+        return (
+            "駅が見つかりません",
+            404
+        )
+
+
+    station_info = station_map[
+        station
+    ]
+
+
+    return render_template(
+
+        "timetable.html",
+
+        station_id=station,
+
+        station_name=
+            station_info["name"],
+
+        station_english=
+            station_info["english"]
+
+    )
+
+
+# ==================================================
+# 駅の時刻表リスト
+# ==================================================
+
+@app.route(
+    "/station/<station>/timetable"
+)
+def station_timetable_list(
+    station
+):
+
+    station_map = {
+
+        "tochigi": {
+            "name": "栃木駅",
+            "english": "Tochigi Station"
+        },
+
+        "sano": {
+            "name": "佐野駅",
+            "english": "Sano Station"
+        },
+
+        "ashikaga": {
+            "name": "足利駅",
+            "english": "Ashikaga Station"
+        },
+
+        "oyama": {
+            "name": "小山駅",
+            "english": "Oyama Station"
+        },
+
+        "omoigawa": {
+            "name": "思川駅",
+            "english": "Omoigawa Station"
+        },
+
+        "ohirashita": {
+            "name": "大平下駅",
+            "english": "Ōhirashita Station"
+        },
+
+        "iwafune": {
+            "name": "岩舟駅",
+            "english": "Iwafune Station"
+        },
+
+        "tomita": {
+            "name": "富田駅",
+            "english": "Tomita Station"
+        },
+
+        "ashikaga_flower_park": {
+            "name":
+                "あしかがフラワーパーク駅",
+            "english":
+                "Ashikaga Flower Park Station"
+        },
+
+        "yamamae": {
+            "name": "山前駅",
+            "english": "Yamamae Station"
+        },
+
+        "omata": {
+            "name": "小俣駅",
+            "english": "Omata Station"
+        }
+
+    }
+
+
+    if station not in station_map:
+
+        return (
+            "駅が見つかりません",
+            404
+        )
+
+
+    station_info = station_map[
+        station
+    ]
+
+
+    return render_template(
+
+        "station_timetable.html",
+
+        station_id=station,
+
+        station_name=
+            station_info["name"],
+
+        station_english=
+            station_info["english"]
+
+    )
+
+
+# ==================================================
+# 列車詳細
+# ==================================================
+
+@app.route(
+    "/train/<path:train_number>"
+)
+def train_detail(
+    train_number
+):
+
+    data = load_timetable()
+
+
+    trains = data.get(
+        "trains",
+        []
+    )
+
+
+    train_number = str(
+        train_number
+    ).strip()
+
+
     train = None
 
 
-    # ==================================================
-    # 列車を検索
-    # ==================================================
-
     for item in trains:
 
-        normalized = normalize_train(item)
+        normalized = normalize_train(
+            item
+        )
 
-        current_number = str(
 
-            normalized.get(
-                "train_number",
-                ""
-            ) or ""
-
-        ).strip()
+        current_number = get_train_number(
+            normalized
+        )
 
 
         if current_number == train_number:
@@ -429,21 +826,47 @@ def train_detail(train_number):
             break
 
 
-    # ==================================================
-    # 列車が見つからない場合
-    # ==================================================
-
     if train is None:
 
-        print(
-
-            "列車が見つかりません:",
-
-            train_number
-
+        return (
+            "列車が見つかりません",
+            404
         )
 
-        return "列車が見つかりません", 404
+
+    # ==================================================
+    # 駅名 英語
+    # ==================================================
+
+    station_map = {
+
+        "小山": "Oyama",
+        "思川": "Omoigawa",
+        "栃木": "Tochigi",
+        "大平下": "Ōhirashita",
+        "岩舟": "Iwafune",
+        "佐野": "Sano",
+        "富田": "Tomita",
+        "足利": "Ashikaga",
+
+        "あしかがフラワーパーク":
+            "Ashikaga Flower Park",
+
+        "山前": "Yamamae",
+        "小俣": "Omata",
+        "桐生": "Kiryū",
+        "下新田": "Shimoshinden",
+        "国定": "Kunisada",
+        "伊勢崎": "Isesaki",
+        "駒形": "Komagata",
+        "前橋大島": "Maebashiōshima",
+        "前橋": "Maebashi",
+        "新前橋": "Shin-Maebashi",
+        "井野": "Ino",
+        "高崎問屋町": "Takasakitonyamachi",
+        "高崎": "Takasaki"
+
+    }
 
 
     # ==================================================
@@ -454,58 +877,46 @@ def train_detail(train_number):
 
 
     for station_name, station_data in (
-
         train.get(
             "stops",
             {}
         ) or {}
-
     ).items():
 
-        station_data = station_data or {}
+        if not isinstance(
+            station_data,
+            dict
+        ):
+
+            continue
 
 
-        arrival = (
-
-            station_data.get(
-                "arrival"
-            )
-
-            or
-
-            ""
-
+        arrival = station_data.get(
+            "arrival"
         )
 
 
-        departure = (
-
-            station_data.get(
-                "departure"
-            )
-
-            or
-
-            ""
-
+        departure = station_data.get(
+            "departure"
         )
 
 
         stops.append({
 
-            "name": station_name,
-
-            "english": STATION_ENGLISH.get(
-
+            "name":
                 station_name,
 
-                station_name
+            "english":
+                station_map.get(
+                    station_name,
+                    station_name
+                ),
 
-            ),
+            "arrival":
+                arrival or "",
 
-            "arrival": arrival,
-
-            "departure": departure
+            "departure":
+                departure or ""
 
         })
 
@@ -515,34 +926,26 @@ def train_detail(train_number):
     # ==================================================
 
     type_name = (
-
-        train.get("type")
-
+        train.get(
+            "type"
+        )
         or
-
         "普通"
-
     )
 
 
     type_english_map = {
 
-        "普通": "Local",
+        "普通":
+            "Local",
 
-        "快速": "Rapid",
+        "快速":
+            "Rapid",
 
-        "特急": "Limited Express"
+        "特急":
+            "Limited Express"
 
     }
-
-
-    type_english = type_english_map.get(
-
-        type_name,
-
-        type_name
-
-    )
 
 
     # ==================================================
@@ -550,105 +953,42 @@ def train_detail(train_number):
     # ==================================================
 
     destination = (
-
-        train.get("destination")
-
+        train.get(
+            "destination"
+        )
         or
-
         ""
-
     )
 
 
     destination_english_map = {
 
-        "高崎": "Takasaki",
+        "高崎":
+            "Takasaki",
 
-        "小山": "Oyama",
+        "小山":
+            "Oyama",
 
-        "前橋": "Maebashi",
+        "前橋":
+            "Maebashi",
 
-        "桐生": "Kiryū",
+        "桐生":
+            "Kiryū",
 
-        "伊勢崎": "Isesaki",
+        "伊勢崎":
+            "Isesaki",
 
-        "足利": "Ashikaga",
+        "足利":
+            "Ashikaga",
 
-        "栃木": "Tochigi",
+        "栃木":
+            "Tochigi",
 
-        "佐野": "Sano"
+        "佐野":
+            "Sano"
 
     }
 
-
-    destination_english = (
-
-        destination_english_map.get(
-
-            destination,
-
-            destination
-
-        )
-
-    )
-
-
-    # ==================================================
-    # 両数
-    # ==================================================
-
-    cars = train.get("cars")
-
-
-    # 数字の場合
-    if isinstance(cars, int):
-
-        cars = cars
-
-
-    # "4" のような文字列の場合
-    elif (
-
-        isinstance(cars, str)
-
-        and
-
-        cars.strip().isdigit()
-
-    ):
-
-        cars = int(
-            cars.strip()
-        )
-
-
-    # "421M" のような列車番号が
-    # 入っていた場合
-    elif (
-
-        isinstance(cars, str)
-
-        and
-
-        re.fullmatch(
-            r"\d+M",
-            cars.strip()
-        )
-
-    ):
-
-        cars = None
-
-
-    else:
-
-        cars = None
-
-
-    # ==================================================
-    # 列車詳細ページを表示
-    # ==================================================
 
     return render_template(
 
@@ -656,19 +996,26 @@ def train_detail(train_number):
 
         train=train,
 
-        train_number=get_train_number(
-            train
-        ),
+        train_number=
+            get_train_number(
+                train
+            ),
 
         station_id="sano",
 
         stops=stops,
 
-        type_english=type_english,
+        type_english=
+            type_english_map.get(
+                type_name,
+                type_name
+            ),
 
-        destination_english=destination_english,
-
-        cars=cars
+        destination_english=
+            destination_english_map.get(
+                destination,
+                destination
+            )
 
     )
 
@@ -677,7 +1024,9 @@ def train_detail(train_number):
 # 設定
 # ==================================================
 
-@app.route("/settings")
+@app.route(
+    "/settings"
+)
 def settings():
 
     return render_template(
@@ -689,36 +1038,31 @@ def settings():
 # 運行情報
 # ==================================================
 
-@app.route("/api/operation")
+@app.route(
+    "/api/operation"
+)
 def api_operation():
 
     url = (
-
-        "https://transit.yahoo.co.jp/"
-        "diainfo/168/0"
-
+        "https://transit.yahoo.co.jp/diainfo/168/0"
     )
 
 
     headers = {
 
         "User-Agent": (
-
             "Mozilla/5.0 "
             "(Windows NT 10.0; Win64; x64) "
             "AppleWebKit/537.36 "
             "(KHTML, like Gecko) "
             "Chrome/140.0 Safari/537.36"
-
         ),
 
         "Accept": (
-
             "text/html,application/xhtml+xml,"
             "application/xml;q=0.9,"
             "image/avif,image/webp,"
             "*/*;q=0.8"
-
         ),
 
         "Accept-Language":
@@ -741,20 +1085,14 @@ def api_operation():
 
 
         print(
-
             "Yahoo!路線情報 HTTP status:",
-
             response.status_code
-
         )
 
 
         print(
-
             "Yahoo! response length:",
-
             len(response.text)
-
         )
 
 
@@ -780,15 +1118,9 @@ def api_operation():
 
 
         print(
-
             "Yahoo!路線情報ページ取得成功"
-
         )
 
-
-        # ==================================================
-        # 更新時刻
-        # ==================================================
 
         updated = ""
 
@@ -796,17 +1128,15 @@ def api_operation():
         update_patterns = [
 
             re.compile(
-
-                r"\d{1,2}月\d{1,2}日\s*"
-                r"\d{1,2}時\d{2}分\s*更新"
-
+                r"\d{1,2}月\d{1,2}日"
+                r"\s*\d{1,2}時\d{2}分"
+                r"\s*更新"
             ),
 
             re.compile(
-
-                r"\d{1,2}月\d{1,2}日\s*"
-                r"\d{1,2}時\d{2}分\s*現在"
-
+                r"\d{1,2}月\d{1,2}日"
+                r"\s*\d{1,2}時\d{2}分"
+                r"\s*現在"
             )
 
         ]
@@ -814,7 +1144,9 @@ def api_operation():
 
         for pattern in update_patterns:
 
-            match = pattern.search(text)
+            match = pattern.search(
+                text
+            )
 
 
             if match:
@@ -823,10 +1155,6 @@ def api_operation():
 
                 break
 
-
-        # ==================================================
-        # 両毛線部分を取得
-        # ==================================================
 
         ryomo_index = text.find(
             "両毛線"
@@ -837,16 +1165,20 @@ def api_operation():
 
             return jsonify({
 
-                "line": "両毛線",
+                "line":
+                    "両毛線",
 
-                "status": "情報取得中",
+                "status":
+                    "情報取得中",
 
                 "message":
                     "両毛線の運行情報を確認しています。",
 
-                "updated": updated,
+                "updated":
+                    updated,
 
-                "source": "Yahoo!路線情報"
+                "source":
+                    "Yahoo!路線情報"
 
             })
 
@@ -854,6 +1186,7 @@ def api_operation():
         ryomo_text = text[
 
             ryomo_index:
+
             ryomo_index + 500
 
         ]
@@ -863,16 +1196,9 @@ def api_operation():
 
 
         message = (
-
-            "現在、両毛線の運行情報を"
-            "確認しています。"
-
+            "現在、両毛線の運行情報を確認しています。"
         )
 
-
-        # ==================================================
-        # 平常運転
-        # ==================================================
 
         if (
 
@@ -887,18 +1213,10 @@ def api_operation():
 
             status = "平常運転"
 
-
             message = (
-
-                "両毛線は平常通り"
-                "運転しています。"
-
+                "両毛線は平常通り運転しています。"
             )
 
-
-        # ==================================================
-        # 運転見合わせ
-        # ==================================================
 
         elif (
 
@@ -915,20 +1233,12 @@ def api_operation():
             message = ryomo_text[:300]
 
 
-        # ==================================================
-        # 運休
-        # ==================================================
-
         elif "運休" in ryomo_text:
 
             status = "運休"
 
             message = ryomo_text[:300]
 
-
-        # ==================================================
-        # 遅延
-        # ==================================================
 
         elif (
 
@@ -949,21 +1259,22 @@ def api_operation():
             message = ryomo_text[:300]
 
 
-        # ==================================================
-        # 結果
-        # ==================================================
-
         return jsonify({
 
-            "line": "両毛線",
+            "line":
+                "両毛線",
 
-            "status": status,
+            "status":
+                status,
 
-            "message": message,
+            "message":
+                message,
 
-            "updated": updated,
+            "updated":
+                updated,
 
-            "source": "Yahoo!路線情報"
+            "source":
+                "Yahoo!路線情報"
 
         })
 
@@ -972,18 +1283,23 @@ def api_operation():
 
         return jsonify({
 
-            "line": "両毛線",
+            "line":
+                "両毛線",
 
-            "status": "情報取得中",
+            "status":
+                "情報取得中",
 
             "message":
                 "運行情報を取得できません。",
 
-            "updated": "",
+            "updated":
+                "",
 
-            "source": "Yahoo!路線情報",
+            "source":
+                "Yahoo!路線情報",
 
-            "error": str(e)
+            "error":
+                str(e)
 
         })
 
@@ -992,25 +1308,352 @@ def api_operation():
 
         return jsonify({
 
-            "line": "両毛線",
+            "line":
+                "両毛線",
 
-            "status": "情報取得中",
+            "status":
+                "情報取得中",
 
             "message":
-                "運行情報の取得中に"
-                "エラーが発生しました。",
+                "運行情報の取得中にエラーが発生しました。",
 
-            "updated": "",
+            "updated":
+                "",
 
-            "source": "Yahoo!路線情報",
+            "source":
+                "Yahoo!路線情報",
 
-            "error": str(e)
+            "error":
+                str(e)
 
         })
 
 
 # ==================================================
-# Flask起動
+# お知らせページ
+# ==================================================
+
+@app.route(
+    "/notifications"
+)
+def notifications():
+
+    return render_template(
+        "notifications.html"
+    )
+
+
+# ==================================================
+# お知らせ API
+# ==================================================
+
+@app.route(
+    "/api/notifications"
+)
+def api_notifications():
+
+    notifications = load_notifications()
+
+
+    notifications = sort_notifications(
+        notifications
+    )
+
+
+    response = jsonify({
+
+        "notifications":
+            notifications,
+
+        "count":
+            len(notifications)
+
+    })
+
+
+    # ブラウザやプロキシに古い通知を
+    # キャッシュさせない
+    response.headers[
+        "Cache-Control"
+    ] = "no-store, no-cache, must-revalidate, max-age=0"
+
+
+    response.headers[
+        "Pragma"
+    ] = "no-cache"
+
+
+    return response
+
+
+# ==================================================
+# 管理者 お知らせ管理画面
+# ==================================================
+
+@app.route(
+    "/admin/notifications",
+    methods=[
+        "GET",
+        "POST"
+    ]
+)
+def admin_notifications():
+
+    # ==================================================
+    # ログイン済み
+    # ==================================================
+
+    if is_admin_logged_in():
+
+        # ----------------------------------------------
+        # POST処理
+        # ----------------------------------------------
+
+        if request.method == "POST":
+
+            action = request.form.get(
+                "action",
+                ""
+            ).strip()
+
+
+            # ==========================================
+            # お知らせ投稿
+            # ==========================================
+
+            if action == "create":
+
+                title = request.form.get(
+                    "title",
+                    ""
+                ).strip()
+
+
+                message = request.form.get(
+                    "message",
+                    ""
+                ).strip()
+
+
+                # タイトル・本文の両方がある場合だけ投稿
+                if title and message:
+
+                    notifications = (
+                        load_notifications()
+                    )
+
+
+                    new_id = (
+                        get_next_notification_id(
+                            notifications
+                        )
+                    )
+
+
+                    now = datetime.now()
+
+
+                    notification = {
+
+                        "id":
+                            new_id,
+
+                        "title":
+                            title,
+
+                        "message":
+                            message,
+
+                        "date":
+                            now.strftime(
+                                "%Y-%m-%d"
+                            ),
+
+                        "time":
+                            now.strftime(
+                                "%H:%M"
+                            )
+
+                    }
+
+
+                    notifications.append(
+                        notification
+                    )
+
+
+                    save_notifications(
+                        notifications
+                    )
+
+
+                    return redirect(
+                        url_for(
+                            "admin_notifications"
+                        )
+                    )
+
+
+            # ==========================================
+            # お知らせ削除
+            # ==========================================
+
+            elif action == "delete":
+
+                notification_id = request.form.get(
+                    "notification_id",
+                    ""
+                ).strip()
+
+
+                new_notifications = []
+
+
+                for item in load_notifications():
+
+                    try:
+
+                        current_id = int(
+                            item.get(
+                                "id",
+                                -1
+                            )
+                        )
+
+                    except (
+                        TypeError,
+                        ValueError
+                    ):
+
+                        current_id = -1
+
+
+                    if str(
+                        current_id
+                    ) != str(
+                        notification_id
+                    ):
+
+                        new_notifications.append(
+                            item
+                        )
+
+
+                save_notifications(
+                    new_notifications
+                )
+
+
+                return redirect(
+                    url_for(
+                        "admin_notifications"
+                    )
+                )
+
+
+        # ----------------------------------------------
+        # 管理画面表示
+        # ----------------------------------------------
+
+        notifications = sort_notifications(
+            load_notifications()
+        )
+
+
+        return render_template(
+
+            "admin_notifications.html",
+
+            logged_in=True,
+
+            notifications=notifications,
+
+            error=""
+
+        )
+
+
+    # ==================================================
+    # 未ログイン
+    # ==================================================
+
+    if request.method == "POST":
+
+        password = request.form.get(
+            "password",
+            ""
+        )
+
+
+        # パスワード比較
+        if secrets.compare_digest(
+            str(password),
+            str(ADMIN_PASSWORD)
+        ):
+
+            session[
+                "admin_logged_in"
+            ] = True
+
+
+            return redirect(
+                url_for(
+                    "admin_notifications"
+                )
+            )
+
+
+        return render_template(
+
+            "admin_notifications.html",
+
+            logged_in=False,
+
+            notifications=[],
+
+            error=
+                "パスワードが正しくありません。"
+
+        )
+
+
+    return render_template(
+
+        "admin_notifications.html",
+
+        logged_in=False,
+
+        notifications=[],
+
+        error=""
+
+    )
+
+
+# ==================================================
+# 管理者ログアウト
+# ==================================================
+
+@app.route(
+    "/admin/notifications/logout"
+)
+def admin_notifications_logout():
+
+    session.pop(
+        "admin_logged_in",
+        None
+    )
+
+
+    return redirect(
+        url_for(
+            "admin_notifications"
+        )
+    )
+
+
+# ==================================================
+# 起動
 # ==================================================
 
 if __name__ == "__main__":
