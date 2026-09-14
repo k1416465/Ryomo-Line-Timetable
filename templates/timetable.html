@@ -7,9 +7,8 @@
 <meta charset="UTF-8">
 
 <meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
-
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
 >
 
 <title>両毛線{{ station_name }}時刻表</title>
@@ -27,77 +26,48 @@ content="width=device-width, initial-scale=1.0"
 
 .bottom-buttons {
     display: grid !important;
-
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 7px;
-
     width: min(440px, 100%);
-
     margin: 12px auto;
 }
 
-
 .bottom-button {
     display: flex !important;
-
     justify-content: center;
-
     align-items: center;
-
     width: 100% !important;
-
     min-width: 0;
-
     min-height: 42px;
-
     padding: 6px 8px;
-
     border: 1px solid #999 !important;
-
     border-radius: 10px !important;
-
     background: #fff !important;
-
     color: #111 !important;
-
     font-size: 14px;
-
     font-weight: 900;
-
     line-height: 1.2;
-
     text-decoration: none !important;
-
     white-space: nowrap;
-
     cursor: pointer;
-
     box-sizing: border-box;
-
     transition:
         background 0.15s ease,
         opacity 0.15s ease,
         transform 0.15s ease;
 }
 
-
 .bottom-button:hover {
     background: #f2f2f2 !important;
 }
-
 
 .bottom-button:active {
     transform: scale(0.97);
 }
 
-
 .bottom-button-jp {
     display: block !important;
-
     color: #111 !important;
-
     text-decoration: none !important;
 }
 
@@ -108,15 +78,275 @@ content="width=device-width, initial-scale=1.0"
 
 body.light-mode .bottom-button {
     background: #fff !important;
-
     color: #111 !important;
-
     border-color: #999 !important;
 }
 
-
 body.light-mode .bottom-button-jp {
     color: #111 !important;
+}
+
+
+/* ==================================
+   あしかがフラワーパーク駅
+   駅名を1行で表示
+================================== */
+
+body.ashikaga-flower-park .station-header h1 {
+    font-size: 26px !important;
+    white-space: nowrap !important;
+}
+
+body.ashikaga-flower-park .station-header .station-en {
+    font-size: 15px !important;
+    white-space: nowrap !important;
+}
+
+
+/* ==================================
+   番線番号なし
+================================== */
+
+.platform.no-platform-number
+    .platform-header {
+    padding-left: 10px !important;
+}
+
+.platform.no-platform-number
+    .platform-header
+    .yellow-bar {
+    margin-left: 0 !important;
+}
+
+.platform.no-platform-number
+    .platform-header
+    .direction {
+    margin-left: 0 !important;
+}
+
+
+/* ==================================
+   複数番線
+================================== */
+
+.platform.multiple-platform-number
+    .platform-header {
+
+    transform: scale(0.75);
+    transform-origin: left center;
+
+    white-space: nowrap !important;
+
+    width: 100% !important;
+
+    box-sizing: border-box !important;
+
+    overflow: visible !important;
+}
+
+
+/* 黄色棒 */
+
+.platform.multiple-platform-number
+    .platform-header
+    .yellow-bar {
+
+    margin-left: 0 !important;
+}
+
+
+/* ==================================
+   方面案内
+================================== */
+
+.platform.multiple-platform-number
+    .platform-header
+    .direction {
+
+    position: relative !important;
+
+    margin-left: 0 !important;
+
+    flex: 1 1 auto !important;
+
+    width: auto !important;
+
+    min-width: 0 !important;
+
+    box-sizing: border-box !important;
+
+    white-space: nowrap !important;
+
+    word-break: keep-all !important;
+
+    overflow-wrap: normal !important;
+
+    border: none !important;
+}
+
+
+/* ==================================
+   英語表記・方面案内の下線は削除
+================================== */
+
+.platform.multiple-platform-number
+    .platform-header
+    .direction::after {
+
+    content: none !important;
+
+    display: none !important;
+
+}
+
+
+/* ==================================
+   番線ヘッダーと列見出しの境界線
+   ヘッダー全体の右端まで伸ばす
+================================== */
+
+.platform
+    .platform-header {
+
+    position: relative !important;
+
+    border-bottom: none !important;
+}
+
+
+.platform
+    .platform-header::after {
+
+    content: "" !important;
+
+    position: absolute !important;
+
+    left: 0 !important;
+
+    right: 0 !important;
+
+    bottom: 0 !important;
+
+    height: 1px !important;
+
+    background: #ffffff !important;
+
+    pointer-events: none !important;
+
+}
+
+
+/* ==================================
+   複数番線は scale(0.75) のため
+   白線だけ実際の幅より広げる
+================================== */
+
+.platform.multiple-platform-number
+    .platform-header::after {
+
+    left: 0 !important;
+
+    right: auto !important;
+
+    width: 133.333333% !important;
+
+}
+
+
+/* ==================================
+   番線番号
+================================== */
+
+.platform.multiple-platform-number
+    .platform-header
+    .platform-number {
+
+    white-space: nowrap !important;
+
+    word-break: keep-all !important;
+
+    overflow-wrap: normal !important;
+
+    width: max-content !important;
+
+    min-width: max-content !important;
+
+    flex-shrink: 0 !important;
+}
+
+
+/* ==================================
+   日本語方面案内
+================================== */
+
+.platform.multiple-platform-number
+    .platform-header
+    .direction-jp {
+
+    white-space: nowrap !important;
+
+    word-break: keep-all !important;
+
+    overflow-wrap: normal !important;
+
+    width: 100% !important;
+
+    min-width: 0 !important;
+
+    box-sizing: border-box !important;
+
+    border: none !important;
+}
+
+
+/* ==================================
+   英語方面案内
+================================== */
+
+.platform.multiple-platform-number
+    .platform-header
+    .direction-en {
+
+    white-space: nowrap !important;
+
+    word-break: keep-all !important;
+
+    overflow-wrap: normal !important;
+
+    width: 100% !important;
+
+    min-width: 0 !important;
+
+    box-sizing: border-box !important;
+
+    border: none !important;
+}
+
+
+/* ==================================
+   direction内の子要素
+================================== */
+
+.platform.multiple-platform-number
+    .platform-header
+    .direction
+    > * {
+
+    border-top: none !important;
+
+    border-bottom: none !important;
+}
+
+
+/* ==================================
+   line-name
+================================== */
+
+.platform.multiple-platform-number
+    .platform-header
+    .line-name {
+
+    border: none !important;
 }
 
 
@@ -128,45 +358,81 @@ body.light-mode .bottom-button-jp {
 
     .bottom-buttons {
         width: 100%;
-
         gap: 7px;
-
         margin-top: 12px;
     }
 
-
     .bottom-button {
         min-height: 42px;
-
         padding: 6px 8px;
-
         border-radius: 10px !important;
-
         font-size: 14px;
+    }
+
+
+    /* ==================================
+       あしかがフラワーパーク駅
+       スマートフォン
+    ================================== */
+
+    body.ashikaga-flower-park
+        .station-header
+        h1 {
+
+        font-size: 20px !important;
+
+        white-space: nowrap !important;
+    }
+
+    body.ashikaga-flower-park
+        .station-header
+        .station-en {
+
+        font-size: 12px !important;
+
+        white-space: nowrap !important;
     }
 
 }
 
 </style>
 
+
 <!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKW0P57706"></script>
+
+<script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=G-CKW0P57706"
+></script>
+
 <script>
-    window.dataLayer = window.dataLayer || [];
 
-    function gtag() {
-        dataLayer.push(arguments);
-    }
+window.dataLayer =
+    window.dataLayer || [];
 
-    gtag("js", new Date());
-    gtag("config", "G-CKW0P57706");
+function gtag() {
+    dataLayer.push(arguments);
+}
+
+gtag(
+    "js",
+    new Date()
+);
+
+gtag(
+    "config",
+    "G-CKW0P57706"
+);
+
 </script>
 
 </head>
 
-<body>
+
+<body class="{% if station_name == 'あしかがフラワーパーク駅' %}ashikaga-flower-park{% endif %}">
 
 <div class="board">
+
 
 <!-- ==========================================
      駅名
@@ -184,169 +450,152 @@ body.light-mode .bottom-button-jp {
 
 </div>
 
+
 <!-- ==========================================
-     1番線
+     1番線表示ブロック
 =========================================== -->
 
-<div class="platform">
+<div
+    class="platform"
+    id="platform1-block"
+>
 
 <div class="platform-header">
 
-    <div class="platform-number">
-        1
-    </div>
+<div
+    class="platform-number"
+    id="platform1-number"
+>
+    1
+</div>
 
-    <div class="yellow-bar"></div>
+<div class="yellow-bar"></div>
 
-    <div class="direction">
+<div class="direction">
 
-        <div class="direction-jp">
+    <div class="direction-jp">
 
-            <div class="line-name">
-                両毛線
-            </div>
-
-            <div id="platform1-direction">
-                読み込み中
-            </div>
-
+        <div class="line-name">
+            両毛線
         </div>
 
-
-        <div class="direction-en">
-
-            <div>
-                Ryōmō Line
-            </div>
-
-            <div id="platform1-direction-en">
-                Loading...
-            </div>
-
+        <div id="platform1-direction">
+            読み込み中
         </div>
 
     </div>
+
+    <div class="direction-en">
+
+        <div>
+            Ryōmō Line
+        </div>
+
+        <div id="platform1-direction-en">
+            Loading...
+        </div>
+
+    </div>
+
+</div>
 
 </div>
 
 
 <div class="train-table">
 
-    <div
-        class="table-head"
-        id="platform1-header"
-    >
+<div
+    class="table-head"
+    id="platform1-header"
+>
 
-        <div>
-            種別
-        </div>
+    <div>種別</div>
+    <div>発車時刻</div>
+    <div>行先</div>
+    <div>両数</div>
+    <div>到着まで</div>
 
-        <div>
-            発車時刻
-        </div>
+</div>
 
-        <div>
-            行先
-        </div>
-
-        <div>
-            両数
-        </div>
-
-        <div>
-            到着まで
-        </div>
-
-    </div>
-
-
-    <div id="platform1-trains"></div>
+<div id="platform1-trains"></div>
 
 </div>
 
 </div>
+
 
 <!-- ==========================================
-     2番線
+     2番線表示ブロック
 =========================================== -->
 
-<div class="platform">
+<div
+    class="platform"
+    id="platform2-block"
+>
 
 <div class="platform-header">
 
-    <div class="platform-number">
-        2
-    </div>
+<div
+    class="platform-number"
+    id="platform2-number"
+>
+    2
+</div>
 
-    <div class="yellow-bar"></div>
+<div class="yellow-bar"></div>
 
-    <div class="direction">
+<div class="direction">
 
-        <div class="direction-jp">
+    <div class="direction-jp">
 
-            <div class="line-name">
-                両毛線
-            </div>
-
-            <div id="platform2-direction">
-                読み込み中
-            </div>
-
+        <div class="line-name">
+            両毛線
         </div>
 
-
-        <div class="direction-en">
-
-            <div>
-                Ryōmō Line
-            </div>
-
-            <div id="platform2-direction-en">
-                Loading...
-            </div>
-
+        <div id="platform2-direction">
+            読み込み中
         </div>
 
     </div>
+
+    <div class="direction-en">
+
+        <div>
+            Ryōmō Line
+        </div>
+
+        <div id="platform2-direction-en">
+            Loading...
+        </div>
+
+    </div>
+
+</div>
 
 </div>
 
 
 <div class="train-table">
 
-    <div
-        class="table-head"
-        id="platform2-header"
-    >
+<div
+    class="table-head"
+    id="platform2-header"
+>
 
-        <div>
-            種別
-        </div>
+    <div>種別</div>
+    <div>発車時刻</div>
+    <div>行先</div>
+    <div>両数</div>
+    <div>到着まで</div>
 
-        <div>
-            発車時刻
-        </div>
+</div>
 
-        <div>
-            行先
-        </div>
-
-        <div>
-            両数
-        </div>
-
-        <div>
-            到着まで
-        </div>
-
-    </div>
-
-
-    <div id="platform2-trains"></div>
+<div id="platform2-trains"></div>
 
 </div>
 
 </div>
+
 
 <!-- ==========================================
      日付・時刻・更新
@@ -364,15 +613,16 @@ body.light-mode .bottom-button-jp {
 
 <button onclick="loadTimetable()">
 
-    <span class="refresh-icon">
-        ↻
-    </span>
+<span class="refresh-icon">
+    ↻
+</span>
 
-    更新
+更新
 
 </button>
 
 </div>
+
 
 <!-- ==========================================
      下部ボタン
@@ -380,31 +630,27 @@ body.light-mode .bottom-button-jp {
 
 <div class="bottom-buttons">
 
-<!-- ホームに戻る -->
-
 <a
     href="/?home=1"
     class="bottom-button"
     onclick="goHome(event)"
 >
 
-    <span class="bottom-button-jp">
-        ホームに戻る
-    </span>
+<span class="bottom-button-jp">
+    ホームに戻る
+</span>
 
 </a>
 
-
-<!-- リスト表示 -->
 
 <a
     href="/station/{{ station_id }}/timetable"
     class="bottom-button"
 >
 
-    <span class="bottom-button-jp">
-        リスト表示
-    </span>
+<span class="bottom-button-jp">
+    リスト表示
+</span>
 
 </a>
 
@@ -412,7 +658,9 @@ body.light-mode .bottom-button-jp {
 
 </div>
 
+
 <script>
+
 
 /* ==================================================
    保存されている表示モードを適用
@@ -421,45 +669,25 @@ body.light-mode .bottom-button-jp {
 function applyDisplayMode() {
 
     const displayMode =
-        localStorage.getItem("displayMode") || "system";
-
+        localStorage.getItem("displayMode")
+        ||
+        "system";
 
     let useLightMode = false;
 
-
-    /*
-     * ダーク
-     */
-
-    if (
-        displayMode === "dark"
-    ) {
+    if (displayMode === "dark") {
 
         useLightMode = false;
 
     }
 
-
-    /*
-     * ライト
-     */
-
-    else if (
-        displayMode === "light"
-    ) {
+    else if (displayMode === "light") {
 
         useLightMode = true;
 
     }
 
-
-    /*
-     * 端末の設定
-     */
-
-    else if (
-        displayMode === "system"
-    ) {
+    else if (displayMode === "system") {
 
         useLightMode =
             !window.matchMedia(
@@ -468,7 +696,6 @@ function applyDisplayMode() {
 
     }
 
-
     document.body.classList.toggle(
         "light-mode",
         useLightMode
@@ -476,16 +703,11 @@ function applyDisplayMode() {
 
 }
 
-
-/* ==================================================
-   初回表示
-================================================== */
-
 applyDisplayMode();
 
 
 /* ==================================================
-   端末のダーク・ライト設定変更を監視
+   端末のダーク・ライト設定変更
 ================================================== */
 
 const systemThemeQuery =
@@ -493,18 +715,14 @@ const systemThemeQuery =
         "(prefers-color-scheme: dark)"
     );
 
-
 function handleSystemThemeChange() {
 
     const displayMode =
-        localStorage.getItem(
-            "displayMode"
-        ) || "system";
+        localStorage.getItem("displayMode")
+        ||
+        "system";
 
-
-    if (
-        displayMode === "system"
-    ) {
+    if (displayMode === "system") {
 
         applyDisplayMode();
 
@@ -512,17 +730,16 @@ function handleSystemThemeChange() {
 
 }
 
-
-if (
-    systemThemeQuery.addEventListener
-) {
+if (systemThemeQuery.addEventListener) {
 
     systemThemeQuery.addEventListener(
         "change",
         handleSystemThemeChange
     );
 
-} else {
+}
+
+else {
 
     systemThemeQuery.addListener(
         handleSystemThemeChange
@@ -540,30 +757,158 @@ const stationName =
 
 
 /* ==================================================
-   駅ごとの番線設定
+   駅ごとの番線・方面設定
 ================================================== */
 
 const stationConfig = {
 
-    "栃木駅": {
+    "小山駅": {
+
+        platform1: null,
+
+        platform2: {
+
+            number: "6･8",
+
+            direction: "上り",
+
+            name:
+                "栃木・佐野・高崎方面",
+
+            english:
+                "for Tochigi, Sano & Takasaki"
+
+        }
+
+    },
+
+
+    "思川駅": {
 
         platform1: {
 
-            direction: "下り",
+            number: "1",
 
-            name: "小山方面",
+            direction: "上り",
 
-            english: "for Oyama"
+            name:
+                "栃木・佐野・高崎方面",
+
+            english:
+                "for Tochigi, Sano & Takasaki"
 
         },
 
         platform2: {
 
+            number: "2",
+
+            direction: "下り",
+
+            name:
+                "小山方面",
+
+            english:
+                "for Oyama"
+
+        }
+
+    },
+
+
+    "栃木駅": {
+
+        platform1: {
+
+            number: "1",
+
+            direction: "下り",
+
+            name:
+                "小山方面",
+
+            english:
+                "for Oyama"
+
+        },
+
+        platform2: {
+
+            number: "2",
+
             direction: "上り",
 
-            name: "佐野・足利・高崎方面",
+            name:
+                "佐野・足利・高崎方面",
 
-            english: "for Sano, Ashikaga & Takasaki"
+            english:
+                "for Sano, Ashikaga & Takasaki"
+
+        }
+
+    },
+
+
+    "大平下駅": {
+
+        platform1: {
+
+            number: "",
+
+            direction: "下り",
+
+            name:
+                "栃木・小山方面",
+
+            english:
+                "for Tochigi & Oyama"
+
+        },
+
+        platform2: {
+
+            number: "",
+
+            direction: "上り",
+
+            name:
+                "佐野・足利・高崎方面",
+
+            english:
+                "for Sano, Ashikaga & Takasaki"
+
+        }
+
+    },
+
+
+    "岩舟駅": {
+
+        platform1: {
+
+            number: "1",
+
+            direction: "下り",
+
+            name:
+                "栃木・小山方面",
+
+            english:
+                "for Tochigi & Oyama"
+
+        },
+
+        platform2: {
+
+            number: "2･3",
+
+            direction: "上り",
+
+            name:
+                "佐野・足利・高崎方面",
+
+            english:
+                "for Sano, Ashikaga & Takasaki"
 
         }
 
@@ -574,21 +919,95 @@ const stationConfig = {
 
         platform1: {
 
+            number: "1",
+
             direction: "上り",
 
-            name: "足利・桐生・高崎方面",
+            name:
+                "足利・桐生・高崎方面",
 
-            english: "for Ashikaga, Kiryū & Takasaki"
+            english:
+                "for Ashikaga, Kiryū & Takasaki"
 
         },
 
         platform2: {
 
+            number: "2",
+
             direction: "下り",
 
-            name: "栃木・小山方面",
+            name:
+                "栃木・小山方面",
 
-            english: "for Tochigi & Oyama"
+            english:
+                "for Tochigi & Oyama"
+
+        }
+
+    },
+
+
+    "富田駅": {
+
+        platform1: {
+
+            number: "1",
+
+            direction: "上り",
+
+            name:
+                "足利・桐生・高崎方面",
+
+            english:
+                "for Ashikaga, Kiryū & Takasaki"
+
+        },
+
+        platform2: {
+
+            number: "2",
+
+            direction: "下り",
+
+            name:
+                "佐野・栃木・小山方面",
+
+            english:
+                "for Sano, Tochigi & Oyama"
+
+        }
+
+    },
+
+
+    "あしかがフラワーパーク駅": {
+
+        platform1: {
+
+            number: "",
+
+            direction: "下り",
+
+            name:
+                "栃木・小山・東京方面",
+
+            english:
+                "for Tochigi, Oyama & Tōkyō"
+
+        },
+
+        platform2: {
+
+            number: "",
+
+            direction: "上り",
+
+            name:
+                "足利・桐生・高崎方面",
+
+            english:
+                "for Ashikaga, Kiryū & Takasaki"
 
         }
 
@@ -599,21 +1018,95 @@ const stationConfig = {
 
         platform1: {
 
+            number: "1",
+
             direction: "下り",
 
-            name: "佐野・栃木・小山方面",
+            name:
+                "佐野・栃木・小山方面",
 
-            english: "for Sano, Tochigi & Oyama"
+            english:
+                "for Sano, Tochigi & Oyama"
 
         },
 
         platform2: {
 
+            number: "2",
+
             direction: "上り",
 
-            name: "桐生・前橋・高崎方面",
+            name:
+                "桐生・前橋・高崎方面",
 
-            english: "for Kiryu, Maebashi & Takasaki"
+            english:
+                "for Kiryū, Maebashi & Takasaki"
+
+        }
+
+    },
+
+
+    "山前駅": {
+
+        platform1: {
+
+            number: "1",
+
+            direction: "上り",
+
+            name:
+                "桐生・前橋・高崎方面",
+
+            english:
+                "for Kiryū, Maebashi & Takasaki"
+
+        },
+
+        platform2: {
+
+            number: "2･3",
+
+            direction: "下り",
+
+            name:
+                "足利・佐野・小山方面",
+
+            english:
+                "for Ashikaga, Sano & Oyama"
+
+        }
+
+    },
+
+
+    "小俣駅": {
+
+        platform1: {
+
+            number: "1",
+
+            direction: "上り",
+
+            name:
+                "桐生・前橋・高崎方面",
+
+            english:
+                "for Kiryū, Maebashi & Takasaki"
+
+        },
+
+        platform2: {
+
+            number: "2",
+
+            direction: "下り",
+
+            name:
+                "足利・佐野・小山方面",
+
+            english:
+                "for Ashikaga, Sano & Oyama"
 
         }
 
@@ -621,6 +1114,10 @@ const stationConfig = {
 
 };
 
+
+/* ==================================================
+   現在駅の設定
+================================================== */
 
 const currentStationConfig =
     stationConfig[stationName];
@@ -633,34 +1130,105 @@ const currentStationConfig =
 function setPlatformInfo() {
 
     if (!currentStationConfig) {
+        return;
+    }
+
+    setSinglePlatformInfo(
+        1,
+        currentStationConfig.platform1
+    );
+
+    setSinglePlatformInfo(
+        2,
+        currentStationConfig.platform2
+    );
+
+}
+
+
+/* ==================================================
+   1つの番線ブロックを設定
+================================================== */
+
+function setSinglePlatformInfo(
+    platformIndex,
+    config
+) {
+
+    const block =
+        document.getElementById(
+            `platform${platformIndex}-block`
+        );
+
+    if (!config) {
+
+        block.style.display = "none";
 
         return;
 
     }
 
+    block.style.display = "";
+
+    const numberElement =
+        document.getElementById(
+            `platform${platformIndex}-number`
+        );
+
+    numberElement.textContent =
+        config.number;
+
+    if (!config.number) {
+
+        numberElement.style.display =
+            "none";
+
+        block.classList.add(
+            "no-platform-number"
+        );
+
+    }
+
+    else {
+
+        numberElement.style.display =
+            "";
+
+        block.classList.remove(
+            "no-platform-number"
+        );
+
+    }
+
+    if (
+        config.number
+        &&
+        config.number.includes("･")
+    ) {
+
+        block.classList.add(
+            "multiple-platform-number"
+        );
+
+    }
+
+    else {
+
+        block.classList.remove(
+            "multiple-platform-number"
+        );
+
+    }
 
     document.getElementById(
-        "platform1-direction"
+        `platform${platformIndex}-direction`
     ).textContent =
-        currentStationConfig.platform1.name;
-
+        config.name;
 
     document.getElementById(
-        "platform1-direction-en"
+        `platform${platformIndex}-direction-en`
     ).textContent =
-        currentStationConfig.platform1.english;
-
-
-    document.getElementById(
-        "platform2-direction"
-    ).textContent =
-        currentStationConfig.platform2.name;
-
-
-    document.getElementById(
-        "platform2-direction-en"
-    ).textContent =
-        currentStationConfig.platform2.english;
+        config.english;
 
 }
 
@@ -673,14 +1241,16 @@ let allTrains = [];
 
 
 /* ==================================================
-   両毛線の運行情報
+   運行情報
 ================================================== */
 
 let operationInfo = {
 
-    status: "情報取得中",
+    status:
+        "情報取得中",
 
-    message: ""
+    message:
+        ""
 
 };
 
@@ -692,152 +1262,98 @@ let operationInfo = {
 const downCars = {
 
     "421M": 6,
-
     "423M": 4,
-
     "425M": 6,
-
     "427M": 4,
-
     "429M": 4,
-
     "431M": 4,
-
     "433M": 6,
-
     "437M": 4,
-
     "439M": 4,
-
     "441M": 6,
-
     "443M": 4,
-
     "445M": 4,
-
     "447M": 4,
-
     "449M": 4,
-
     "451M": 4,
-
     "453M": 4,
-
     "455M": 6,
-
     "459M": 6,
-
     "461M": 4,
-
     "463M": 6,
-
     "465M": 6,
-
     "467M": 4,
-
     "469M": 4,
-
     "471M": 6,
-
     "475M": 4,
-
     "479M": 6
 
 };
 
 
 /* ==================================================
-   列車データの整理
+   列車データ整理
 ================================================== */
 
 function normalizeTrain(train) {
 
     const result = {
-
         ...train
-
     };
 
-
-    /*
-     * 「普通」＋「471M」のような
-     * データを正しい形に修正
-     */
-
     if (
-
         result.direction === "下り"
-
         &&
-
         result.train_number === "普通"
-
         &&
-
         typeof result.cars === "string"
-
         &&
-
         /^\d+M$/.test(
             result.cars.trim()
         )
-
     ) {
 
         const correctTrainNumber =
             result.cars.trim();
 
-
         result.train_number =
             correctTrainNumber;
-
 
         result.type =
             "普通";
 
-
         result.cars =
-            downCars[correctTrainNumber]
-            || null;
+            downCars[
+                correctTrainNumber
+            ]
+            ||
+            null;
 
     }
 
-
-    /*
-     * 列車番号が数字＋Mなのに
-     * 両数欄にも同じ値が入っている場合
-     */
-
     if (
-
         typeof result.cars === "string"
-
         &&
-
         /^\d+M$/.test(
             result.cars.trim()
         )
-
     ) {
 
         const number =
             result.cars.trim();
 
-
         if (
-
             result.train_number === number
-
         ) {
 
             result.cars =
                 downCars[number]
-                || null;
+                ||
+                null;
 
         }
 
     }
-
 
     if (!result.type) {
 
@@ -846,14 +1362,13 @@ function normalizeTrain(train) {
 
     }
 
-
     return result;
 
 }
 
 
 /* ==================================================
-   種別の英語
+   種別英語
 ================================================== */
 
 function getTypeEnglish(type) {
@@ -861,22 +1376,15 @@ function getTypeEnglish(type) {
     switch (type) {
 
         case "普通":
-
             return "Local";
 
-
         case "快速":
-
             return "Rapid";
 
-
         case "特急":
-
             return "Limited Express";
 
-
         default:
-
             return type || "Local";
 
     }
@@ -885,7 +1393,7 @@ function getTypeEnglish(type) {
 
 
 /* ==================================================
-   行先の英語
+   行先英語
 ================================================== */
 
 function getDestinationEnglish(destination) {
@@ -960,19 +1468,12 @@ function getDestinationEnglish(destination) {
 
     };
 
-
     return (
-
         map[destination]
-
         ||
-
         destination
-
         ||
-
         ""
-
     );
 
 }
@@ -985,61 +1486,41 @@ function getDestinationEnglish(destination) {
 function timeToSeconds(time) {
 
     if (!time) {
-
         return null;
-
     }
-
 
     const parts =
         time.split(":");
 
-
     if (parts.length !== 2) {
-
         return null;
-
     }
-
 
     const hour =
         Number(parts[0]);
 
-
     const minute =
         Number(parts[1]);
 
-
     if (
-
         !Number.isFinite(hour)
-
         ||
-
         !Number.isFinite(minute)
-
     ) {
-
         return null;
-
     }
 
-
     return (
-
         hour * 60 * 60
-
         +
-
         minute * 60
-
     );
 
 }
 
 
 /* ==================================================
-   駅の発車時刻を取得
+   駅の発車時刻
 ================================================== */
 
 function getStationDeparture(train) {
@@ -1047,49 +1528,32 @@ function getStationDeparture(train) {
     const stops =
         train.stops || {};
 
-
     const stationKey =
         stationName.replace(
             /駅$/,
             ""
         );
 
-
     const station =
         stops[stationKey];
 
-
     if (!station) {
-
         return null;
-
     }
 
-
-    /*
-     * 発車時刻があれば発車時刻。
-     * なければ到着時刻。
-     */
-
     return (
-
         station.departure
-
         ||
-
         station.arrival
-
         ||
-
         null
-
     );
 
 }
 
 
 /* ==================================================
-   駅の到着時刻を取得
+   駅の到着時刻
 ================================================== */
 
 function getStationArrival(train) {
@@ -1097,44 +1561,32 @@ function getStationArrival(train) {
     const stops =
         train.stops || {};
 
-
     const stationKey =
         stationName.replace(
             /駅$/,
             ""
         );
 
-
     const station =
         stops[stationKey];
 
-
     if (!station) {
-
         return null;
-
     }
 
-
     return (
-
         station.arrival
-
         ||
-
         station.departure
-
         ||
-
         null
-
     );
 
 }
 
 
 /* ==================================================
-   時刻文字列をDateに変換
+   時刻文字列 → Date
 ================================================== */
 
 function timeToDate(
@@ -1143,57 +1595,36 @@ function timeToDate(
 ) {
 
     if (!time) {
-
         return null;
-
     }
-
 
     const parts =
         time.split(":");
 
-
     if (parts.length !== 2) {
-
         return null;
-
     }
-
 
     let hour =
         Number(parts[0]);
 
-
     const minute =
         Number(parts[1]);
 
-
     if (
-
         !Number.isFinite(hour)
-
         ||
-
         !Number.isFinite(minute)
-
         ||
-
         minute < 0
-
         ||
-
         minute > 59
-
     ) {
-
         return null;
-
     }
-
 
     const date =
         new Date(baseDate);
-
 
     if (hour >= 24) {
 
@@ -1205,7 +1636,6 @@ function timeToDate(
 
     }
 
-
     date.setHours(
         hour,
         minute,
@@ -1213,26 +1643,19 @@ function timeToDate(
         0
     );
 
-
     return date;
 
 }
 
 
 /* ==================================================
-   両数を取得
+   両数取得
 ================================================== */
 
 function getCars(train) {
 
     let cars =
         train.cars;
-
-
-    /*
-     * 「471M」のような値を
-     * 両数として扱わない
-     */
 
     if (
         typeof cars === "string"
@@ -1241,20 +1664,14 @@ function getCars(train) {
         cars =
             cars.trim();
 
-
         if (
             /^\d+M$/.test(cars)
         ) {
-
-            /*
-             * 列車番号から両数を取得
-             */
 
             const trainNumber =
                 String(
                     train.train_number || ""
                 ).trim();
-
 
             if (
                 downCars[trainNumber]
@@ -1266,32 +1683,24 @@ function getCars(train) {
 
             }
 
-
             return null;
 
         }
 
     }
 
-
     const number =
         Number(cars);
 
-
     if (
-
         Number.isFinite(number)
-
         &&
-
         number > 0
-
     ) {
 
         return number;
 
     }
-
 
     return null;
 
@@ -1299,7 +1708,7 @@ function getCars(train) {
 
 
 /* ==================================================
-   到着まで / 停車中 / 発車済
+   到着まで
 ================================================== */
 
 function getArrivalStatus(
@@ -1307,28 +1716,18 @@ function getArrivalStatus(
     departure
 ) {
 
-    /*
-     * 到着時刻がない場合
-     */
-
     if (!arrival) {
 
         return {
-
             number: "",
-
             label: "",
-
             status: "normal"
-
         };
 
     }
 
-
     const now =
         new Date();
-
 
     const arrivalDate =
         timeToDate(
@@ -1336,28 +1735,21 @@ function getArrivalStatus(
             now
         );
 
-
     const departureDate =
         timeToDate(
             departure || arrival,
             now
         );
 
-
     if (!arrivalDate) {
 
         return {
-
             number: "",
-
             label: "",
-
             status: "normal"
-
         };
 
     }
-
 
     if (
         now < arrivalDate
@@ -1375,12 +1767,10 @@ function getArrivalStatus(
                 )
             );
 
-
         const remainingMinutes =
             Math.ceil(
                 diffSeconds / 60
             );
-
 
         return {
 
@@ -1397,15 +1787,10 @@ function getArrivalStatus(
 
     }
 
-
     if (
-
         departureDate
-
         &&
-
         now < departureDate
-
     ) {
 
         return {
@@ -1422,7 +1807,6 @@ function getArrivalStatus(
         };
 
     }
-
 
     return {
 
@@ -1441,7 +1825,7 @@ function getArrivalStatus(
 
 
 /* ==================================================
-   発車後1分で一覧から削除
+   表示対象か
 ================================================== */
 
 function isTrainStillDisplayed(train) {
@@ -1449,17 +1833,12 @@ function isTrainStillDisplayed(train) {
     const departure =
         getStationDeparture(train);
 
-
     if (!departure) {
-
         return false;
-
     }
-
 
     const now =
         new Date();
-
 
     const departureDate =
         timeToDate(
@@ -1467,13 +1846,9 @@ function isTrainStillDisplayed(train) {
             now
         );
 
-
     if (!departureDate) {
-
         return false;
-
     }
-
 
     const removeTime =
         new Date(
@@ -1481,7 +1856,6 @@ function isTrainStillDisplayed(train) {
             +
             60 * 1000
         );
-
 
     return (
         now < removeTime
@@ -1491,7 +1865,7 @@ function isTrainStillDisplayed(train) {
 
 
 /* ==================================================
-   列車1本分のHTML
+   列車HTML
 ================================================== */
 
 function createTrainHTML(train) {
@@ -1499,32 +1873,25 @@ function createTrainHTML(train) {
     const type =
         train.type || "普通";
 
-
     const typeEnglish =
         getTypeEnglish(type);
 
-
     const destination =
         train.destination || "";
-
 
     const destinationEnglish =
         getDestinationEnglish(
             destination
         );
 
-
     const arrival =
         getStationArrival(train);
-
 
     const departure =
         getStationDeparture(train);
 
-
     const cars =
         getCars(train);
-
 
     const remaining =
         getArrivalStatus(
@@ -1532,32 +1899,19 @@ function createTrainHTML(train) {
             departure
         );
 
-
     if (
         !isTrainStillDisplayed(train)
     ) {
-
         return "";
-
     }
-
-
-    /* ----------------------------------------------
-       両数の色
-    ---------------------------------------------- */
 
     let carsClass =
         "cars-green";
 
-
     if (
-
         cars !== null
-
         &&
-
         cars >= 6
-
     ) {
 
         carsClass =
@@ -1565,14 +1919,8 @@ function createTrainHTML(train) {
 
     }
 
-
-    /* ----------------------------------------------
-       両数
-    ---------------------------------------------- */
-
     let carsHTML =
         "";
-
 
     if (cars !== null) {
 
@@ -1596,11 +1944,6 @@ function createTrainHTML(train) {
 
     }
 
-
-    /* ----------------------------------------------
-       到着まで
-    ---------------------------------------------- */
-
     let remainingHTML = `
 
         <div
@@ -1619,18 +1962,8 @@ function createTrainHTML(train) {
 
     `;
 
-
-    /* ----------------------------------------------
-       備考
-    ---------------------------------------------- */
-
     const note =
         train.note || "";
-
-
-    /*
-     * 運行情報に異常がある場合
-     */
 
     const abnormalOperation =
 
@@ -1646,14 +1979,11 @@ function createTrainHTML(train) {
 
         operationInfo.message;
 
-
     const isMobile =
         window.innerWidth <= 800;
 
-
     let noteHTML =
         "";
-
 
     if (
         note
@@ -1662,13 +1992,9 @@ function createTrainHTML(train) {
     ) {
 
         const noteText =
-
             isMobile
-
                 ? note
-
                 : `　　${note}`;
-
 
         noteHTML = `
 
@@ -1679,12 +2005,9 @@ function createTrainHTML(train) {
                     : ""
                 }
 
-
                 ${
                     abnormalOperation
-
                     ?
-
                     `
 
                         <span
@@ -1698,9 +2021,7 @@ function createTrainHTML(train) {
                         </span>
 
                     `
-
                     :
-
                     ""
                 }
 
@@ -1709,7 +2030,6 @@ function createTrainHTML(train) {
         `;
 
     }
-
 
     else {
 
@@ -1723,11 +2043,6 @@ function createTrainHTML(train) {
 
     }
 
-
-    /* ----------------------------------------------
-       列車表示
-    ---------------------------------------------- */
-
     return `
 
         <div
@@ -1739,9 +2054,6 @@ function createTrainHTML(train) {
             )"
             style="cursor: pointer;"
         >
-
-
-            <!-- 種別 -->
 
             <div>
 
@@ -1760,8 +2072,6 @@ function createTrainHTML(train) {
             </div>
 
 
-            <!-- 発車時刻 -->
-
             <div>
 
                 <div
@@ -1772,8 +2082,6 @@ function createTrainHTML(train) {
 
             </div>
 
-
-            <!-- 行先 -->
 
             <div>
 
@@ -1798,7 +2106,6 @@ function createTrainHTML(train) {
                         ${destination}
                     </strong>
 
-
                     <span
                         style="
                             display:block;
@@ -1814,8 +2121,6 @@ function createTrainHTML(train) {
             </div>
 
 
-            <!-- 両数 -->
-
             <div class="cars">
 
                 ${carsHTML}
@@ -1823,14 +2128,11 @@ function createTrainHTML(train) {
             </div>
 
 
-            <!-- 発車まで -->
-
             <div>
 
                 ${remainingHTML}
 
             </div>
-
 
         </div>
 
@@ -1843,7 +2145,7 @@ function createTrainHTML(train) {
 
 
 /* ==================================================
-   本日の次の列車を取得
+   次の列車2本
 ================================================== */
 
 function getTodayUpcomingTrains(
@@ -1853,12 +2155,6 @@ function getTodayUpcomingTrains(
     const now =
         new Date();
 
-
-    /*
-     * 午前4時までは
-     * 前日の列車扱い
-     */
-
     if (
         now.getHours() < 4
     ) {
@@ -1867,7 +2163,6 @@ function getTodayUpcomingTrains(
 
     }
 
-
     let trains =
 
         allTrains
@@ -1875,7 +2170,8 @@ function getTodayUpcomingTrains(
             .filter(
                 train =>
                     train.direction
-                    === direction
+                    ===
+                    direction
             )
 
             .filter(
@@ -1884,7 +2180,6 @@ function getTodayUpcomingTrains(
                         train
                     )
             );
-
 
     trains.sort(
         (a, b) => {
@@ -1895,27 +2190,19 @@ function getTodayUpcomingTrains(
                     now
                 );
 
-
             const bTime =
                 timeToDate(
                     getStationDeparture(b),
                     now
                 );
 
-
             if (!aTime) {
-
                 return 1;
-
             }
-
 
             if (!bTime) {
-
                 return -1;
-
             }
-
 
             return (
                 aTime - bTime
@@ -1923,7 +2210,6 @@ function getTodayUpcomingTrains(
 
         }
     );
-
 
     return trains.slice(
         0,
@@ -1957,17 +2243,13 @@ function showServiceFinished(
 
 
 /* ==================================================
-   番線を表示
+   番線表示
 ================================================== */
 
 function renderPlatform(
-
     containerId,
-
     headerId,
-
     direction
-
 ) {
 
     const container =
@@ -1975,18 +2257,27 @@ function renderPlatform(
             containerId
         );
 
-
     const header =
         document.getElementById(
             headerId
         );
 
+    if (!direction) {
+
+        header.style.display =
+            "none";
+
+        container.innerHTML =
+            "";
+
+        return;
+
+    }
 
     const trains =
         getTodayUpcomingTrains(
             direction
         );
-
 
     if (
         trains.length === 0
@@ -1995,28 +2286,22 @@ function renderPlatform(
         header.style.display =
             "none";
 
-
         showServiceFinished(
             container
         );
 
     }
 
-
     else {
 
         header.style.display =
             "grid";
 
-
         container.innerHTML =
-
             trains
-
                 .map(
                     createTrainHTML
                 )
-
                 .join("");
 
     }
@@ -2025,7 +2310,7 @@ function renderPlatform(
 
 
 /* ==================================================
-   列車を表示
+   列車表示
 ================================================== */
 
 function renderTrains() {
@@ -2038,37 +2323,75 @@ function renderTrains() {
 
     }
 
+    if (
+        currentStationConfig.platform1
+    ) {
 
-    renderPlatform(
+        renderPlatform(
 
-        "platform1-trains",
+            "platform1-trains",
 
-        "platform1-header",
+            "platform1-header",
 
-        currentStationConfig
-            .platform1
-            .direction
+            currentStationConfig
+                .platform1
+                .direction
 
-    );
+        );
 
+    }
 
-    renderPlatform(
+    else {
 
-        "platform2-trains",
+        document.getElementById(
+            "platform1-header"
+        ).style.display =
+            "none";
 
-        "platform2-header",
+        document.getElementById(
+            "platform1-trains"
+        ).innerHTML =
+            "";
 
-        currentStationConfig
-            .platform2
-            .direction
+    }
 
-    );
+    if (
+        currentStationConfig.platform2
+    ) {
+
+        renderPlatform(
+
+            "platform2-trains",
+
+            "platform2-header",
+
+            currentStationConfig
+                .platform2
+                .direction
+
+        );
+
+    }
+
+    else {
+
+        document.getElementById(
+            "platform2-header"
+        ).style.display =
+            "none";
+
+        document.getElementById(
+            "platform2-trains"
+        ).innerHTML =
+            "";
+
+    }
 
 }
 
 
 /* ==================================================
-   運行情報を取得
+   運行情報取得
 ================================================== */
 
 async function loadOperationInfo() {
@@ -2082,7 +2405,6 @@ async function loadOperationInfo() {
                 Date.now()
             );
 
-
         if (!response.ok) {
 
             throw new Error(
@@ -2091,10 +2413,8 @@ async function loadOperationInfo() {
 
         }
 
-
         const data =
             await response.json();
-
 
         operationInfo = {
 
@@ -2110,11 +2430,9 @@ async function loadOperationInfo() {
 
         };
 
-
         renderTrains();
 
     }
-
 
     catch (error) {
 
@@ -2129,7 +2447,7 @@ async function loadOperationInfo() {
 
 
 /* ==================================================
-   timetable.jsonを取得
+   timetable.json取得
 ================================================== */
 
 async function loadTimetable() {
@@ -2137,15 +2455,11 @@ async function loadTimetable() {
     try {
 
         const response =
-
             await fetch(
-
                 "/api/timetable?"
                 +
                 Date.now()
-
             );
-
 
         if (!response.ok) {
 
@@ -2155,24 +2469,18 @@ async function loadTimetable() {
 
         }
 
-
         const data =
             await response.json();
 
-
         allTrains =
-
             (data.trains || [])
-
                 .map(
                     normalizeTrain
                 );
 
-
         renderTrains();
 
     }
-
 
     catch (error) {
 
@@ -2180,18 +2488,15 @@ async function loadTimetable() {
             error
         );
 
-
         document.getElementById(
             "platform1-header"
         ).style.display =
             "none";
 
-
         document.getElementById(
             "platform2-header"
         ).style.display =
             "none";
-
 
         document.getElementById(
             "platform1-trains"
@@ -2206,7 +2511,6 @@ async function loadTimetable() {
             </div>
 
         `;
-
 
         document.getElementById(
             "platform2-trains"
@@ -2236,13 +2540,10 @@ function updateClock() {
     const now =
         new Date();
 
-
     const year =
         now.getFullYear();
 
-
     const month =
-
         String(
             now.getMonth() + 1
         )
@@ -2251,9 +2552,7 @@ function updateClock() {
             "0"
         );
 
-
     const day =
-
         String(
             now.getDate()
         )
@@ -2262,32 +2561,20 @@ function updateClock() {
             "0"
         );
 
-
     const weekday =
-
         [
-
             "日",
-
             "月",
-
             "火",
-
             "水",
-
             "木",
-
             "金",
-
             "土"
-
         ][
             now.getDay()
         ];
 
-
     const hours =
-
         String(
             now.getHours()
         )
@@ -2296,9 +2583,7 @@ function updateClock() {
             "0"
         );
 
-
     const minutes =
-
         String(
             now.getMinutes()
         )
@@ -2307,9 +2592,7 @@ function updateClock() {
             "0"
         );
 
-
     const seconds =
-
         String(
             now.getSeconds()
         )
@@ -2318,18 +2601,14 @@ function updateClock() {
             "0"
         );
 
-
     document.getElementById(
         "current-date"
     ).textContent =
-
         `${year}/${month}/${day}(${weekday})`;
-
 
     document.getElementById(
         "current-time"
     ).textContent =
-
         `${hours}:${minutes}:${seconds}`;
 
 }
@@ -2343,13 +2622,6 @@ function goHome(event) {
 
     event.preventDefault();
 
-
-    /*
-     * ?home=1 を付けることで、
-     * デフォルト駅が設定されていても
-     * ホーム画面を強制的に表示する
-     */
-
     window.location.href =
         "/?home=1";
 
@@ -2357,7 +2629,7 @@ function goHome(event) {
 
 
 /* ==================================================
-   列車詳細ページを開く
+   列車詳細
 ================================================== */
 
 function openTrainDetails(
@@ -2365,11 +2637,8 @@ function openTrainDetails(
 ) {
 
     if (!trainNumber) {
-
         return;
-
     }
-
 
     window.location.href =
         "/train/"
@@ -2391,57 +2660,44 @@ updateClock();
 
 
 /* ==================================================
-   時計を1秒ごとに更新
+   時計更新
 ================================================== */
 
 setInterval(
-
     updateClock,
-
     1000
-
 );
 
 
 /* ==================================================
-   発車列車を10秒ごとに更新
+   列車表示更新
 ================================================== */
 
 setInterval(
-
     renderTrains,
-
     10000
-
 );
 
 
 /* ==================================================
-   timetable.jsonを1分ごとに再取得
+   timetable更新
 ================================================== */
 
 setInterval(
-
     loadTimetable,
-
     60000
-
 );
 
 
 /* ==================================================
-   両毛線の運行情報を1分ごとに更新
+   運行情報更新
 ================================================== */
 
 loadOperationInfo();
 
-
 setInterval(
-
     loadOperationInfo,
-
     60000
-
 );
 
 </script>
