@@ -14,6 +14,7 @@ from bs4 import BeautifulSoup
 from pathlib import Path
 import re
 from datetime import datetime
+from zoneinfo import ZoneInfo
 import os
 import secrets
 
@@ -1450,7 +1451,13 @@ def admin_notifications():
                     )
 
 
-                    now = datetime.now()
+                    # ==================================
+                    # 日本時間で現在時刻を取得
+                    # ==================================
+
+                    now = datetime.now(
+                        ZoneInfo("Asia/Tokyo")
+                    )
 
 
                     notification = {
