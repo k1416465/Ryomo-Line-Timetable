@@ -856,7 +856,7 @@ def train_detail(
         "山前": "Yamamae",
         "小俣": "Omata",
         "桐生": "Kiryū",
-        "下新田": "Shimoshinden",
+        "岩宿": "Iwajuku",
         "国定": "Kunisada",
         "伊勢崎": "Isesaki",
         "駒形": "Komagata",
@@ -865,7 +865,31 @@ def train_detail(
         "新前橋": "Shin-Maebashi",
         "井野": "Ino",
         "高崎問屋町": "Takasakitonyamachi",
-        "高崎": "Takasaki"
+        "高崎": "Takasaki",
+ 
+       "大宮": "Ōmiya",
+       "浦和": "Urawa",
+       "上野": "Ueno",
+       "東京": "Tōkyō",
+       "品川": "Shinagawa",
+       "横浜": "Yokohama",
+       "大船": "Ōfuna",
+
+       "池袋": "Ikebukuro",
+       "新宿": "Shinjuku",
+
+       "南浦和": "Minami-Urawa",
+       "南越谷": "Minami-Koshigaya",
+       "吉川美南": "Yoshikawaminami",
+       "南流山": "Minami-Nagareyama",
+       "新松戸": "Shim-Maatsudo",
+       "西船橋": "Nishi-Funabashi",
+
+       "北朝霞": "Kita-Asaka",
+       "新秋津": "Shin-Akitsu",
+       "立川": "Tachikawa",
+       "八王子": "Hachiōji",
+       "高尾": "Takao"
 
     }
 
@@ -944,7 +968,19 @@ def train_detail(
             "Rapid",
 
         "特急":
-            "Limited Express"
+            "Limited Express",
+
+        "臨時":
+            "Extra",
+
+        "団体":
+            "Party",
+
+        "回送":
+            "Out of service",
+
+        "試運転":
+            "Test Run"
 
     }
 
@@ -967,26 +1003,51 @@ def train_detail(
         "高崎":
             "Takasaki",
 
-        "小山":
-            "Oyama",
+        "新前橋":
+            "Shin-Maebashi",
 
         "前橋":
             "Maebashi",
 
-        "桐生":
-            "Kiryū",
-
         "伊勢崎":
             "Isesaki",
+
+        "桐生":
+            "Kiryū",
 
         "足利":
             "Ashikaga",
 
+        "佐野":
+            "Sano",
+       
+        "岩舟":
+            "Iwafune",
+
         "栃木":
             "Tochigi",
 
-        "佐野":
-            "Sano"
+        "小山":
+            "Oyama",
+
+        "大船":
+            "Ōfuna",
+
+        "新宿":
+            "Shinjuku",
+
+        "吉川美南":
+            "Yoshikawaminami",
+
+        "西船橋":
+            "Nishi-Funabashi",
+
+        "八王子":
+            "Hachiōji",
+
+        "高尾":
+            "Takao"
+
 
     }
 
