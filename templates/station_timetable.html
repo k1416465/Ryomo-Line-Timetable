@@ -1679,6 +1679,15 @@
 
 
     /* ==================================
+       初回表示時の自動スクロール
+    ================================== */
+
+    let shouldAutoScrollToCurrentTime =
+        true;
+
+
+
+    /* ==================================
        種別英語
     ================================== */
 
@@ -2525,6 +2534,9 @@
                 row.className =
                     "train-row";
 
+                row.dataset.departureTime =
+                    departure;
+
 
                 row.innerHTML = `
 
@@ -2662,6 +2674,129 @@
             }
         );
 
+        /* ==================================
+           初回表示時のみ現在時刻付近へ移動
+        ================================== */
+
+        if (
+            shouldAutoScrollToCurrentTime
+        ) {
+
+            shouldAutoScrollToCurrentTime =
+                false;
+
+            setTimeout(
+                scrollToCurrentTime,
+                100
+            );
+
+        }
+
+    }
+
+
+    /* ==================================
+       現在時刻付近へ自動スクロール
+    ================================== */
+
+    function scrollToCurrentTime() {
+
+        const rows =
+            Array.from(
+                document.querySelectorAll(
+                    "#train-list .train-row"
+                )
+            );
+
+        if (
+            rows.length === 0
+        ) {
+            return;
+        }
+
+
+        const now =
+            new Date();
+
+        const currentMinutes =
+            now.getHours() * 60
+            +
+            now.getMinutes();
+
+
+        let targetRow = null;
+
+        let closestDifference =
+            Infinity;
+
+
+        rows.forEach(
+            row => {
+
+                const time =
+                    row.dataset.departureTime;
+
+                const minutes =
+                    timeToMinutes(
+                        time
+                    );
+
+
+                if (
+                    minutes === null
+                ) {
+                    return;
+                }
+
+
+                /*
+                 * 現在時刻以降の列車を探す
+                 */
+                const difference =
+                    minutes
+                    -
+                    currentMinutes;
+
+
+                if (
+                    difference >= 0
+                    &&
+                    difference
+                    <
+                    closestDifference
+                ) {
+
+                    closestDifference =
+                        difference;
+
+                    targetRow =
+                        row;
+
+                }
+
+            }
+        );
+
+
+        /*
+         * 現在時刻以降の列車がない場合は
+         * 最後の列車を表示
+         */
+        if (
+            !targetRow
+        ) {
+
+            targetRow =
+                rows[rows.length - 1];
+
+        }
+
+
+        targetRow.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+
     }
 
 
@@ -2702,6 +2837,15 @@
 
 
         renderTimetable();
+
+        /* ==================================
+           方向切り替え後も現在時刻付近へ移動
+        ================================== */
+
+        setTimeout(
+            scrollToCurrentTime,
+            100
+        );
 
     }
 

@@ -295,6 +295,46 @@
 
 
     /* ==========================================
+       駅名リンク
+    ========================================== */
+
+    .station-link {
+
+        display: inline-block;
+
+        color: inherit;
+
+        text-decoration: none;
+
+        border-radius: 6px;
+
+        padding: 2px 5px;
+
+        transition:
+            background 0.15s ease,
+            opacity 0.15s ease;
+    }
+
+
+    .station-link:hover {
+
+        background: rgba(255, 255, 255, 0.10);
+    }
+
+
+    .station-link:active {
+
+        opacity: 0.65;
+    }
+
+
+    body.light-mode .station-link:hover {
+
+        background: rgba(0, 0, 0, 0.08);
+    }
+
+
+    /* ==========================================
        時刻
     ========================================== */
 
@@ -620,7 +660,6 @@
         .departure {
 
             font-size: 18px;
-
         }
 
 
@@ -647,24 +686,39 @@
 
 </style>
 
+
 <!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKW0P57706"></script>
+
+<script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=G-CKW0P57706"
+></script>
+
 <script>
+
     window.dataLayer = window.dataLayer || [];
 
     function gtag() {
+
         dataLayer.push(arguments);
+
     }
 
+
     gtag("js", new Date());
+
     gtag("config", "G-CKW0P57706");
+
 </script>
 
 </head>
 
+
 <body>
 
+
 <div class="train-detail-page">
+
 
 <div class="train-detail-board">
 
@@ -685,6 +739,7 @@
                 {{ train.type or "普通" }}
 
             </span>
+
 
             <span class="train-destination">
 
@@ -760,11 +815,13 @@
 
             </div>
 
+
             <div class="stop-cell">
 
                 到着
 
             </div>
+
 
             <div class="stop-cell">
 
@@ -786,17 +843,59 @@
 
             <div class="stop-cell">
 
+                {% set station_urls = {
+                    '小山': '/station/oyama',
+                    '思川': '/station/omoigawa',
+                    '栃木': '/station/tochigi',
+                    '大平下': '/station/ohirashita',
+                    '岩舟': '/station/iwafune',
+                    '佐野': '/station/sano',
+                    '富田': '/station/tomita',
+                    '足利': '/station/ashikaga',
+                    'あしかがフラワーパーク': '/station/ashikaga_flower_park',
+                    '山前': '/station/yamamae',
+                    '小俣': '/station/omata'
+                } %}
+
+
+                {% if stop.name in station_urls %}
+
+                <a
+                    href="{{ station_urls[stop.name] }}"
+                    class="station-link"
+                >
+
+                    <div class="station-name {% if stop.name == 'あしかがフラワーパーク' %}long-station{% endif %}">
+
+                        {{ stop.name }}
+
+                    </div>
+
+
+                    <div class="station-en">
+
+                        {{ stop.english }}
+
+                    </div>
+
+                </a>
+
+                {% else %}
+
                 <div class="station-name {% if stop.name == 'あしかがフラワーパーク' %}long-station{% endif %}">
 
                     {{ stop.name }}
 
                 </div>
 
+
                 <div class="station-en">
 
                     {{ stop.english }}
 
                 </div>
+
+                {% endif %}
 
             </div>
 
@@ -879,9 +978,12 @@
 
 </div>
 
+
 </div>
 
+
 <script>
+
 
 /* ==================================
    保存されている表示モードを読み込む
@@ -992,6 +1094,7 @@ document.addEventListener(
 );
 
 </script>
+
 
 </body>
 
